@@ -1,0 +1,18 @@
+/* style={{display: "flex", alignItems: "center"}} */
+.radio_gender {
+    display: flex;
+    align-items: center;
+}
+
+.radio_gender .radio_group_gender {
+    margin-inline-start: 18px;
+}
+
+@media screen and (max-width: 500px) {
+    .radio_gender {
+        display: block;
+    }
+    .radio_gender .radio_group_gender {
+        margin-inline-start: 0;
+    }
+}
