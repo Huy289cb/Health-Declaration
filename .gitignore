@@ -41,6 +41,6 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/react,maven
 
 .svn
-.setting
+.settings
 .idea
 .vscode
