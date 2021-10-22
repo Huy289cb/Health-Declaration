@@ -15,17 +15,17 @@ const ViewComponentCreate = withTranslation()(Create);
 
 const PersonalHealthRecordRoutes = [
     {
-        path: ConstantList.ROOT_PATH + "personal-health-record",
+        path: ConstantList.ROOT_PATH + "health-record",
         exact: true,
         component: ViewComponent
     },
     {
-        path: ConstantList.ROOT_PATH + "personal-health-record/create",
+        path: ConstantList.ROOT_PATH + "create-health-record",
         exact: true,
         component: ViewComponentCreate
     },
     {
-        path: ConstantList.ROOT_PATH + "personal-health-record/create/(id)?/:id?/(page)?/:page?/(pageSize)?/:pageSize?",
+        path: ConstantList.ROOT_PATH + "create-health-record/(id)?/:id?/(page)?/:page?/(pageSize)?/:pageSize?",
         exact: true,
         component: ViewComponentCreate
     }

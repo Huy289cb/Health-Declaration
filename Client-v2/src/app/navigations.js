@@ -9,7 +9,7 @@ export const navigations = [{
     {
         name: "Cập nhật thông tin sức khỏe",
         icon: "noteadd",
-        path: ConstantList.ROOT_PATH + "personal-health-record/create",
+        path: ConstantList.ROOT_PATH + "create-health-record",
         isVisible: true,
     },
     {
@@ -39,7 +39,7 @@ export const navigations = [{
     {
         name: "Danh sách cập nhật kết quả",
         icon: "noteadd",
-        path: ConstantList.ROOT_PATH + "personal-health-record",
+        path: ConstantList.ROOT_PATH + "health-record",
         isVisible: true,
     },
     // {
