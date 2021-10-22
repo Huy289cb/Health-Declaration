@@ -301,7 +301,7 @@
 }
 .icon{
   background:rgb(3, 185, 155);
-  margin: 0px 20px 0px 50px;  
+  margin: 0px 40px 0px 40px;  
   border-radius: 8px;
 }
 .icon:hover{
@@ -312,7 +312,7 @@
   }
 .icon-1{
   background:rgb(240, 2, 51);
-  margin: 0px 50px 0px 20px;  
+  margin: 0px 40px 0px 40px;  
   border-radius: 8px;
 }
 .icon-1:hover{ 
@@ -320,11 +320,19 @@
 } 
 .icon-2{
   background:rgb(238, 102, 11);
-  margin: 0px 20px 0px 50px;  
+  margin: 0px 40px 0px 40px;
   border-radius: 8px;
 } 
 .icon-2:hover{ 
   background:rgb(255,117 , 16);
+}
+.icon-3{
+  background:rgb(20, 71, 212);
+  margin: 0px 40px 0px 40px;  
+  border-radius: 8px;
+} 
+.icon-3:hover{ 
+  background:rgb(40,91 ,232);
 }
 .text-center{
   text-align: center;
@@ -336,6 +344,9 @@
   color: red;
   list-style-type: disc;
   margin-left: 2em;
+}
+.text-color{
+  color: black;
 }
 
 
