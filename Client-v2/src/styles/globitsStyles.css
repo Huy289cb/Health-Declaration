@@ -9,14 +9,18 @@
   -ms-user-select: none;
   user-select: none;
   border: 1px solid transparent;
-  padding: .375rem .75rem;
+  padding: 0.375rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
-  border-radius: .25rem;
-  -webkit-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+  border-radius: 0.25rem;
+  -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+    -webkit-box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+    -webkit-box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
 
 .btn-primary {
@@ -242,7 +246,7 @@
 .sidenav__user .username-photo .username {
   font-weight: 600 !important;
   color: #ffc277 !important;
-  font-size: .95em !important;
+  font-size: 0.95em !important;
 }
 
 .MuiCheckbox-root {
@@ -250,19 +254,19 @@
 }
 
 .nice-input label:first-child {
-  color: #000!important;
+  color: #000 !important;
 }
 
-.nice-input div>fieldset>legend {
-  font-size: 14px!important;
+.nice-input div > fieldset > legend {
+  font-size: 14px !important;
 }
 
 .nice-input .MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.Mui-disabled {
-  color: #888!important;
+  color: #888 !important;
 }
 
 .nice-input .MuiInputBase-root.MuiOutlinedInput-root.Mui-disabled {
-  color: #888!important;
+  color: #888 !important;
   /* background-color: #eee; */
 }
 
@@ -270,19 +274,20 @@
   transform: translate(14px, -6px) scale(1);
 }
 
-.history_table>div {
-  max-width: 100vw!important;
+.history_table > div {
+  max-width: 100vw !important;
 }
 
-.history_table>div>div {
-  width: 80vw!important;
+.history_table > div > div {
+  width: 80vw !important;
 }
 
 .member_table {
   border-collapse: collapse;
 }
 
-.member_table > tr > th, .member_table > tr > td {
+.member_table > tr > th,
+.member_table > tr > td {
   padding: 6px 12px;
 }
 
@@ -292,61 +297,73 @@
   }
 }
 
-.product-table .MuiTableCell-root { 
-  border-bottom:rgba(0, 0, 0, 0.125);
+.product-table .MuiTableCell-root {
+  border-bottom: rgba(0, 0, 0, 0.125);
 }
 
-.product-table .MuiTableHead-root { 
+.product-table .MuiTableHead-root {
   font-weight: bold;
 }
-.icon{
-  background:rgb(3, 185, 155);
-  margin: 0px 40px 0px 40px;  
+.icon {
+  background: rgb(3, 185, 155);
+  margin: 0px 40px 0px 40px;
   border-radius: 8px;
 }
-.icon:hover{
+.icon:hover {
   /* margin: 0px 50px 0px 50px; */
   /* border: white solid 1px; */
   /* border-radius: 30%; */
-   background:rgb(20, 200, 170);
-  }
-.icon-1{
-  background:rgb(240, 2, 51);
-  margin: 0px 40px 0px 40px;  
-  border-radius: 8px;
+  background: rgb(20, 200, 170);
 }
-.icon-1:hover{ 
-  background:rgb(255, 7, 61);
-} 
-.icon-2{
-  background:rgb(238, 102, 11);
+.icon-1 {
+  background: rgb(240, 2, 51);
   margin: 0px 40px 0px 40px;
   border-radius: 8px;
-} 
-.icon-2:hover{ 
-  background:rgb(255,117 , 16);
 }
-.icon-3{
-  background:rgb(20, 71, 212);
-  margin: 0px 40px 0px 40px;  
+.icon-1:hover {
+  background: rgb(255, 7, 61);
+}
+.icon-2 {
+  background: rgb(238, 102, 11);
+  margin: 0px 40px 0px 40px;
   border-radius: 8px;
-} 
-.icon-3:hover{ 
-  background:rgb(40,91 ,232);
 }
-.text-center{
+.icon-2:hover {
+  background: rgb(255, 117, 16);
+}
+.icon-3 {
+  background: rgb(20, 71, 212);
+  margin: 0px 40px 0px 40px;
+  border-radius: 8px;
+}
+.icon-3:hover {
+  background: rgb(40, 91, 232);
+}
+.text-center {
   text-align: center;
 }
-.margin-padding{
+.margin-padding {
   margin-top: 15px;
 }
-.disc-red{
+.disc-red {
   color: red;
   list-style-type: disc;
   margin-left: 2em;
 }
-.text-color{
+.text-color {
   color: black;
+}
+
+/*# sourceMappingURL=globitsStyles.css.map */
+
+.head-line {
+  font-family: SVN-Poppins, Inter, Twemoji, Apple Color Emoji, Segoe UI Emoji, Arial, Helvetica, Sans-Serif,
+    Noto Color Emoji;
+  margin: 0;
+  color: aliceblue;
+  padding: 8px;
+  font-size: medium;
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=globitsStyles.css.map */

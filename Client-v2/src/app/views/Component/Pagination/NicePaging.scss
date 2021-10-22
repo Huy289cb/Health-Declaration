@@ -15,15 +15,15 @@
     margin-left: 15px;
 }
 
-.row-per-page-selector .text-field>div {
+.row-per-page-selector .text-field > div {
     line-height: 20px;
 }
 
-.row-per-page-selector .text-field>div::before {
+.row-per-page-selector .text-field > div::before {
     content: none;
 }
 
-.row-per-page-selector .text-field>div::after {
+.row-per-page-selector .text-field > div::after {
     content: none;
 }
 
@@ -32,7 +32,7 @@
         padding: 7px 5px;
     }
     .page-selector {
-        padding: 0!important;
+        padding: 0 !important;
     }
     .page-selector li:first-child,
     .page-selector li:last-child {
@@ -42,14 +42,14 @@
 
 .nice-pagination-bar .Mui-selected {
     color: #fff;
-    background-color: #2a80c8;
-    border-color: #2a80c8;
+    background-color: rgba(8, 173, 108, 0.5);
+    border-color: rgba(8, 173, 108, 0.5);
 }
 
 .nice-pagination-bar .Mui-selected:hover {
     color: #fff;
-    background-color: #1f5f94;
-    border-color: #1f5f94;
+    background-color: rgb(79, 170, 109);
+    border-color: rgb(79, 170, 109);
 }
 
 .total-rows {
@@ -70,17 +70,17 @@
 
 .page-goto .text-field {
     width: 50px;
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
 }
 
-.page-goto .text-field>div::after {
+.page-goto .text-field > div::after {
     content: none;
 }
 
-.page-goto .text-field>div::before {
+.page-goto .text-field > div::before {
     content: none;
 }
