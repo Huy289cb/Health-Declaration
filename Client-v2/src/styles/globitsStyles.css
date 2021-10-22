@@ -292,7 +292,7 @@
   }
 }
 
-.product-table .MuiTableCell-root {
+.product-table .MuiTableCell-root { 
   border-bottom:rgba(0, 0, 0, 0.125);
 }
 
