@@ -2,7 +2,7 @@ const APPLICATION_PATH = "/";
 module.exports = Object.freeze({
     ROOT_PATH: APPLICATION_PATH,
     ACTIVE_LAYOUT: "layout1", //layout1 = vertical, layout2=horizontal
-    API_ENPOINT: "http://localhost:8992/healthdeclaration", //local
+    API_ENPOINT: "http://localhost:8992/health-declaration", //local
     // API_ENPOINT: "http://healthdeclaration.globits.net:9002/healthdeclaration", //online
     // API_ENPOINT: "http://q7tankieng.cov21.vn:9003/healthdeclaration", //online
     LOGIN_PAGE: APPLICATION_PATH + "session/signin", //Nếu là Spring

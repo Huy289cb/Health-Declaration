@@ -29,8 +29,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 	private String gMapY;// Google map Y
 	private Double totalAcreage;// Tổng Diện tích
 	private UUID parentId;
-	private String emergencyPhone; // Số điện thoại cấp cứu
-	private String hotZalo; // zalo nóng
 
 	public String getName() {
 		return name;
@@ -160,22 +158,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 		this.parentId = parentId;
 	}
 
-	public String getEmergencyPhone() {
-		return emergencyPhone;
-	}
-
-	public void setEmergencyPhone(String emergencyPhone) {
-		this.emergencyPhone = emergencyPhone;
-	}
-
-	public String getHotZalo() {
-		return hotZalo;
-	}
-
-	public void setHotZalo(String hotZalo) {
-		this.hotZalo = hotZalo;
-	}
-
 	public HDAdministrativeUnitDto() {
 		super();
 	}
@@ -218,8 +200,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 			parent.setgMapX(administrativeUnit.getParent().getgMapX());
 			parent.setgMapY(administrativeUnit.getParent().getgMapY());
 			parent.setTotalAcreage(administrativeUnit.getParent().getTotalAcreage());
-			parent.setEmergencyPhone(administrativeUnit.getParent().getEmergencyPhone());
-			parent.setHotZalo(administrativeUnit.getParent().getHotZalo());
 
 			this.parent = new HDAdministrativeUnitDto(parent, true);
 		}
@@ -237,8 +217,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 		this.gMapX = administrativeUnit.getgMapX();
 		this.gMapY = administrativeUnit.getgMapY();
 		this.totalAcreage = administrativeUnit.getTotalAcreage();
-		this.emergencyPhone = administrativeUnit.getEmergencyPhone();
-		this.hotZalo = administrativeUnit.getHotZalo();
 
 		if (administrativeUnit.getParent() != null) {
 			HDAdministrativeUnit parent = administrativeUnit.getParent();
@@ -252,8 +230,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 			parent.setgMapX(administrativeUnit.getParent().getgMapX());
 			parent.setgMapY(administrativeUnit.getParent().getgMapY());
 			parent.setTotalAcreage(administrativeUnit.getParent().getTotalAcreage());
-			parent.setEmergencyPhone(administrativeUnit.getParent().getEmergencyPhone());
-			parent.setHotZalo(administrativeUnit.getParent().getHotZalo());
 
 			this.parent = new HDAdministrativeUnitDto(parent, true);
 		}
@@ -271,8 +247,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 		this.gMapX = administrativeUnit.getgMapX();
 		this.gMapY = administrativeUnit.getgMapY();
 		this.totalAcreage = administrativeUnit.getTotalAcreage();
-		this.emergencyPhone = administrativeUnit.getEmergencyPhone();
-		this.hotZalo = administrativeUnit.getHotZalo();
 
 		if (administrativeUnit.getParent() != null) {
 			HDAdministrativeUnit parent = administrativeUnit.getParent();
@@ -286,8 +260,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 			parent.setgMapX(administrativeUnit.getParent().getgMapX());
 			parent.setgMapY(administrativeUnit.getParent().getgMapY());
 			parent.setTotalAcreage(administrativeUnit.getParent().getTotalAcreage());
-			parent.setEmergencyPhone(administrativeUnit.getParent().getEmergencyPhone());
-			parent.setHotZalo(administrativeUnit.getParent().getHotZalo());
 
 			this.parent = new HDAdministrativeUnitDto(parent);
 			this.parentId = administrativeUnit.getParent().getId();
@@ -308,8 +280,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 				subAdministrativeUnitsDto.setgMapX(adu.getgMapX());
 				subAdministrativeUnitsDto.setgMapY(adu.getgMapY());
 				subAdministrativeUnitsDto.setTotalAcreage(adu.getTotalAcreage());
-				subAdministrativeUnitsDto.setEmergencyPhone(adu.getEmergencyPhone());
-				subAdministrativeUnitsDto.setHotZalo(adu.getHotZalo());
 
 				administrativeUnitsDtos.add(subAdministrativeUnitsDto);
 
@@ -337,8 +307,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 				sDto.setgMapX(s.getgMapX());
 				sDto.setgMapY(getgMapY());
 				sDto.setTotalAcreage(getTotalAcreage());
-				sDto.setEmergencyPhone(s.getEmergencyPhone());
-				sDto.setHotZalo(s.getHotZalo());
 
 				ret.add(sDto);
 			}
@@ -358,8 +326,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 		this.gMapX = administrativeUnit.getgMapX();
 		this.gMapY = administrativeUnit.getgMapY();
 		this.totalAcreage = administrativeUnit.getTotalAcreage();
-		this.emergencyPhone = administrativeUnit.getEmergencyPhone();
-		this.hotZalo = administrativeUnit.getHotZalo();
 
 		if (administrativeUnit.getParent() != null) {
 			HDAdministrativeUnit parent = administrativeUnit.getParent();
@@ -374,8 +340,6 @@ public class HDAdministrativeUnitDto extends BaseObjectDto {
 			parent.setgMapX(administrativeUnit.getParent().getgMapX());
 			parent.setgMapY(administrativeUnit.getParent().getgMapY());
 			parent.setTotalAcreage(administrativeUnit.getParent().getTotalAcreage());
-			parent.setEmergencyPhone(administrativeUnit.getParent().getEmergencyPhone());
-			parent.setHotZalo(administrativeUnit.getParent().getHotZalo());
 
 			this.parent = new HDAdministrativeUnitDto(parent);
 		}

@@ -56,12 +56,6 @@ public class HDAdministrativeUnit extends BaseObject{
 	@Column(name = "total_acreage")
 	private Double totalAcreage;// Tổng Diện tích
 
-	@Column(name = "emergency_phone")
-	private String emergencyPhone; // số điện thoại cấp cứu
-
-	@Column(name = "hot_zalo")
-	private String hotZalo; // zalo nóng
-
 	public String getName() {
 		return name;
 	}
@@ -152,21 +146,5 @@ public class HDAdministrativeUnit extends BaseObject{
 
 	public HDAdministrativeUnit() {
 		this.setUuidKey(UUID.randomUUID());
-	}
-
-	public String getEmergencyPhone() {
-		return emergencyPhone;
-	}
-
-	public void setEmergencyPhone(String emergencyPhone) {
-		this.emergencyPhone = emergencyPhone;
-	}
-
-	public String getHotZalo() {
-		return hotZalo;
-	}
-
-	public void setHotZalo(String hotZalo) {
-		this.hotZalo = hotZalo;
 	}
 }

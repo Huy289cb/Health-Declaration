@@ -35,7 +35,7 @@ import com.globits.healthdeclaration.service.HDAdministrativeUnitService;
 
 @Transactional
 @Service
-public class HDAdministrativeUnitServiceServiceImpl extends GenericServiceImpl<HDAdministrativeUnit, UUID>
+public class HDAdministrativeUnitServiceImpl extends GenericServiceImpl<HDAdministrativeUnit, UUID>
 		implements HDAdministrativeUnitService {
 	@Autowired
 	private HDAdministrativeUnitRepository repository;
@@ -253,11 +253,6 @@ public class HDAdministrativeUnitServiceServiceImpl extends GenericServiceImpl<H
 
 			if (dto.getTotalAcreage() != null)
 				HDAdministrativeUnit.setTotalAcreage(dto.getTotalAcreage());
-
-			if (dto.getEmergencyPhone() != null)
-				HDAdministrativeUnit.setEmergencyPhone(dto.getEmergencyPhone());
-			if (dto.getHotZalo() != null)
-				HDAdministrativeUnit.setHotZalo(dto.getHotZalo());
 
 			if (dto.getParent() != null) {
 				HDAdministrativeUnit parent = null;
