@@ -399,7 +399,7 @@ class Analytics extends Component {
                                 </Button>
                               </td>
                             </a>
-                          </tr> 
+                          </tr>  
                           </>}
                           <tr>
                             <td colSpan={2}>
