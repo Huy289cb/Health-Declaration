@@ -296,7 +296,52 @@
   border-bottom:rgba(0, 0, 0, 0.125);
 }
 
-.product-table .MuiTableHead-root {
+.product-table .MuiTableHead-root { 
   font-weight: bold;
 }
+.icon{
+  background:rgb(3, 185, 155);
+  margin: 0px 20px 0px 50px;  
+  border-radius: 5%;
+}
+.icon:hover{
+  /* margin: 0px 50px 0px 50px; */
+  /* border: white solid 1px; */
+  /* border-radius: 30%; */
+   background:rgb(20, 200, 170);
+  }
+.icon-1{
+  background:rgb(240, 2, 51);
+  margin: 0px 50px 0px 20px;  
+  border-radius: 5%;
+}
+.icon-1:hover{ 
+  background:rgb(255, 7, 61);
+} 
+.icon-2{
+  background:rgb(238, 102, 11);
+  margin: 0px 20px 0px 50px;  
+  border-radius: 5%;
+} 
+.icon-2:hover{ 
+  background:rgb(255,117 , 16);
+}
+.text-center{
+  text-align: center;
+}
+.margin-padding{
+  margin-top: 15px;
+}
+.disc-red{
+  color: red;
+  list-style-type: disc;
+  margin-left: 2em;
+}
+
+
+/* .icon:hover{
+   background-color: red; 
+   
+
+} */
 /*# sourceMappingURL=globitsStyles.css.map */
