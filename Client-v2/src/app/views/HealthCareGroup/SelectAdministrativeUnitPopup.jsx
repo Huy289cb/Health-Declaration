@@ -10,22 +10,25 @@ import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { searchByPage } from "../AdministrativeUnit/AdministrativeUnitService";
 import NicePagination from "../Component/Pagination/NicePagination";
-toast.configure({
+toast.configure( {
   autoClose: 1000,
   draggable: false,
   limit: 3
-});
-function PaperComponent(props) {
+} );
+function PaperComponent ( props )
+{
   return (
-    <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
-      <Paper {...props} />
+    <Draggable handle="#draggable-dialog-title" cancel={ '[class*="MuiDialogContent-root"]' }>
+      <Paper { ...props } />
     </Draggable>
   );
 }
-class SelectAdministrativeUnitPopup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
+class SelectAdministrativeUnitPopup extends React.Component
+{
+  constructor ( props )
+  {
+    super( props );
+    this.handleChange = this.handleChange.bind( this );
   }
   state = {
     rowsPerPage: 5,
@@ -42,250 +45,287 @@ class SelectAdministrativeUnitPopup extends React.Component {
     item: null,
   };
 
-  setPage = page => {
-    this.setState({ page }, function () {
+  setPage = page =>
+  {
+    this.setState( { page }, function ()
+    {
       this.updatePageData();
-    })
+    } )
   };
 
-  setRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
+  setRowsPerPage = event =>
+  {
+    this.setState( { rowsPerPage: event.target.value, page: 0 }, function ()
+    {
       this.search();
-    })
+    } )
   };
 
-  handleChangePage = (event, newPage) => {
-    this.setPage(newPage);
+  handleChangePage = ( event, newPage ) =>
+  {
+    this.setPage( newPage );
   };
 
-  updatePageData = (item) => {
+  updatePageData = ( item ) =>
+  {
     var searchObject = {};
-    if (item != null) {
-      this.setState({
+    if ( item != null )
+    {
+      this.setState( {
         page: 1,
         text: item.text,
         orgType: item.orgType,
-      }, () => {
+      }, () =>
+      {
         var searchObject = {};
         searchObject.text = this.state.keyword;
         searchObject.pageIndex = this.state.page;
         searchObject.pageSize = this.state.rowsPerPage;
-        searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-          this.setState({ itemList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages })
-        });
-      })
-    } else {
+        searchByPage( searchObject, this.state.page, this.state.rowsPerPage ).then( ( { data } ) =>
+        {
+          this.setState( { itemList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages } )
+        } );
+      } )
+    } else
+    {
       var searchObject = {};
       searchObject.text = this.state.keyword;
       searchObject.pageIndex = this.state.page;
       searchObject.pageSize = this.state.rowsPerPage;
-      searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-        this.setState({ itemList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages })
-      });
+      searchByPage( searchObject, this.state.page, this.state.rowsPerPage ).then( ( { data } ) =>
+      {
+        this.setState( { itemList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages } )
+      } );
     }
   };
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     this.updatePageData();
 
   }
-  getName = (item) => {
+  getName = ( item ) =>
+  {
     var address = item.name;
-    if(item.parent != null){
-      address = item.name+' - '+item.parent.name;
-      if(item.parent.parent != null){
-        address +=' - '+ item.parent.parent.name;
-        if(item.parent.parent.parent != null){
-          address +=' - '+ item.parent.parent.parent.name;
+    if ( item.parent != null )
+    {
+      address = item.name + ' - ' + item.parent.name;
+      if ( item.parent.parent != null )
+      {
+        address += ' - ' + item.parent.parent.name;
+        if ( item.parent.parent.parent != null )
+        {
+          address += ' - ' + item.parent.parent.parent.name;
         }
       }
     }
     return address;
   }
 
-  getLevel = (level) => {
+  getLevel = ( level ) =>
+  {
     var levelName;
-    if (level === 1) {
+    if ( level === 1 )
+    {
       levelName = "Thành phố";
     }
-    if (level === 2) {
+    if ( level === 2 )
+    {
       levelName = "Quận/huyện";
     }
-    if (level === 3) {
+    if ( level === 3 )
+    {
       levelName = "Xã/Phường";
     }
     return levelName;
   }
 
-  handleClick = (event, item) => {
+  handleClick = ( event, item ) =>
+  {
     //alert(item);
-    if (item.id != null) {
-      this.setState({ selectedValue: [...this.state.selectedValue, item.id], selectedItem: item });
-    } else {
-      this.setState({ selectedValue: null, selectedItem: null });
+    if ( item.id != null )
+    {
+      this.setState( { selectedValue: item.id, selectedItem: item } );
+    } else
+    {
+      this.setState( { selectedValue: null, selectedItem: null } );
     }
   }
 
-  componentWillMount() {
+  componentWillMount ()
+  {
     let { open, handleClose, selectedItem } = this.props;
     //this.setState(item);
-    this.setState({ selectedValue: selectedItem.id });
+    this.setState( { selectedValue: selectedItem.id } );
   }
 
-  handleKeyDownEnterSearch = e => {
-    if (e.key === 'Enter') {
+  handleKeyDownEnterSearch = e =>
+  {
+    if ( e.key === 'Enter' )
+    {
       this.search();
     }
   };
 
-  search() {
-    this.setState({ page: 0 }, function () {
+  search ()
+  {
+    this.setState( { page: 0 }, function ()
+    {
       var searchObject = {};
       searchObject.text = this.state.keyword;
       searchObject.pageIndex = this.state.page + 1;
       searchObject.pageSize = this.state.rowsPerPage;
-      searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-        this.setState({ itemList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages })
-      });
+      searchByPage( searchObject, this.state.page, this.state.rowsPerPage ).then( ( { data } ) =>
+      {
+        this.setState( { itemList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages } )
+      } );
       //this.updatePageData();
-    });
+    } );
   }
 
-  handleChange = (event, source) => {
+  handleChange = ( event, source ) =>
+  {
     event.persist();
-    this.setState({
+    this.setState( {
       [event.target.name]: event.target.value
-    });
+    } );
   };
 
-  handleOpenProductDialog = () => {
-    this.setState({
+  handleOpenProductDialog = () =>
+  {
+    this.setState( {
       shouldOpenProductDialog: true
-    })
+    } )
   }
 
-  handleDialogProductClose = () => {
-    this.setState({
+  handleDialogProductClose = () =>
+  {
+    this.setState( {
       shouldOpenProductDialog: false
-    })
+    } )
   }
 
-  handleOKEditClose = () => {
-    this.setState({
+  handleOKEditClose = () =>
+  {
+    this.setState( {
       shouldOpenProductDialog: false
-    });
+    } );
     this.updatePageData();
   };
 
-  onClickRow = (selectedRow) => {
-    document.querySelector(`#radio${selectedRow.id}`).click();
+  onClickRow = ( selectedRow ) =>
+  {
+    document.querySelector( `#radio${ selectedRow.id }` ).click();
   }
 
-  render() {
+  render ()
+  {
     const { t, i18n, handleClose, handleSelect, selectedItem, open, itemConvertList } = this.props;
     let { keyword, shouldOpenProductDialog, itemList } = this.state;
     let columns = [
       {
-        title: t("Chọn"),
+        title: t( "Chọn" ),
         field: "custom",
         align: "left",
         width: "250",
-        render: rowData => <Radio id={`radio${rowData.id}`} name="radSelected" value={rowData.id} checked={this.state.selectedValue.includes(rowData.id)} onClick={(event) => this.handleClick(event, rowData)}/>
+        render: rowData => <Radio id={ `radio${ rowData?.id }` } name="radSelected" value={ rowData?.id } checked={ this.state.selectedValue === rowData.id } onClick={ ( event ) => this.handleClick( event, rowData ) } />
       },
       {
-        title: t("Mã đơn vị"),
+        title: t( "Mã đơn vị" ),
         field: "code",
         align: "left",
         width: "150",
       },
       {
-        title: t("Tên đơn vị"),
+        title: t( "Tên đơn vị" ),
         field: "name",
         width: "150",
-        render: (item) => this.getName(item)
+        render: ( item ) => this.getName( item )
       },
       {
-        title: t("Cấp đơn vị"),
+        title: t( "Cấp đơn vị" ),
         field: "name",
         width: "150",
-        render: (item) => this.getLevel(item.level)
+        render: ( item ) => this.getLevel( item.level )
       }
     ];
     return (
-      <Dialog onClose={handleClose} open={open} PaperComponent={PaperComponent} maxWidth={'md'} fullWidth>
-        <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          <span className="mb-20">{""}</span>
+      <Dialog onClose={ handleClose } open={ open } PaperComponent={ PaperComponent } maxWidth={ 'md' } fullWidth>
+        <DialogTitle style={ { cursor: 'move' } } id="draggable-dialog-title">
+          <span className="mb-20">{ "" }</span>
         </DialogTitle>
         <DialogContent>
-          <Grid item container xs={12}>
-            <Grid item lg={7} md={7} sm={12} sx={12}>
+          <Grid item container xs={ 12 }>
+            <Grid item lg={ 7 } md={ 7 } sm={ 12 } sx={ 12 }>
 
             </Grid>
-            <Grid item lg={5} md={5} sm={12} sx={12}>
+            <Grid item lg={ 5 } md={ 5 } sm={ 12 } sx={ 12 }>
               <Input
-                label={t('Tìm kiếm')}
+                label={ t( 'Tìm kiếm' ) }
                 type="text"
                 name="keyword"
-                value={keyword}
-                onChange={this.handleChange}
-                onKeyDown={this.handleKeyDownEnterSearch}
-                onKeyUp={this.handleKeyUp}
+                value={ keyword }
+                onChange={ this.handleChange }
+                onKeyDown={ this.handleKeyDownEnterSearch }
+                onKeyUp={ this.handleKeyUp }
                 // style={{ width: '50%'}}
                 className="w-100 mb-16 mr-12"
                 id="search_box"
-                placeholder={t('Tìm kiếm')}
+                placeholder={ t( 'Tìm kiếm' ) }
                 startAdornment={
                   <InputAdornment >
                     <Link to="#"> <SearchIcon
-                      onClick={() => this.search(keyword)}
-                      style={{
+                      onClick={ () => this.search( keyword ) }
+                      style={ {
                         position: "absolute",
                         top: "0",
                         right: "0"
-                      }} /></Link>
+                      } } /></Link>
                   </InputAdornment>
                 }
               />
             </Grid>
 
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={ 12 }>
 
             <MaterialTable
-              data={itemList}
-              columns={columns}
-              onRowClick={((evt, selectedRow) => this.onClickRow(selectedRow))}
-              parentChildData={(row, rows) => {
-                var list = rows.find(a => a.id === row.parentId);
+              data={ itemList }
+              columns={ columns }
+              onRowClick={ ( ( evt, selectedRow ) => this.onClickRow( selectedRow ) ) }
+              parentChildData={ ( row, rows ) =>
+              {
+                var list = rows.find( a => a.id === row.parentId );
                 return list;
-              }}
-              options={{
+              } }
+              options={ {
                 toolbar: false,
                 selection: false,
                 actionsColumnIndex: -1,
                 paging: false,
                 search: false
-              }}
-              components={{
+              } }
+              components={ {
                 Toolbar: props => (
-                  <div style={{ width: "100%" }}>
-                    <MTableToolbar {...props} />
+                  <div style={ { width: "100%" } }>
+                    <MTableToolbar { ...props } />
                   </div>
                 ),
-              }}
-              onSelectionChange={(rows) => {
+              } }
+              onSelectionChange={ ( rows ) =>
+              {
                 this.data = rows;
-              }}
+              } }
             />
             <NicePagination
-              totalPages={this.state.totalPages}
-              handleChangePage={this.handleChangePage}
-              setRowsPerPage={this.setRowsPerPage}
-              pageSize={this.state.rowsPerPage}
-              pageSizeOption={[1, 2, 3, 5, 10, 25, 1000]}
-              t={t}
-              totalElements={this.state.totalElements}
-              page={this.state.page}
+              totalPages={ this.state.totalPages }
+              handleChangePage={ this.handleChangePage }
+              setRowsPerPage={ this.setRowsPerPage }
+              pageSize={ this.state.rowsPerPage }
+              pageSizeOption={ [1, 2, 3, 5, 10, 25, 1000] }
+              t={ t }
+              totalElements={ this.state.totalElements }
+              page={ this.state.page }
             />
           </Grid>
         </DialogContent>
@@ -294,15 +334,15 @@ class SelectAdministrativeUnitPopup extends React.Component {
             className="mb-16 mr-36 align-bottom"
             variant="contained"
             color="secondary"
-            onClick={() => handleClose()}
+            onClick={ () => handleClose() }
           >
-            {t('Hủy')}</Button>
+            { t( 'Hủy' ) }</Button>
           <Button className="mb-16 mr-16 align-bottom"
             variant="contained"
             color="primary"
-            onClick={() => handleSelect(this.state.selectedItem)}
+            onClick={ () => handleSelect( this.state.selectedItem ) }
           >
-            {t('Chọn')}
+            { t( 'Chọn' ) }
           </Button>
         </DialogActions>
       </Dialog>
