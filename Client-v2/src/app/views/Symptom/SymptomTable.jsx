@@ -340,7 +340,7 @@ class SymptomTable extends Component {
                 maxBodyHeight: '450px',
                 minBodyHeight: '370px',
                 headerStyle: {
-                    backgroundColor: "#337ab7",
+                    backgroundColor: "#3366ff",
                     color: "#fff",
                   },
                 padding: 'dense',

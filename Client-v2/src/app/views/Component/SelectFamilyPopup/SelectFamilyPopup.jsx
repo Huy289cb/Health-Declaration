@@ -152,7 +152,7 @@ class SelectFamilyPopup extends React.Component {
     let { itemList } = this.state;
     let columns = [
       {
-        title: t("general.popup.select"),
+        title: "Chọn",
         field: "custom",
         align: "left",
         width: "250",
@@ -165,15 +165,15 @@ class SelectFamilyPopup extends React.Component {
             onClick={(event) => this.handleClick(event, rowData)}
           />
       },
-      { title: t("general.popup.code"), field: "code", align: "left", width: "150" },
-      { title: t("Họ tên"), field: "name", width: "150" },
-      { title: t("Địa chỉ chi tiết"), field: "detailAddress", width: "150" },
-      { title: t("Số điện thoại"), field: "phoneNumber", width: "150" },
+      { title: "Mã", field: "code", align: "left", width: "150" },
+      { title: "Họ tên chủ hộ", field: "name", width: "150" },
+      { title: "Địa chỉ chi tiết", field: "detailAddress", width: "150" },
+      { title: "Số điện thoại", field: "phoneNumber", width: "150" },
     ];
     return (
       <Dialog onClose={handleClose} open={open} PaperComponent={PaperComponent} maxWidth={'md'} fullWidth>
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          <span className="mb-20">{t("Chọn hộ gia đình")}</span>
+          <span className="mb-20">Chọn hộ gia đình</span>
         </DialogTitle>
         <DialogContent>
           <Grid container className="mb-16">
@@ -181,7 +181,6 @@ class SelectFamilyPopup extends React.Component {
             <Grid item md={6}>
               <SearchInput
                 search={this.updatePageData}
-                t={t}
               />
             </Grid>
           </Grid>
@@ -232,7 +231,7 @@ class SelectFamilyPopup extends React.Component {
           <Button
             className="mb-16 mr-36 btn btn-secondary"
             variant="contained"
-            onClick={() => handleClose()}>{t('general.button.cancel')}</Button>
+            onClick={() => handleClose()}>Đóng</Button>
           <Button
             className="mb-16 mr-16 btn btn-success"
             variant="contained"
@@ -244,7 +243,7 @@ class SelectFamilyPopup extends React.Component {
                 toast.warning("Hãy chọn 1 hộ gia đình!");
               }}
             }>
-            {t('general.button.select')}
+            Chọn
           </Button>
         </DialogActions>
       </Dialog>

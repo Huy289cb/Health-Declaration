@@ -31,8 +31,8 @@
 
 .btn-primary-d {
   color: #fff;
-  background-color: #2a80c8;
-  border-color: #2a80c8;
+  background-color: #3366ff;
+  border-color: #3366ff;
 }
 
 .btn-secondary {
@@ -138,11 +138,11 @@
 }
 
 .MuiTypography-colorPrimary {
-  color: #2a80c8;
+  color: #3366ff;
 }
 
 .MuiIcon-colorPrimary {
-  color: #2a80c8;
+  color: #3366ff;
 }
 
 .text-primary-d2 {
@@ -150,7 +150,7 @@
 }
 
 .bgc-primary-d1 {
-  background-color: #2a80c8 !important;
+  background-color: #3366ff !important;
 }
 
 .brc-primary-l2 {
@@ -217,19 +217,19 @@
 }
 
 .MuiPickersToolbar-toolbar {
-  background-color: #2a80c8;
+  background-color: #3366ff;
 }
 
 .MuiPickersDay-daySelected:hover {
-  background-color: #2a80c8;
+  background-color: #3366ff;
 }
 
 .MuiPickersDay-daySelected {
-  background-color: #2a80c8;
+  background-color: #3366ff;
 }
 
 .MuiButton-textPrimary {
-  color: #2a80c8;
+  color: #3366ff;
 }
 
 .input-description {
@@ -357,13 +357,18 @@
 /*# sourceMappingURL=globitsStyles.css.map */
 
 .head-line {
-  font-family: SVN-Poppins, Inter, Twemoji, Apple Color Emoji, Segoe UI Emoji, Arial, Helvetica, Sans-Serif,
-    Noto Color Emoji;
+  font-family: inherit;
+  text-transform: uppercase;
   margin: 0;
   color: aliceblue;
   padding: 8px;
   font-size: medium;
   font-weight: bold;
+  background-color: #3366ff;
+}
+
+.MuiFormControlLabel-root {
+  margin-left: 0;
 }
 
 /*# sourceMappingURL=globitsStyles.css.map */

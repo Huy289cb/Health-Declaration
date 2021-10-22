@@ -317,7 +317,7 @@ class User extends Component {
                 toolbar: false,
                 maxBodyHeight: "440px",
                 headerStyle: {
-                  backgroundColor: "#337ab7",
+                  backgroundColor: "#3366ff",
                   color: "#fff",
                 },
                 tableLayout: 'fixed',

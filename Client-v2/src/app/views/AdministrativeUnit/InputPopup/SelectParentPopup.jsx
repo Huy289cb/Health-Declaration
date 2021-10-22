@@ -272,7 +272,7 @@ class SelectParentPopup extends React.Component {
                 search: false,
                 toolbar: false,
                 headerStyle: {
-                  backgroundColor: "#337ab7",
+                  backgroundColor: "#3366ff",
                   color: "#fff",
                 },
               }}

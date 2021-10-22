@@ -23,7 +23,8 @@ import
   InputLabel,
   MenuItem,
   IconButton,
-  Icon
+  Icon,
+  InputAdornment,
 } from "@material-ui/core";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import FamilyInputPopup from "../Component/SelectFamilyPopup/InputPopup"
@@ -400,7 +401,7 @@ class CreateEncounter extends React.Component
             var type = ConstantList.GET_PERSONAL_HEALTH_RECORD_TYPE.medical_team;
             this.setState( { medicalTeam: { id: data.userUnit.id }, type: type }, () =>
             {
-              console.log( this.state );
+              // console.log( this.state );
             } );
           }
         }
@@ -742,7 +743,7 @@ class CreateEncounter extends React.Component
   {
     this.setState( { haveTest: event.target.value }, () =>
     {
-      console.log( this.state );
+      // console.log( this.state );
     } );
   }
 
@@ -801,8 +802,7 @@ class CreateEncounter extends React.Component
     this.setState( { familyMember } );
   };
 
-  render ()
-  {
+  render () {
     let { t } = this.props;
     let {
       id,
@@ -856,7 +856,7 @@ class CreateEncounter extends React.Component
                   color="secondary"
                   onClick={ () => this.backToHome() }
                 >
-                  { t( "Về trang chủ" ) }
+                  Trang chủ
                 </Button>
                 <Button
                   size="small"
@@ -864,7 +864,7 @@ class CreateEncounter extends React.Component
                   variant="contained"
                   onClick={ () => this.setState( { openFamilyPopup: true } ) }
                 >
-                  <div className="btn-select-family">{ t( "Chọn hộ gia đình khác" ) }</div>
+                  <div className="btn-select-family">Chọn hộ gia đình</div>
                 </Button>
                 <SelectFamilyPopup
                   open={ openFamilyPopup }
@@ -875,17 +875,30 @@ class CreateEncounter extends React.Component
                   } }
                   selectedItem={ family ? family : {} }
                   handleClose={ () => this.setState( { openFamilyPopup: false } ) }
-                  t={ t }
+                  t={t}
                 />
               </Grid>
               <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
-                <div>Ghi chú:</div>
-                <div>
-                  (<span style={ { color: "red" } }> * </span>) <i>Trường bắt buộc</i>
-                </div>
-                <div style={ { display: "inline-block" } }>
-                  ( <div style={ { display: "inline-block", width: "12px", height: "12px", backgroundColor: "#eee" } }></div> ) <i>Trường chỉ xem</i>
-                </div>
+                <div className="head-line mb-8">Phiếu thăm khám</div>
+                <div style={{ display: 'flex'}}>
+                  <div>Ghi chú:</div>
+                    <div className="pl-16">
+                      (<span style={{ color: "red" }}> * </span>){" "}
+                      <i>Trường bắt buộc.</i>
+                    </div>
+                    <div className="pl-16" style={{ display: "inline-block" }}>
+                      ({" "}
+                      <div
+                        style={{
+                          display: "inline-block",
+                          width: "12px",
+                          height: "12px",
+                          backgroundColor: "#eee",
+                        }}
+                      ></div>{" "}
+                      ) <i>Trường chỉ xem.</i>
+                    </div>
+                  </div>
               </Grid>
               { isViewType && <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
                 <FormControl className="nice-input" fullWidth={ true } variant="outlined" size="small">
@@ -893,13 +906,13 @@ class CreateEncounter extends React.Component
                     {
                       <span>
                         <span style={ { color: "red" } }> * </span>
-                        <span>{ t( "Loại thăm khám" ) }</span>
+                        <span>Loại thăm khám</span>
                       </span>
                     }
                   </InputLabel>
                   <Select
                     label={
-                      <span>{ t( "Loại thăm khám" ) }</span>
+                      <span>Loại thăm khám</span>
                     }
                     value={ type ? type : "" }
                     disabled={ !isVisible }
@@ -927,10 +940,6 @@ class CreateEncounter extends React.Component
                 </FormControl>
               </Grid> }
               <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
-
-                <div style={ { backgroundColor: "rgb(51, 122, 183)" } }>
-                  <legend class="head-line">Phiếu thăm khám</legend>
-                </div>
                 <Grid className="" container spacing={ 2 } style={ { paddingTop: "12px" } }>
                   {/* code */ }
                   <Grid item sm={ 12 } xs={ 12 }>
@@ -957,7 +966,7 @@ class CreateEncounter extends React.Component
                       name="family"
                       label={ <span className="font">
                         <span style={ { color: "red" } }> * </span>
-                        { t( "Hộ gia đình" ) }
+                        Hộ gia đình
                       </span> }
                       value={
                         family ? ( family.code ? family.code + " | " : "" ) + ( family.name ? family.name + " | " : "" )
@@ -976,14 +985,14 @@ class CreateEncounter extends React.Component
                         {
                           <span className="">
                             <span style={ { color: "red" } }> * </span>
-                            { t( "Chọn thành viên gia đình" ) }
+                            Chọn thành viên gia đình
                           </span>
                         }
                       </InputLabel>
                       <Select
                         label={ <span className="">
                           <span style={ { color: "red" } }> * </span>
-                          { t( "Chọn thành viên gia đình" ) }
+                            Chọn thành viên gia đình
                         </span> }
                         value={ familyMemberId ? familyMemberId : "" }
                         onChange={ ( event ) => this.changeFamilyMember( event.target.value )
@@ -993,7 +1002,6 @@ class CreateEncounter extends React.Component
                           //     let str = "";
                           //     event.target.value.member && event.target.value.member.listBackgroundDisease
                           //       && event.target.value.member.listBackgroundDisease.forEach((e) => {
-                          //         console.log(e.backgroundDisease.name);
                           //         str += e.backgroundDisease.name + ", "
                           //       });
                           //     str = str.replace(/,\s*$/, "");
@@ -1011,10 +1019,6 @@ class CreateEncounter extends React.Component
                           //   }
                           // }
                         }
-                        inputProps={ {
-                          name: "familyMembers",
-                          id: "familyMembers-simple",
-                        } }
                         validators={ ["required"] }
                         errorMessages={ [t( "general.required" )] }
                       >
@@ -1040,7 +1044,7 @@ class CreateEncounter extends React.Component
                   <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 6 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={ t( "Tuổi" ) }
+                      label="Tuổi"
                       disabled
                       // onChange={this.handleChange}
                       type="number"
@@ -1053,7 +1057,7 @@ class CreateEncounter extends React.Component
                   <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 6 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={ t( "Giới tính" ) }
+                      label="Giới tính"
                       disabled
                       // onChange={this.handleChange}
                       type="text"
@@ -1066,18 +1070,21 @@ class CreateEncounter extends React.Component
                   <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={ t( "Chiều cao(cm)" ) }
-                      disabled
-                      // onChange={this.handleChange}
+                      label="Chiều cao"
+                      // disabled
+                      onChange={this.handleChange}
                       type="text"
                       name="height"
                       value={ familyMember ? ( familyMember.member ? ( familyMember.member.height ? familyMember.member.height : '' ) : "" ) : "" }
                       variant="outlined"
                       size="small"
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">(cm)</InputAdornment>
+                      }}
                     />
                   </Grid>
                   <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
-                    { familyMember && familyMember.member && familyMember.member.phoneNumber &&
+                    {/* { familyMember && familyMember.member && familyMember.member.phoneNumber &&
                       <a href={ "tel:" + ( familyMember ? ( familyMember.member ? ( familyMember.member.phoneNumber ? familyMember.member.phoneNumber : "" ) : "" ) : "" ) }>
                         <Button
                           startIcon={ <Icon>call</Icon> }
@@ -1086,10 +1093,10 @@ class CreateEncounter extends React.Component
                         >
                           { familyMember ? ( familyMember.member ? ( familyMember.member.phoneNumber ? familyMember.member.phoneNumber : "" ) : "" ) : "" }
                         </Button>
-                      </a> }
-                    {/* <TextValidator
+                      </a> } */}
+                    <TextValidator
                         className="nice-input w-100"
-                        label={t("Số điện thoại cá nhân")}
+                        label="Số điện thoại cá nhân"
                         disabled
                         // onChange={this.handleChange}
                         type="text"
@@ -1097,29 +1104,28 @@ class CreateEncounter extends React.Component
                         value={familyMember ? (familyMember.member ? (familyMember.member.phoneNumber ? familyMember.member.phoneNumber : "") : "") : ""}
                         variant="outlined"
                         size="small"
-                      /> */}
+                      />
                   </Grid>
                   <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={ t( "Cân nặng(kg)" ) }
+                      label="Cân nặng"
                       // disabled={(familyMember && familyMember.member) ? true : false}
-                      onChange={ ( event ) =>
-                      {
-                        // if (familyMember && familyMember.member) {
+                      onChange={ ( event ) => {
                         familyMember.member.weight = event.target.value;
                         this.setState( { familyMember } );
-                        if ( familyMember.member.height )
-                        {
+                        if ( familyMember.member.height ) {
                           this.getBMI( Number( familyMember.member.height ), Number( event.target.value ) );
                         }
-                        // }
-                      } }
+                      }}
                       type="number"
                       name="weight"
                       value={ familyMember ? ( familyMember.member ? ( familyMember.member.weight ? familyMember.member.weight : '' ) : "" ) : "" }
                       variant="outlined"
                       size="small"
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">(kg)</InputAdornment>
+                      }}
                     />
                   </Grid>
 
@@ -1129,7 +1135,7 @@ class CreateEncounter extends React.Component
                   <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={ t( "Email" ) }
+                      label="Email"
                       disabled
                       // onChange={this.handleChange}
                       type="text"
@@ -1142,7 +1148,7 @@ class CreateEncounter extends React.Component
                   <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={ t( "Số thẻ BHYT" ) }
+                      label="Số thẻ BHYT"
                       disabled
                       // onChange={this.handleChange}
                       type="text"
@@ -1152,12 +1158,10 @@ class CreateEncounter extends React.Component
                       size="small"
                     />
                   </Grid>
-                  <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }></Grid>
-
-                  <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
+                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={ t( "Chỉ số BMI" ) }
+                      label="Chỉ số BMI"
                       disabled
                       type="number"
                       name="bmi"
@@ -1166,10 +1170,10 @@ class CreateEncounter extends React.Component
                       size="small"
                     />
                   </Grid>
-                  <Grid item lg={ 6 } md={ 6 } sm={ 12 } xs={ 12 }>
+                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={ t( "Đánh giá chỉ số BMI" ) }
+                      label="Đánh giá chỉ số BMI"
                       disabled
                       type="text"
                       name="bmiText"
@@ -1179,25 +1183,28 @@ class CreateEncounter extends React.Component
                     />
                   </Grid>
 
-                  <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
-                    <FormControl component="fieldset" error={ this.state.radioError }
-                      disabled={ familyMember ? false : true }>
-                      <FormLabel component="legend"><span style={ { color: "red" } }> * </span>Có bệnh nền: </FormLabel>
+                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
+                    <FormControl error={ this.state.radioError }
+                      disabled={ familyMember ? false : true }
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}>
+                      <span><span style={ { color: "red" } }> * </span>Có bệnh nền:</span>
                       <RadioGroup row aria-label="haveBackgroundDisease" name="haveBackgroundDisease"
                         value={ familyMember && familyMember.member ? familyMember.member.haveBackgroundDisease : null }
-                        onChange={ ( event ) =>
-                        {
-                          if ( event.target.value === "true" )
-                          {
+                        onChange={ ( event ) => {
+                          if ( event.target.value === "true" ) {
                             familyMember.member.haveBackgroundDisease = true;
                           }
-                          else
-                          {
+                          else {
                             familyMember.member.haveBackgroundDisease = false;
                             familyMember.member.backgroundDiseases = [];
                           }
                           this.setState( { familyMember, radioHelperText: "", radioError: false } )
-                        } }>
+                        }}>
                         <FormControlLabel value={ true }
                           control={ <Radio checked={ familyMember && familyMember.member ? ( familyMember.member.haveBackgroundDisease === true ? true : false ) : false } /> }
                           label="Có" />
@@ -1210,7 +1217,7 @@ class CreateEncounter extends React.Component
 
                     </FormControl>
                   </Grid>
-                  <Grid item lg={ 9 } md={ 9 } sm={ 12 } xs={ 12 }>
+                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
                     <Autocomplete
                       className="nice-input w-100"
                       disabled={ familyMember && familyMember.member ? ( familyMember.member.haveBackgroundDisease ? false : true ) : true }
@@ -1232,11 +1239,7 @@ class CreateEncounter extends React.Component
                         <TextValidator
                           { ...params }
                           value={ familyMember && familyMember.member && familyMember.member.backgroundDiseases ? familyMember.member.backgroundDiseases : [] }
-                          label={
-                            <span className="font">
-                              { t( "Tiền sử bệnh" ) }
-                            </span>
-                          }
+                          label={<span className="font">Bệnh nền</span>}
                           variant="outlined"
                           size="small"
                           fullWidth
@@ -1274,21 +1277,18 @@ class CreateEncounter extends React.Component
                       />
                     </Grid> */}
                   <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
-
-                    <div style={ { backgroundColor: "rgb(51, 122, 183)" } }>
-                      <legend class="head-line">Các chỉ số:</legend>
-                    </div>
-                    <Grid container spacing={ 2 } style={ { padding: "8px" } }>
+                    <div className="head-line mb-8">Các chỉ số</div>
+                    <Grid container spacing={ 2 }>
                       <Grid item lg={ 2 } md={ 4 } sm={ 12 } xs={ 12 }>
                         <FormControl className="nice-input" fullWidth={ true } variant="outlined" size="small">
                           <InputLabel htmlFor="temperature-simple">
                             {
-                              <span>{ t( "Nhiệt độ (°C)" ) }</span>
+                              <span>Nhiệt độ</span>
                             }
                           </InputLabel>
                           <Select
                             label={
-                              <span>{ t( "Nhiệt độ (°C)" ) }</span>
+                              <span>Nhiệt độ</span>
                             }
                             value={ temperature ? temperature : "" }
                             onChange={ ( event ) =>
@@ -1298,7 +1298,10 @@ class CreateEncounter extends React.Component
                             inputProps={ {
                               name: "temperature",
                               id: "temperature-simple",
-                            } }
+                            }}
+                            InputProps={{
+                              endAdornment: <InputAdornment position="end">(°C)</InputAdornment>
+                            }}
                             validators={ ["required"] }
                             errorMessages={ [t( "general.required" )] }
                           >
@@ -1317,12 +1320,12 @@ class CreateEncounter extends React.Component
                         <FormControl className="nice-input" fullWidth={ true } variant="outlined" size="small">
                           <InputLabel htmlFor="breathingRate-simple">
                             {
-                              <span>{ t( "Nhịp thở (lần/phút)" ) }</span>
+                              <span>Nhịp thở (lần/phút)</span>
                             }
                           </InputLabel>
                           <Select
                             label={
-                              <span>{ t( "Nhịp thở (lần/phút)" ) }</span>
+                              <span>Nhịp thở (lần/phút)</span>
                             }
                             value={ breathingRate ? breathingRate : "" }
                             onChange={ ( event ) =>
@@ -1351,12 +1354,12 @@ class CreateEncounter extends React.Component
                         <FormControl className="nice-input" fullWidth={ true } variant="outlined" size="small">
                           <InputLabel htmlFor="spo2-simple">
                             {
-                              <span>{ t( "Chỉ số SpO2" ) }</span>
+                              <span>Chỉ số SpO2</span>
                             }
                           </InputLabel>
                           <Select
                             label={
-                              <span>{ t( "Chỉ số SpO2" ) }</span>
+                              <span>Chỉ số SpO2</span>
                             }
                             value={ spo2 ? spo2 : "" }
                             onChange={ ( event ) =>
@@ -1386,7 +1389,7 @@ class CreateEncounter extends React.Component
                           className="nice-input w-100"
                           label={
                             <span className="font">
-                              { t( "Huyết áp tối đa" ) }
+                              Huyết áp tối đa
                             </span>
                           }
                           onChange={ this.handleChange }
@@ -1404,7 +1407,7 @@ class CreateEncounter extends React.Component
                           className="nice-input w-100"
                           label={
                             <span className="font">
-                              { t( "Huyết áp tối thiểu" ) }
+                              Huyết áp tối thiểu
                             </span>
                           }
                           onChange={ this.handleChange }
@@ -1422,14 +1425,17 @@ class CreateEncounter extends React.Component
 
                   </Grid>
                   <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
-
-                    <div style={ { backgroundColor: "rgb(51, 122, 183)" } }>
-                      <legend class="head-line">Xét nghiệm COVID:</legend>
-                    </div>
-                    <Grid container spacing={ 2 } style={ { padding: "8px" } }>
+                    <div className="head-line mb-8">Xét nghiệm COVID</div>
+                    <Grid container spacing={ 2 }>
                       <Grid item lg={ 4 } md={ 4 } sm={ 12 } xs={ 12 }>
-                        <FormControl component="fieldset" error={ this.state.radioErrorHaveTest }>
-                          <FormLabel component="legend"><span style={ { color: "red" } }> * </span>Có xét nghiệm: </FormLabel>
+                        <FormControl error={ this.state.radioErrorHaveTest }
+                          style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}>
+                          <span><span style={ { color: "red" } }> * </span>Có xét nghiệm:</span>
                           <RadioGroup row
                             aria-label="position" name="position" defaultValue="top"
                             onChange={ ( value ) => { this.handleChange( value, "haveTest" ) } }
@@ -1460,7 +1466,7 @@ class CreateEncounter extends React.Component
                                 name="haveQuickTest"
                               />
                             }
-                            label={ <span><span style={ { color: "red" } }> * </span>Có xét nghiệm nhanh</span> }
+                            label={ <span>Có xét nghiệm nhanh</span> }
                           />
                           <div style={ { display: haveQuickTest ? "block" : "none" } }>
                             <Grid container spacing={ 2 }>
@@ -1490,12 +1496,12 @@ class CreateEncounter extends React.Component
                                   variant="outlined" size="small">
                                   <InputLabel htmlFor="quickTestResults-simple">
                                     {
-                                      <span><span style={ { color: "red" } }> * </span>{ t( "Kết quả xét nghiệm nhanh" ) }</span>
+                                      <span><span style={ { color: "red" } }> * </span>Kết quả xét nghiệm nhanh</span>
                                     }
                                   </InputLabel>
                                   <Select
                                     label={
-                                      <span><span style={ { color: "red" } }> * </span>{ t( "Kết quả xét nghiệm nhanh" ) }</span>
+                                      <span><span style={ { color: "red" } }> * </span>Kết quả xét nghiệm nhanh</span>
                                     }
                                     value={ quickTestResults ? quickTestResults : "" }
                                     onChange={ ( event ) =>
@@ -1537,7 +1543,7 @@ class CreateEncounter extends React.Component
                                 name="havePCR"
                               />
                             }
-                            label={ <span><span style={ { color: "red" } }> * </span>Có xét nghiệm PCR</span> }
+                            label={ <span>Có xét nghiệm PCR</span> }
                           />
                           <div style={ { display: havePCR ? "block" : "none" } }>
                             <Grid container spacing={ 2 }>
@@ -1567,12 +1573,12 @@ class CreateEncounter extends React.Component
                                   fullWidth={ true } variant="outlined" size="small">
                                   <InputLabel htmlFor="pcrResults-simple">
                                     {
-                                      <span><span style={ { color: "red" } }> * </span>{ t( "Kết quả xét nghiệm PCR" ) }</span>
+                                      <span><span style={ { color: "red" } }> * </span>Kết quả xét nghiệm PCR</span>
                                     }
                                   </InputLabel>
                                   <Select
                                     label={
-                                      <span><span style={ { color: "red" } }> * </span>{ t( "Kết quả xét nghiệm PCR" ) }</span>
+                                      <span><span style={ { color: "red" } }> * </span>Kết quả xét nghiệm PCR"</span>
                                     }
                                     value={ pcrResults ? pcrResults : "" }
                                     onChange={ ( event ) =>
@@ -1609,12 +1615,9 @@ class CreateEncounter extends React.Component
                   </Grid>
 
                   <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
-
-                    <div style={ { backgroundColor: "rgb(51, 122, 183)" } }>
-                      <legend class="head-line"><span style={ { color: "red" } }> * </span>Triệu chứng:</legend>
-                    </div>
-                    <Grid container style={ { padding: "8px" } }>
-                      <Grid item lg={ 3 } md={ 4 } sm={ 12 } xs={ 12 }>
+                    <div className="head-line"><span style={ { color: "red" } }> * </span>Triệu chứng</div>
+                    <Grid container>
+                      <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                         <FormControl component="fieldset" error={ this.state.radioErrorHaveSymptom }>
                           <FormControlLabel
                             value={ true }
@@ -1626,21 +1629,21 @@ class CreateEncounter extends React.Component
                             label="Không có triệu chứng"
                             labelPlacement="end"
                             disabled={
-                              ( nomalSystoms && nomalSystoms.length > 0 ? true : false ) ||
-                              ( severeSymptoms && severeSymptoms.length > 0 ? true : false ) ||
+                              ( (nomalSystoms && nomalSystoms.length > 0) ? true : false ) ||
+                              ( (severeSymptoms && severeSymptoms.length > 0) ? true : false ) ||
                               ( symptomText ? true : false )
                             }
                           />
                           <FormHelperText>{ this.state.radioHelperTextHaveSymptom }</FormHelperText>
                         </FormControl>
                       </Grid>
-                      <Grid item lg={ 9 } md={ 8 } sm={ 12 } xs={ 12 }>
-                        <TextValidator
+                      <Grid item lg={ 9 } md={ 9 } sm={ 12 } xs={ 12 }>
+                        {/* <TextValidator
                           disabled={ haveSymptom ? haveSymptom : false }
                           className="nice-input w-100"
                           label={
                             <span className="font">
-                              { t( "Triệu chứng khác" ) }
+                              Triệu chứng khác" ) }
                             </span>
                           }
                           onChange={ this.handleChange }
@@ -1649,74 +1652,87 @@ class CreateEncounter extends React.Component
                           value={ symptomText ? symptomText : "" }
                           variant="outlined"
                           size="small"
-                        />
+                        /> */}
                       </Grid>
-                      { listNormalSymptom && listNormalSymptom.map( ( item ) =>
-                      {
-                        return (
-                          <Grid item lg={ 4 } md={ 4 } sm={ 12 } xs={ 12 }>
-                            <FormControlLabel
-                              onChange={ ( event, value ) =>
-                              {
-                                if ( value )
+                      {!haveSymptom &&
+                      <>
+                        { listNormalSymptom && listNormalSymptom.map( ( item ) =>
+                        {
+                          return (
+                            <Grid item lg={ 4 } md={ 4 } sm={ 12 } xs={ 12 }>
+                              <FormControlLabel
+                                onChange={ ( event, value ) =>
                                 {
-                                  //thêm
-                                  if ( !nomalSystoms )
+                                  if ( value )
                                   {
-                                    nomalSystoms = [];
+                                    //thêm
+                                    if ( !nomalSystoms )
+                                    {
+                                      nomalSystoms = [];
+                                    }
+                                    nomalSystoms = [...nomalSystoms, { symptom: item }]
+                                  } else
+                                  {
+                                    //xoá
+                                    nomalSystoms = nomalSystoms.filter( ( e ) =>
+                                    {
+                                      return e.symptom.id != item.id;
+                                    } )
                                   }
-                                  nomalSystoms = [...nomalSystoms, { symptom: item }]
-                                } else
-                                {
-                                  //xoá
-                                  nomalSystoms = nomalSystoms.filter( ( e ) =>
-                                  {
-                                    return e.symptom.id != item.id;
-                                  } )
-                                }
-                                this.setState( { nomalSystoms } );
-                              } }
-                              disabled={ haveSymptom ? haveSymptom : false }
-                              control={ <Checkbox value={ item } /> }
-                              label={ item ? ( item.symptom ? item.symptom.name : item.name ) : '' }
-                            />
-                          </Grid>
-                        )
-                      } ) }
-                      { listSevereSymptom && listSevereSymptom.map( ( item ) =>
-                      {
-                        return (
-                          <Grid item lg={ 4 } md={ 4 } sm={ 12 } xs={ 12 }>
-                            <FormControlLabel
-                              onChange={ ( event, value ) =>
-                              {
-                                if ( value )
-                                {
-                                  //thêm
-                                  if ( !severeSymptoms )
-                                  {
-                                    severeSymptoms = [];
+                                  this.setState( { nomalSystoms } );
+                                } }
+                                disabled={ haveSymptom ? haveSymptom : false }
+                                control={ <Checkbox value={ item } /> }
+                                label={ item ? ( item.symptom ? item.symptom.name : item.name ) : '' }
+                              />
+                            </Grid>
+                          )
+                        })}
+                        { listSevereSymptom && listSevereSymptom.map( ( item ) => {
+                          return (
+                            <Grid item lg={ 4 } md={ 4 } sm={ 12 } xs={ 12 }>
+                              <FormControlLabel
+                                onChange={ ( event, value ) => {
+                                  if ( value ) {
+                                    //thêm
+                                    if ( !severeSymptoms ) {
+                                      severeSymptoms = [];
+                                    }
+                                    severeSymptoms = [...severeSymptoms, { symptom: item }]
+                                  } else {
+                                    //xoá
+                                    severeSymptoms = severeSymptoms.filter( ( e ) => {
+                                      return e.symptom.id != item.id;
+                                    })
                                   }
-                                  severeSymptoms = [...severeSymptoms, { symptom: item }]
-                                } else
-                                {
-                                  //xoá
-                                  severeSymptoms = severeSymptoms.filter( ( e ) =>
-                                  {
-                                    return e.id != item.id;
-                                  } )
-                                }
-                                this.setState( { severeSymptoms } );
-                              } }
-                              disabled={ haveSymptom ? haveSymptom : false }
-                              control={ <Checkbox value={ item } /> }
-                              label={ item ? ( item.symptom ? item.symptom.name : item.name ) : '' }
-                            />
-                          </Grid>
-                        )
-                      } ) }
+                                  this.setState( { severeSymptoms } );
+                                } }
+                                disabled={ haveSymptom ? haveSymptom : false }
+                                control={ <Checkbox value={ item } /> }
+                                label={ item ? ( item.symptom ? item.symptom.name : item.name ) : '' }
+                              />
+                            </Grid>
+                          )
+                        })}
+                        <Grid item sm={ 12 } xs={ 12 } className="mt-8">
+                          <TextValidator
+                            disabled={ haveSymptom ? haveSymptom : false }
+                            className="nice-input w-100"
+                            label={
+                              <span className="font">
+                                Triệu chứng khác
+                              </span>
+                            }
+                            onChange={ this.handleChange }
+                            type="text"
+                            name="symptomText"
+                            value={ symptomText ? symptomText : "" }
+                            variant="outlined"
+                            size="small"
+                          />
+                        </Grid>
+                      </>}
                     </Grid>
-
                   </Grid>
                   <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
                     <Grid container spacing={ 2 }>
@@ -1725,7 +1741,7 @@ class CreateEncounter extends React.Component
                           className="nice-input w-100"
                           label={
                             <span className="font">
-                              { t( "Ghi chú" ) }
+                              Ghi chú
                             </span>
                           }
                           multiline={ true }
@@ -1746,13 +1762,13 @@ class CreateEncounter extends React.Component
                                 {
                                   <span>
                                     <span style={ { color: "red" } }> * </span>
-                                    <span>{ t( "Hướng xử lý" ) }</span>
+                                    <span>Hướng xử lý</span>
                                   </span>
                                 }
                               </InputLabel>
                               <Select
                                 label={
-                                  <span>{ t( "Hướng xử lý" ) }</span>
+                                  <span>Hướng xử lý</span>
                                 }
                                 value={ makeDecision ? makeDecision : "" }
                                 onChange={ ( event ) =>
@@ -1783,7 +1799,7 @@ class CreateEncounter extends React.Component
                                     className="nice-input w-100"
                                     label={
                                       <span className="font">
-                                        { t( "Đơn vị y tế" ) }
+                                        Đơn vị y tế
                                       </span>
                                     }
                                     // onChange={this.handleChange}
@@ -1815,7 +1831,7 @@ class CreateEncounter extends React.Component
                                     handleSelect={ this.handleSelectHealthOrganization }
                                     selectedItem={ healthOrganization ? healthOrganization : {} }
                                     handleClose={ this.handleDialogClose }
-                                    t={ t }
+                                  
                                   />
                                 ) }
                               </Grid>
@@ -1834,7 +1850,7 @@ class CreateEncounter extends React.Component
                         className="mr-12 btn btn-secondary d-inline-flex"
                         variant="contained"
                         onClick={ () => { this.props.history.push( ConstantList.ROOT_PATH + "personal-health-record" ) } }>
-                        { t( "Trở lại danh sách kết quả cập nhật" ) }
+                        Trở lại danh sách kết quả cập nhật
                       </Button>
                       <Button
                         disabled={ loading ? loading : false }
@@ -1843,7 +1859,7 @@ class CreateEncounter extends React.Component
                         variant="contained"
                         color="primary"
                         type="submit">
-                        { t( "general.button.save" ) }
+                        Lưu
                       </Button>
                     </div>
                   </DialogActions>
@@ -1851,9 +1867,9 @@ class CreateEncounter extends React.Component
                     <ConfirmationDialog
                       open={ openSaveDialog }
                       onYesClick={ this.handleClose }
-                      title={ t( "Đã lưu thành công" ) }
-                      text={ t( 'Cảm ơn bạn đã tham gia khai báo y tế!' ) }
-                      agree={ t( "OK" ) }
+                      title="Đã lưu thành công"
+                      text='Cảm ơn bạn đã tham gia khai báo y tế!'
+                      agree="OK"
                     />
                   ) }
                 </div>
@@ -1863,8 +1879,8 @@ class CreateEncounter extends React.Component
               </Grid>
             </Grid>
             { this.state.familyMemberId &&
-              <fieldset className="history_table">
-                <legend>Lịch sử cập nhật thông tin sức khoẻ của thành viên</legend>
+              <>
+              <div className="head-line mb-8">Lịch sử cập nhật thông tin sức khoẻ của thành viên</div>
                 <Grid className="" container spacing={ 2 }>
                   <Grid item xs={ 12 }>
                     <MaterialTable
@@ -1873,7 +1889,7 @@ class CreateEncounter extends React.Component
                       {
                         [
                           {
-                            title: t( 'STT' ), field: "custom", align: "left", width: "150",
+                            title: 'STT', field: "custom", align: "left", width: "150",
                             headerStyle: {
                               minWidth: "40px",
                               paddingLeft: "10px",
@@ -1891,7 +1907,7 @@ class CreateEncounter extends React.Component
                             }
                           },
                           {
-                            title: t( 'Ngày/giờ' ), field: "declarationTime", align: "left", width: "150",
+                            title: 'Ngày/giờ', field: "declarationTime", align: "left", width: "150",
                             headerStyle: {
                               minWidth: "150px",
                               paddingLeft: "10px",
@@ -1909,7 +1925,7 @@ class CreateEncounter extends React.Component
                             }
                           },
                           {
-                            title: t( 'Nhiệt độ (°C)' ), field: "temperature", align: "left", width: "150",
+                            title: 'Nhiệt độ (°C)', field: "temperature", align: "left", width: "150",
                             headerStyle: {
                               minWidth: "150px",
                               paddingLeft: "10px",
@@ -1931,7 +1947,7 @@ class CreateEncounter extends React.Component
                             }
                           },
                           {
-                            title: t( 'Nhịp thở(lần/phút)' ), field: "breathingRate", align: "left", width: "150",
+                            title: 'Nhịp thở(lần/phút)', field: "breathingRate", align: "left", width: "150",
                             headerStyle: {
                               minWidth: "150px",
                               paddingLeft: "10px",
@@ -1953,7 +1969,7 @@ class CreateEncounter extends React.Component
                             }
                           },
                           {
-                            title: t( 'Chỉ số SpO2' ), field: "spo2", align: "left", width: "150",
+                            title: 'Chỉ số SpO2', field: "spo2", align: "left", width: "150",
                             headerStyle: {
                               minWidth: "150px",
                               paddingLeft: "10px",
@@ -1975,7 +1991,7 @@ class CreateEncounter extends React.Component
                             }
                           },
                           {
-                            title: t( 'Triệu chứng' ), field: "custom", align: "left", width: "150",
+                            title: 'Triệu chứng', field: "custom", align: "left", width: "150",
                             headerStyle: {
                               minWidth: "150px",
                               paddingLeft: "10px",
@@ -2016,7 +2032,7 @@ class CreateEncounter extends React.Component
                             }
                           },
                           {
-                            title: t( 'Chi tiết' ), field: "custom", width: "150",
+                            title: 'Chi tiết', field: "custom", width: "150",
                             align: "center",
                             headerStyle: {
                               minWidth: "50px",
@@ -2081,7 +2097,7 @@ class CreateEncounter extends React.Component
                         setRowsPerPage={ this.setRowsPerPage }
                         pageSize={ this.state.rowsPerPage }
                         pageSizeOption={ [1, 2, 3, 5, 10, 25, 50] }
-                        t={ t }
+                      
                         totalElements={ this.state.totalElements }
                         page={ this.state.page }
                         isSimple={ true }
@@ -2093,12 +2109,12 @@ class CreateEncounter extends React.Component
                         open={ openViewDialog }
                         updatePageData={ this.updatePageData }
                         item={ this.state.item }
-                        t={ t }
+                      
                       />
                     ) }
                   </Grid>
                 </Grid>
-              </fieldset>
+              </>
             }
           </DialogContent>
         </ValidatorForm>

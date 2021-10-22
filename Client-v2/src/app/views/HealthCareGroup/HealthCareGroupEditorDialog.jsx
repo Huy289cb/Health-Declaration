@@ -466,7 +466,7 @@ class HealthCareGroupEditorDialog extends Component {
                     maxBodyHeight: '450px',
                     minBodyHeight: '250px',
                     headerStyle: {
-                      backgroundColor: "#337ab7",
+                      backgroundColor: "#3366ff",
                       color: "#fff",
                     },
                     padding: 'dense',
