@@ -304,6 +304,57 @@
 .product-table .MuiTableHead-root {
   font-weight: bold;
 }
+.icon {
+  background: rgb(3, 185, 155);
+  margin: 0px 40px 0px 40px;
+  border-radius: 8px;
+}
+.icon:hover {
+  /* margin: 0px 50px 0px 50px; */
+  /* border: white solid 1px; */
+  /* border-radius: 30%; */
+  background: rgb(20, 200, 170);
+}
+.icon-1 {
+  background: rgb(240, 2, 51);
+  margin: 0px 40px 0px 40px;
+  border-radius: 8px;
+}
+.icon-1:hover {
+  background: rgb(255, 7, 61);
+}
+.icon-2 {
+  background: rgb(238, 102, 11);
+  margin: 0px 40px 0px 40px;
+  border-radius: 8px;
+}
+.icon-2:hover {
+  background: rgb(255, 117, 16);
+}
+.icon-3 {
+  background: rgb(20, 71, 212);
+  margin: 0px 40px 0px 40px;
+  border-radius: 8px;
+}
+.icon-3:hover {
+  background: rgb(40, 91, 232);
+}
+.text-center {
+  text-align: center;
+}
+.margin-padding {
+  margin-top: 15px;
+}
+.disc-red {
+  color: red;
+  list-style-type: disc;
+  margin-left: 2em;
+}
+.text-color {
+  color: black;
+}
+
+/*# sourceMappingURL=globitsStyles.css.map */
 
 .head-line {
   font-family: SVN-Poppins, Inter, Twemoji, Apple Color Emoji, Segoe UI Emoji, Arial, Helvetica, Sans-Serif,

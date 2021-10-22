@@ -148,6 +148,7 @@ class Analytics extends Component {
           // debugger;
           // alert(data);
           this.setState({ reportData: data });
+        
         }
       )
     }
@@ -203,7 +204,6 @@ class Analytics extends Component {
   }
   
   componentWillMount() {
-
   }
 
   //practitionnal table
@@ -330,7 +330,7 @@ class Analytics extends Component {
           <Grid container spacing={3} style={{dipslay: "flex", justifyContent: "center"}}>
             <Grid item lg={3} md={3} sm={12} xs={12}>
               <Link to={"/personal-health-record/create"}>
-                <Card elevation={3} className="bgc-green-d1 p-32 py-32 text-center h-100 click">
+                <Card elevation={3} className="p-32 py-32 text-center h-100 click icon">
                   <div className="text-white margin-auto">
                     <div className="card-title text-white uppercase m-0">{t("Cập nhật thông tin sức khỏe")}</div>
                   </div>
@@ -339,7 +339,7 @@ class Analytics extends Component {
             </Grid>
             <Grid item lg={3} md={3} sm={12} xs={12}>
               <Link to={"/familyMember"}>
-                <Card elevation={3} className="bg-secondary p-32 py-32 text-center h-100 click">
+                <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon-2">
                   <div className="text-white margin-auto">
                     <div className="card-title text-white uppercase m-0">{t("Quản lý thành viên hộ gia đình")}</div>
                   </div>
@@ -349,11 +349,11 @@ class Analytics extends Component {
             {emegencyPhone &&
               <Grid item lg={3} md={3} sm={12} xs={12}>
                 <a href={"tel:" + emegencyPhone}>
-                  <Card elevation={3} className="bgc-danger-tp1 p-32 py-32 text-center h-100 click">
+                  <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon-1">
                     <div className="text-white margin-auto">
                       <div className="card-title text-white uppercase m-0">Gọi số cấp cứu địa bàn phường</div>
                       <div className="uppercase m-0">{emegencyPhone}</div>
-                    </div>
+                    </div> 
                   </Card>
                 </a>
               </Grid>
@@ -361,7 +361,7 @@ class Analytics extends Component {
             {hotZalo &&
               <Grid item lg={3} md={3} sm={12} xs={12}>
                 <a href={"https://zalo.me/" + hotZalo}>
-                  <Card elevation={3} className="bgc-primary-d1 p-32 py-32 text-center h-100 click">
+                  <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon-3">
                     <div className="text-white margin-auto">
                       <div className="card-title text-white uppercase m-0">Số zalo nóng</div>
                       <div className="uppercase m-0">{hotZalo}</div>
@@ -379,19 +379,19 @@ class Analytics extends Component {
                       <div className="card-title text-primary-d2 uppercase text-center">{t("Thông tin nhân viên y tế phụ trách")}</div>
                       <div className="text-center mb-16">(Giờ hỗ trợ từ 8h đến 22h. Ngoài giờ, trong trường hợp khẩn cấp hãy gọi số cấp cứu)</div>
                       <div className="card-body" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-                        <table className="family-details">
+                        <table className="family-details text-color">
                         {userPractitionerType2 && userPractitionerType2.practitioner &&
                           <>
-                          <tr>
+                          <tr className="text-color">
                             <td>NVYT Tại chỗ:</td>
                             <td>{userPractitionerType2.practitioner.displayName}</td>
                           </tr>
-                          <tr>
+                          <tr className="text-color">
                             <td><b>Điện thoại:</b></td>
                             <a href={"tel:" + userPractitionerType2.practitioner.phoneNumber}>
                               <td>
                                 <Button
-                                  startIcon={<Icon>call</Icon>}
+                                  startIcon={<Icon>call</Icon>} 
                                   variant="contained"
                                   className="btn-primary-d d-inline-flex"
                                 >
@@ -399,7 +399,7 @@ class Analytics extends Component {
                                 </Button>
                               </td>
                             </a>
-                          </tr>
+                          </tr>  
                           </>}
                           <tr>
                             <td colSpan={2}>
@@ -408,11 +408,11 @@ class Analytics extends Component {
                           </tr>
                           {userPractitionerType1 && userPractitionerType1.practitioner &&
                           <>
-                          <tr>
+                          <tr className="text-color">
                             <td>NVYT Từ xa:</td>
                             <td>{userPractitionerType1.practitioner.displayName}</td>
                           </tr>
-                          <tr>
+                          <tr className="text-color">
                             <td><b>Điện thoại:</b></td>
                             <a href={"tel:" + userPractitionerType1.practitioner.phoneNumber}>
                               <td>
@@ -465,29 +465,29 @@ class Analytics extends Component {
                             t={t} i18n={i18n}
                           />
                         )}
-                        <table className="family-details">
+                        <table className="family-details text-color ">
                           {/* <tr>
                             <td>Mã gia đình</td>
                             <td>{userData.code}</td>
                           </tr> */}
                           <tr style={{fontSize: "15px"}}>
-                            <td>Chủ hộ:</td>
-                            <td><b>{userData.name}</b></td>
+                            <td> <b>Chủ hộ:</b></td>
+                            <td>{userData.name}</td>
                           </tr>
                           {/* <tr>
                             <td>Tuổi:</td>
                             <td>{userData.age}</td>
                           </tr> */}
                           <tr>
-                            <td>Số điện thoại:</td>
+                            <td><b>Số điện thoại:</b></td>
                             <td>{userData.phoneNumber}</td>
                           </tr>
                           <tr>
-                            <td>Địa Chỉ:</td>
+                            <td><b>Địa Chỉ:</b></td>
                             <td style={{maxWidth: "250px", lineBreak: "auto"}}>{this.state.userAddress}</td>
                           </tr>
                           <tr>
-                            <td>Các thành viên:</td>
+                            <td><b>Các thành viên:</b></td>
                             {/* <td>
                               
                               <ul>
@@ -503,7 +503,7 @@ class Analytics extends Component {
                             </td> */}
                           </tr>
                         </table>
-                        <table className="member_table" border={1}>
+                        <table className="member_table text-color" border={1}>
                           <tr>
                             <th>STT</th>
                             <th>Họ tên</th>
@@ -535,34 +535,33 @@ class Analytics extends Component {
           <Grid container spacing={3}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Link to={"/family"}>
-                <Card elevation={3} className="bgc-green-d1 p-32 py-32 text-center h-100 click">
+                <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon " >
+                {/* bgc-green-d1 */}
                   <div className="text-white margin-auto">
-                    <div className="card-title text-white uppercase m-0">{t("Quản lý Hộ gia đình")}</div>
+                    <div className="card-title text-white uppercase m-0 ">{t("Quản lý Hộ gia đình")}</div>
                   </div>
                 </Card>
               </Link>
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Link to={"/encounter/create"}>
-                <Card elevation={3} className="bgc-danger-tp1 p-32 py-32 text-center h-100 click">
+                <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon-1 ">
                   <div className="text-white margin-auto">
                     <div className="card-title text-white uppercase m-0">{t("Phiếu thăm khám")}</div>
                   </div>
                 </Card>
-              </Link>
+              </Link> 
             </Grid>
             {reportData && <Grid item lg={12} md={12} sm={12} xs={12}>
-              <div className="text-primary-d2 margin-auto">
-                <div className="card-title text-primary-d2 uppercase m-0">{t("Diễn biến dịch bệnh")}</div>
+              <div className="text-primary-d2 margin-auto margin-padding">
+                <div className="card-title text-primary-d2 uppercase m-0 text-center">{t("Diễn biến dịch bệnh")}</div>
                 {reportData.code=="town" &&  <ArrowBackIcon onClick={()=>this.reportByComuneId(reportData?.details[0]?.parentAdminUnitid)}/>}
                 {reportData.code=="quarter" &&  <ArrowBackIcon onClick={()=>this.reportByDistrict()}/>}
                 <div className="card-body">
-                  <Table className="product-table" border={1}>
+                  <Table className="product-table margin-padding  " border={1}>
                     <TableHead>
                       <TableRow>
-                        <TableCell className="px-24 ">                          
-                          Đơn vị hành chính                          
-                        </TableCell>
+                        <TableCell className="px-24">Đơn vị hành chính</TableCell>
                         {/* <TableCell className="px-24" align="center">SPO2 thấp và nhịp thở không bình thường</TableCell>
                         <TableCell className="px-24" align="center">Triệu chứng cần cấp cứu</TableCell>
                         <TableCell className="px-24" align="center">Có triệu chứng khác</TableCell>
@@ -571,10 +570,11 @@ class Analytics extends Component {
                         <TableCell className="px-24" align="center">Mức nguy cơ cao</TableCell>
                         <TableCell className="px-24" align="center">Mức nguy cơ trung bình</TableCell>
                         <TableCell className="px-24" align="center">Mức nguy cơ thấp</TableCell>
-                      </TableRow>
+                      </TableRow> 
                     </TableHead>
                     {
                       (reportData.details).map((element, index) => {
+                        
                         return (
                           <TableRow>
                             <TableCell className="px-24 ">
@@ -674,7 +674,7 @@ class Analytics extends Component {
         }
         {(role == "ROLE_HEALTHCARE_STAFF") && data &&
           <Grid container spacing={3}>
-            <Grid item lg={12} md={12} sm={12} xs={12} style={{ 'fontSize': '20px' }}>
+            <Grid item lg={12} md={12} sm={12} xs={12} style={{ 'fontSize': '15px' }}>
               <div><b>Nhân viên y tế: </b>{data.practitioner ? data.practitioner.displayName : ''}</div>
               <div><b>Tổ y tế: </b>{data.practitioner ? (data.practitioner.healthCareGroup ? data.practitioner.healthCareGroup.name : '') : ''}</div>
             </Grid>
@@ -751,7 +751,7 @@ class Analytics extends Component {
                 </Collapse>
             </Grid>)}
             <Grid item xs={12}>
-              <div className="card-title text-primary-d2 uppercase m-0">{t("Danh sách các bệnh nhân phụ trách")}</div>
+              <div className="card-title text-primary-d2 uppercase m-0 text-center ">{t("Danh sách các bệnh nhân phụ trách")}</div>
               <MaterialTable
                 data={this.state.itemList ? this.state.itemList : []}
                 columns=
