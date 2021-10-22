@@ -1,8 +1,15 @@
-
 /* @media screen and (max-width: 959px){
     .history_table {
         display: none;
     }
         
 } */
-
+.head-line {
+    font-family: SVN-Poppins, Inter, Twemoji, Apple Color Emoji, Segoe UI Emoji, Arial, Helvetica, Sans-Serif,
+        Noto Color Emoji;
+    margin: 0;
+    color: aliceblue;
+    padding: 8px;
+    font-size: medium;
+    font-weight: bold;
+}

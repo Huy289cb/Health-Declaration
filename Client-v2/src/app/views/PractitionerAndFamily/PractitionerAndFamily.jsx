@@ -21,17 +21,18 @@ import Filter from "./Filter";
 import appConfig from "app/appConfig";
 import localStorageService from "app/services/localStorageService";
 
-toast.configure({
+toast.configure( {
   autoClose: 2000,
   draggable: false,
   limit: 3
-});
+} );
 
-function MaterialButton(props) {
+function MaterialButton ( props )
+{
   const { t, i18n } = useTranslation();
   const { item } = props;
   return <div>
-    <SendTreatment t={t} item={item} onSelect={props.onSelect} index={2} />
+    <SendTreatment t={ t } item={ item } onSelect={ props.onSelect } index={ 2 } />
     {/* <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
       <Icon fontSize="small" color="primary">edit</Icon>
     </IconButton> */}
@@ -40,7 +41,8 @@ function MaterialButton(props) {
     </IconButton> */}
   </div>;
 }
-class PractitionerAndFamily extends Component {
+class PractitionerAndFamily extends Component
+{
   state = {
     rowsPerPage: 10,
     page: 1,
@@ -52,163 +54,202 @@ class PractitionerAndFamily extends Component {
     filterItem: {}
   };
 
-  updatePageData = (item) => {
+  updatePageData = ( item ) =>
+  {
     var searchObject = {};
-    if (item != null) {
-      this.setState({
+    if ( item != null )
+    {
+      this.setState( {
         page: 1,
         text: item.text,
         healthCareGroupId: item.healthCareGroupId,
         administrativeUnitId: item.administrativeUnitId
-      }, () => {
-        this.search(searchObject);
-      })
-    } else {
+      }, () =>
+      {
+        this.search( searchObject );
+      } )
+    } else
+    {
 
-      this.search(searchObject);
+      this.search( searchObject );
     }
   };
 
-  search = (searchObject) => {
+  search = ( searchObject ) =>
+  {
     searchObject.text = this.state.text;
     searchObject.pageIndex = this.state.page;
     searchObject.pageSize = this.state.rowsPerPage;
     searchObject.healthCareGroupId = this.state.healthCareGroupId;
     searchObject.administrativeUnitId = this.state.administrativeUnitId;
-    searchByPage(searchObject).then(({ data }) => {
-      this.setState({
+    searchByPage( searchObject ).then( ( { data } ) =>
+    {
+      this.setState( {
         itemList: [...data.content],
         totalElements: data.totalElements,
         totalPages: data.totalPages,
         listFamily: []
-      })
+      } )
     }
     );
   }
 
-  updatePractitioner = (type) => {
-    if (this.state.listFamily && this.state.listFamily.length > 0) {
-      this.handleSendListTreatment(this.state.listFamily, type);
-    } else {
-      toast.warn("Chưa chọn dữ liệu");
+  updatePractitioner = ( type ) =>
+  {
+    if ( this.state.listFamily && this.state.listFamily.length > 0 )
+    {
+      this.handleSendListTreatment( this.state.listFamily, type );
+    } else
+    {
+      toast.warn( "Chưa chọn dữ liệu" );
     }
   }
 
-  handleSendListTreatment = (listData, type) => {
-    this.setState({
+  handleSendListTreatment = ( listData, type ) =>
+  {
+    this.setState( {
       listFamily: listData,
       type: type,
       shouldOpenSelectTreatmentDialog: true,
-    })
+    } )
   }
 
 
   //Paging handle start
-  setPage = (page) => {
-    this.setState({ page }, function () {
+  setPage = ( page ) =>
+  {
+    this.setState( { page }, function ()
+    {
       this.updatePageData()
-    })
+    } )
   }
-  setRowsPerPage = (event) => {
-    this.setState({ rowsPerPage: event.target.value, page: 1 }, function () {
+  setRowsPerPage = ( event ) =>
+  {
+    this.setState( { rowsPerPage: event.target.value, page: 1 }, function ()
+    {
       this.updatePageData()
-    })
+    } )
   }
-  handleChangePage = (event, newPage) => {
-    this.setPage(newPage)
+  handleChangePage = ( event, newPage ) =>
+  {
+    this.setPage( newPage )
   }
   //Paging handle end
 
-  handleClose = () => {
-    this.setState({
+  handleClose = () =>
+  {
+    this.setState( {
       shouldOpenPractitionerAndFamilyEditorDialog: false,
       shouldOpenConfirmationDialog: false,
       shouldOpenConfirmationDeleteListDialog: false,
       shouldOpenSelectTreatmentDialog: false,
-    }, () => {
+    }, () =>
+    {
       this.updatePageData();
-    });
+    } );
   };
-  genPractitioner(listPrac, type) {
-    let practitioner  = "";
-    if (listPrac != null && listPrac.length > 0) {
-      practitioner = listPrac.map(value=> {
+  genPractitioner ( listPrac, type )
+  {
+    let practitioner = "";
+    if ( listPrac != null && listPrac.length > 0 )
+    {
+      practitioner = listPrac.map( value =>
+      {
         let type = "";
-        if (value && value.type) {
-          if (value.type == 1) {
+        if ( value && value.type )
+        {
+          if ( value.type == 1 )
+          {
             type = "(Từ xa)";
-          } else {
+          } else
+          {
             type = "(Tại chỗ)";
           }
         }
         return (
-          <div>{`${value.practitioner.displayName} ${type}`}</div>
-       )
-      })
+          <div>{ `${ value.practitioner.displayName } ${ type }` }</div>
+        )
+      } )
     }
     return practitioner;
   }
 
   //handle delete start
-  async handleDeleteList(list) {
+  async handleDeleteList ( list )
+  {
     let listAlert = [];
     let { t } = this.props
-    for (var i = 0; i < list.length; i++) {
-      try {
-        await deleteItem(list[i].id);
-      } catch (error) {
-        listAlert.push(list[i].name);
+    for ( var i = 0; i < list.length; i++ )
+    {
+      try
+      {
+        await deleteItem( list[i].id );
+      } catch ( error )
+      {
+        listAlert.push( list[i].name );
       }
     }
     this.handleClose()
-    toast.success(t('toast.delete_success'));
+    toast.success( t( 'toast.delete_success' ) );
   };
-  handleDeleteListItem = (event) => {
+  handleDeleteListItem = ( event ) =>
+  {
     let { t } = this.props
-    if (this.data != null) {
-      this.handleDeleteList(this.data).then(() => {
+    if ( this.data != null )
+    {
+      this.handleDeleteList( this.data ).then( () =>
+      {
         this.updatePageData();
-      })
-    } else {
-      toast.warning(t('toast.please_select'));
+      } )
+    } else
+    {
+      toast.warning( t( 'toast.please_select' ) );
     };
   }
-  handleConfirmDeleteItem = () => {
+  handleConfirmDeleteItem = () =>
+  {
     let { t } = this.props
-    deleteItem(this.state.id).then(() => {
+    deleteItem( this.state.id ).then( () =>
+    {
       this.updatePageData();
       this.handleClose();
-      toast.success(t('toast.delete_success'));
-    });
+      toast.success( t( 'toast.delete_success' ) );
+    } );
   };
-  handleDelete = id => {
-    this.setState({
+  handleDelete = id =>
+  {
+    this.setState( {
       id,
       shouldOpenConfirmationDialog: true
-    });
+    } );
   };
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     this.updatePageData();
-    this.setState({role: localStorageService.getItem("role")});
+    this.setState( { role: localStorageService.getItem( "role" ) } );
   }
 
-  handleSendTreatment = (itemSendTreatment) => {
-    this.setState({
+  handleSendTreatment = ( itemSendTreatment ) =>
+  {
+    this.setState( {
       itemSendTreatment,
       shouldOpenSelectTreatmentDialog: true,
-    })
+    } )
   }
 
-  handleCollapseFilter = () => {
+  handleCollapseFilter = () =>
+  {
     let { checkedFilter } = this.state;
-    this.setState({ checkedFilter: !checkedFilter });
+    this.setState( { checkedFilter: !checkedFilter } );
   };
 
-  handleChangeFilter = (filterItem) => {
-    this.setState({filterItem: filterItem}, () => console.log(this.state));
+  handleChangeFilter = ( filterItem ) =>
+  {
+    this.setState( { filterItem: filterItem }, () => console.log( this.state ) );
   }
-  render() {
+  render ()
+  {
     const { t, i18n } = this.props;
     let {
       itemList,
@@ -227,7 +268,7 @@ class PractitionerAndFamily extends Component {
       //   width: '100'
       // },
       {
-        title: t('Họ và tên chủ hộ'),
+        title: t( 'Họ và tên chủ hộ' ),
         field: "name",
         width: '150'
       },
@@ -237,12 +278,12 @@ class PractitionerAndFamily extends Component {
       //   width: '100'
       // },
       {
-        title: t('SĐT'),
+        title: t( 'SĐT' ),
         field: "phoneNumber",
         width: '100'
       },
       {
-        title: t('Đơn vị hành chính'),
+        title: t( 'Đơn vị hành chính' ),
         field: "administrativeUnit.name",
       },
       // {
@@ -250,25 +291,31 @@ class PractitionerAndFamily extends Component {
       //   field: "detailAddress"
       // },
       {
-        title: t('Nhân viên y tế tại chỗ'),
+        title: t( 'Nhân viên y tế tại chỗ' ),
         field: "detailAddress",
-        render: rowData => {
-          if (rowData.listPractitioner && rowData.listPractitioner.length > 0) {
-            let item = rowData.listPractitioner.find((e) => e.type == 2);
-            if ( item ) {
-              return <div>{`${item.practitioner.displayName}`}</div>
+        render: rowData =>
+        {
+          if ( rowData.listPractitioner && rowData.listPractitioner.length > 0 )
+          {
+            let item = rowData.listPractitioner.find( ( e ) => e.type == 2 );
+            if ( item )
+            {
+              return <div>{ `${ item.practitioner.displayName }` }</div>
             }
           }
         }
       },
       {
-        title: t('Nhân viên y tế tư vấn từ xa'),
+        title: t( 'Nhân viên y tế tư vấn từ xa' ),
         field: "detailAddress",
-        render: rowData => {
-          if (rowData.listPractitioner && rowData.listPractitioner.length > 0) {
-            let item = rowData.listPractitioner.find((e) => e.type == 1);
-            if ( item ) {
-              return <div>{`${item.practitioner.displayName}`}</div>
+        render: rowData =>
+        {
+          if ( rowData.listPractitioner && rowData.listPractitioner.length > 0 )
+          {
+            let item = rowData.listPractitioner.find( ( e ) => e.type == 1 );
+            if ( item )
+            {
+              return <div>{ `${ item.practitioner.displayName }` }</div>
             }
           }
         }
@@ -305,90 +352,90 @@ class PractitionerAndFamily extends Component {
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
-          <Breadcrumb routeSegments={[{ name: t('Phân công chăm sóc hộ gia đình') }]} />
+          <Breadcrumb routeSegments={ [{ name: t( 'Phân công chăm sóc hộ gia đình' ) }] } />
         </div>
-        <Grid container spacing={1}>
-          <Grid item lg={3} md={3} sm={12} xs={12}>
+        <Grid container spacing={ 1 }>
+          <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
             <Button
               variant="contained"
               className="mr-12 btn btn-primary d-inline-flex"
               color="primary"
-              onClick={() => this.updatePractitioner(2)}
+              onClick={ () => this.updatePractitioner( 2 ) }
             >
-              {t("Phân công NVYT tại chỗ ")}
+              { t( "Phân công NVYT tại chỗ " ) }
             </Button>
           </Grid>
-          <Grid item lg={3} md={3} sm={12} xs={12}>
+          <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
             <Button
               variant="contained"
               className="mr-12 btn btn-secondary d-inline-flex"
               color="primary"
-              onClick={() => this.updatePractitioner(1)}
+              onClick={ () => this.updatePractitioner( 1 ) }
             >
-              {t("Phân công NVYT từ xa")}
+              { t( "Phân công NVYT từ xa" ) }
             </Button>
           </Grid>
-          <Grid item md={6} sm={12} xs={12}>
-            <Grid container spacing={2} style={{display: "flex", justifyContent: "flex-end"}}>
-              <Grid item lg={8} md={8} sm={6} xs={6}>
-                  <SearchInput
-                      search={this.updatePageData}
-                      t={t}
-                  />
+          <Grid item md={ 6 } sm={ 12 } xs={ 12 }>
+            <Grid container spacing={ 2 } style={ { display: "flex", justifyContent: "flex-end" } }>
+              <Grid item lg={ 8 } md={ 8 } sm={ 6 } xs={ 6 }>
+                <SearchInput
+                  search={ this.updatePageData }
+                  t={ t }
+                />
               </Grid>
-              {(role == "ROLE_ADMIN" || role == "ROLE_SUPER_ADMIN") &&
-                <Grid item lg={4} md={4} sm={6} xs={6}>
+              { ( role == "ROLE_ADMIN" || role == "ROLE_SUPER_ADMIN" ) &&
+                <Grid item lg={ 4 } md={ 4 } sm={ 6 } xs={ 6 }>
                   <Button
-                      className="btn_s_right d-inline-flex btn btn-primary-d"
-                      variant="contained"
-                      onClick={this.handleCollapseFilter}
-                      fullWidth
+                    className="btn_s_right d-inline-flex btn btn-primary-d"
+                    variant="contained"
+                    onClick={ this.handleCollapseFilter }
+                    fullWidth
                   >
-                      <FilterListIcon />
-                      <span>{t("general.button.filter")}</span>
-                      <ArrowDropDownIcon
-                          style={
-                            checkedFilter
-                                ? {
-                                    transform: "rotate(180deg)",
-                                    transition: ".3s",
-                                    paddingRight: 5,
-                                }
-                                : {
-                                    transform: "rotate(0deg)",
-                                    transition: ".3s",
-                                    paddingLeft: 5,
-                                }
+                    <FilterListIcon />
+                    <span>{ t( "general.button.filter" ) }</span>
+                    <ArrowDropDownIcon
+                      style={
+                        checkedFilter
+                          ? {
+                            transform: "rotate(180deg)",
+                            transition: ".3s",
+                            paddingRight: 5,
                           }
-                      />
+                          : {
+                            transform: "rotate(0deg)",
+                            transition: ".3s",
+                            paddingLeft: 5,
+                          }
+                      }
+                    />
                   </Button>
-              </Grid>}
+                </Grid> }
             </Grid>
           </Grid>
-          {checkedFilter && (<Grid item lg={12} md={12} sm={12} xs={12}>
-              <Collapse
-                  in={checkedFilter}
-                  style={{
-                      width: "100%",
-                  }}
-              >
-                  <Filter
-                      search={this.updatePageData}
-                      filterItem={this.state.filterItem}
-                      handleChangeFilter={this.handleChangeFilter}
-                      t={t}
-                  />
-              </Collapse>
-          </Grid>)}
-          <Grid item lg={12} md={12} sm={12} xs={12}>
+          { checkedFilter && ( <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
+            <Collapse
+              in={ checkedFilter }
+              style={ {
+                width: "99%",
+              } }
+            >
+              <Filter
+                search={ this.updatePageData }
+                filterItem={ this.state.filterItem }
+                handleChangeFilter={ this.handleChangeFilter }
+                t={ t }
+              />
+            </Collapse>
+          </Grid> ) }
+          <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 }>
             <MaterialTable
-              data={itemList}
-              columns={columns}
+              data={ itemList }
+              columns={ columns }
               // parentChildData={(row, rows) => {
               //   var list = rows.find((a) => a.id === row.parentId)
               //   return list
               // }}
-              options={{
+              options={ {
                 selection: true,
                 // actionsColumnIndex: -1,
                 paging: false,
@@ -396,123 +443,132 @@ class PractitionerAndFamily extends Component {
                 toolbar: false,
                 maxBodyHeight: "440px",
                 headerStyle: {
-                  // backgroundColor: "#ccc",
-                  color: "#1b619e",
+                  backgroundColor: '#4FAA6D',
+                  color: '#fff',
                   textTransform: "uppercase",
                   whiteSpace: 'nowrap',
                   borderTop: "1px solid #ccc",
                   borderBottom: "1px solid #ccc",
                 },
                 // tableLayout: 'fixed',
-                rowStyle: (rowData, index) => {
+                rowStyle: ( rowData, index ) =>
+                {
                   const seriusStatus = rowData.seriusStatus;
                   let bgc = "#fff";
                   // let textcolor = "rgba(0, 0, 0, 0.87)";
-                  if (seriusStatus) {
-                    let e = appConfig.SERIUS_STATUS_CONST.find((element) => element.value === seriusStatus)
-                    if (e) {
+                  if ( seriusStatus )
+                  {
+                    let e = appConfig.SERIUS_STATUS_CONST.find( ( element ) => element.value === seriusStatus )
+                    if ( e )
+                    {
                       bgc = e.bgc;
                       // textcolor = "#fff";
                     }
-                  } else {
-                    bgc = appConfig.SERIUS_STATUS_CONST.find((element) => element.value === -1).bgc;
+                  } else
+                  {
+                    bgc = appConfig.SERIUS_STATUS_CONST.find( ( element ) => element.value === -1 ).bgc;
                   }
-                  return ({
+                  return ( {
                     backgroundColor: bgc,
                     // color: textcolor
-                  })
+                  } )
                 }
-              }}
-              onSelectionChange={(rows) => {
-                console.log(rows);
+              } }
+              onSelectionChange={ ( rows ) =>
+              {
+                console.log( rows );
                 this.data = rows;
-                this.setState({listFamily: rows});
+                this.setState( { listFamily: rows } );
                 // this.setState({selectedItems:rows});
-              }}
+              } }
             />
             <NicePagination
-              totalPages={this.state.totalPages}
-              handleChangePage={this.handleChangePage}
-              setRowsPerPage={this.setRowsPerPage}
-              pageSize={this.state.rowsPerPage}
-              pageSizeOption={[1, 2, 3, 5, 10, 25, 1000]}
-              t={t}
-              totalElements={this.state.totalElements}
-              page={this.state.page}
+              totalPages={ this.state.totalPages }
+              handleChangePage={ this.handleChangePage }
+              setRowsPerPage={ this.setRowsPerPage }
+              pageSize={ this.state.rowsPerPage }
+              pageSizeOption={ [1, 2, 3, 5, 10, 25, 1000] }
+              t={ t }
+              totalElements={ this.state.totalElements }
+              page={ this.state.page }
             />
 
-            {shouldOpenPractitionerAndFamilyEditorDialog && (
+            { shouldOpenPractitionerAndFamilyEditorDialog && (
               <PractitionerAndFamilyEditorDialog
-                handleClose={this.handleClose}
-                open={shouldOpenPractitionerAndFamilyEditorDialog}
-                updatePageData={this.updatePageData}
-                item={this.state.item}
-                t={t} i18n={i18n}
+                handleClose={ this.handleClose }
+                open={ shouldOpenPractitionerAndFamilyEditorDialog }
+                updatePageData={ this.updatePageData }
+                item={ this.state.item }
+                t={ t } i18n={ i18n }
               />
-            )}
+            ) }
 
-            {shouldOpenSelectTreatmentDialog && (
+            { shouldOpenSelectTreatmentDialog && (
               <SendTreatmentPopup
-                t={t} i18n={i18n}
-                open={shouldOpenSelectTreatmentDialog}
-                handleClose={this.handleClose}
-                itemSendCheck={this.state.itemSendTreatment}
-                listFamily = {this.state.listFamily}
-                type = {this.state.type}
-                checkAgain={true}
+                t={ t } i18n={ i18n }
+                open={ shouldOpenSelectTreatmentDialog }
+                handleClose={ this.handleClose }
+                itemSendCheck={ this.state.itemSendTreatment }
+                listFamily={ this.state.listFamily }
+                type={ this.state.type }
+                checkAgain={ true }
               />
-            )}
-            {shouldOpenConfirmationDialog && (
+            ) }
+            { shouldOpenConfirmationDialog && (
               <ConfirmationDialog
-                open={shouldOpenConfirmationDialog}
-                onClose={this.handleClose}
-                onYesClick={this.handleConfirmDeleteItem}
-                title={t("confirm_dialog.delete.title")}
-                text={t('confirm_dialog.delete.text')}
-                agree={t("confirm_dialog.delete.agree")}
-                cancel={t("confirm_dialog.delete.cancel")}
+                open={ shouldOpenConfirmationDialog }
+                onClose={ this.handleClose }
+                onYesClick={ this.handleConfirmDeleteItem }
+                title={ t( "confirm_dialog.delete.title" ) }
+                text={ t( 'confirm_dialog.delete.text' ) }
+                agree={ t( "confirm_dialog.delete.agree" ) }
+                cancel={ t( "confirm_dialog.delete.cancel" ) }
               />
-            )}
+            ) }
 
-            {shouldOpenConfirmationDeleteListDialog && (
+            { shouldOpenConfirmationDeleteListDialog && (
               <ConfirmationDialog
-                open={shouldOpenConfirmationDeleteListDialog}
-                onClose={this.handleClose}
-                onYesClick={this.handleDeleteList}
-                title={t("confirm_dialog.delete_list.title")}
-                text={t('confirm_dialog.delete_list.text')}
-                agree={t("confirm_dialog.delete_list.agree")}
-                cancel={t("confirm_dialog.delete_list.cancel")}
+                open={ shouldOpenConfirmationDeleteListDialog }
+                onClose={ this.handleClose }
+                onYesClick={ this.handleDeleteList }
+                title={ t( "confirm_dialog.delete_list.title" ) }
+                text={ t( 'confirm_dialog.delete_list.text' ) }
+                agree={ t( "confirm_dialog.delete_list.agree" ) }
+                cancel={ t( "confirm_dialog.delete_list.cancel" ) }
               />
-            )}
+            ) }
           </Grid>
-          <Grid item lg={12} md={12} sm={12} xs={12} style={{backgroundColor: "#fff"}}>
+          <Grid item lg={ 12 } md={ 12 } sm={ 12 } xs={ 12 } style={ { backgroundColor: "#fff" } }>
             <fieldset>
               <legend>Chú thích</legend>
-              <Grid container spacing={1}>
-                <Grid item lg={3} md={3} sm={6} xs={12} style={{display: "flex", alignItems: "center"}}>
-                  <div style={{width: "20px", height: "20px", 
-                  backgroundColor: appConfig.SERIUS_STATUS_CONST.find((element) => element.value === -1).bgc
-                }}></div>
-                  <span style={{marginLeft: "12px"}}>Mức nguy cơ thấp</span>
+              <Grid container spacing={ 1 }>
+                <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 12 } style={ { display: "flex", alignItems: "center" } }>
+                  <div style={ {
+                    width: "20px", height: "20px",
+                    backgroundColor: appConfig.SERIUS_STATUS_CONST.find( ( element ) => element.value === -1 ).bgc
+                  } }></div>
+                  <span style={ { marginLeft: "12px" } }>Mức nguy cơ thấp</span>
                 </Grid>
-                <Grid item lg={3} md={3} sm={6} xs={12} style={{display: "flex", alignItems: "center"}}>
-                  <div style={{width: "20px", height: "20px", 
-                  backgroundColor: appConfig.SERIUS_STATUS_CONST.find((element) => element.value === 1).bgc
-                }}></div>
-                  <span style={{marginLeft: "12px"}}>Mức nguy cơ trung bình</span>
+                <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 12 } style={ { display: "flex", alignItems: "center" } }>
+                  <div style={ {
+                    width: "20px", height: "20px",
+                    backgroundColor: appConfig.SERIUS_STATUS_CONST.find( ( element ) => element.value === 1 ).bgc
+                  } }></div>
+                  <span style={ { marginLeft: "12px" } }>Mức nguy cơ trung bình</span>
                 </Grid>
-                <Grid item lg={3} md={3} sm={6} xs={12} style={{display: "flex", alignItems: "center"}}>
-                  <div style={{width: "20px", height: "20px", 
-                  backgroundColor: appConfig.SERIUS_STATUS_CONST.find((element) => element.value === 2).bgc
-                }}></div>
-                  <span style={{marginLeft: "12px"}}>Mức nguy cơ cao</span>
+                <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 12 } style={ { display: "flex", alignItems: "center" } }>
+                  <div style={ {
+                    width: "20px", height: "20px",
+                    backgroundColor: appConfig.SERIUS_STATUS_CONST.find( ( element ) => element.value === 2 ).bgc
+                  } }></div>
+                  <span style={ { marginLeft: "12px" } }>Mức nguy cơ cao</span>
                 </Grid>
-                <Grid item lg={3} md={3} sm={6} xs={12} style={{display: "flex", alignItems: "center"}}>
-                  <div style={{width: "20px", height: "20px", 
-                  backgroundColor: appConfig.SERIUS_STATUS_CONST.find((element) => element.value === 3).bgc
-                }}></div>
-                  <span style={{marginLeft: "12px"}}>Mức nguy cơ rất cao</span>
+                <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 12 } style={ { display: "flex", alignItems: "center" } }>
+                  <div style={ {
+                    width: "20px", height: "20px",
+                    backgroundColor: appConfig.SERIUS_STATUS_CONST.find( ( element ) => element.value === 3 ).bgc
+                  } }></div>
+                  <span style={ { marginLeft: "12px" } }>Mức nguy cơ rất cao</span>
                 </Grid>
               </Grid>
             </fieldset>
