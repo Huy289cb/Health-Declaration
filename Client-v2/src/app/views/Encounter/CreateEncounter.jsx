@@ -1831,15 +1831,13 @@ class CreateEncounter extends React.Component
                                     handleSelect={ this.handleSelectHealthOrganization }
                                     selectedItem={ healthOrganization ? healthOrganization : {} }
                                     handleClose={ this.handleDialogClose }
-                                  
+                                    t={t}
                                   />
                                 ) }
                               </Grid>
                             </Grid> }
                         </Grid>
                       </Grid>
-
-
                     </Grid>
                   </Grid>
                 </Grid>
@@ -2071,7 +2069,7 @@ class CreateEncounter extends React.Component
                         maxBodyHeight: '450px',
                         minBodyHeight: '200px',
                         headerStyle: {
-                          backgroundColor: '#358600',
+                          backgroundColor: '#3366ff',
                           color: '#fff',
                           whiteSpace: 'nowrap'
                         },
@@ -2097,7 +2095,7 @@ class CreateEncounter extends React.Component
                         setRowsPerPage={ this.setRowsPerPage }
                         pageSize={ this.state.rowsPerPage }
                         pageSizeOption={ [1, 2, 3, 5, 10, 25, 50] }
-                      
+                        t={t}
                         totalElements={ this.state.totalElements }
                         page={ this.state.page }
                         isSimple={ true }
@@ -2109,7 +2107,7 @@ class CreateEncounter extends React.Component
                         open={ openViewDialog }
                         updatePageData={ this.updatePageData }
                         item={ this.state.item }
-                      
+                        t={t}
                       />
                     ) }
                   </Grid>

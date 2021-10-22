@@ -1257,7 +1257,7 @@ class CreateEncounter extends React.Component {
                         maxBodyHeight: '450px',
                         minBodyHeight: '200px',
                         headerStyle: {
-                          backgroundColor: '#358600',
+                          backgroundColor: '#3366ff',
                           color: '#fff',
                           whiteSpace: 'nowrap'
                         },
