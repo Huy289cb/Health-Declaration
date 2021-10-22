@@ -302,7 +302,7 @@
 .icon{
   background:rgb(3, 185, 155);
   margin: 0px 20px 0px 50px;  
-  border-radius: 5%;
+  border-radius: 8px;
 }
 .icon:hover{
   /* margin: 0px 50px 0px 50px; */
@@ -313,7 +313,7 @@
 .icon-1{
   background:rgb(240, 2, 51);
   margin: 0px 50px 0px 20px;  
-  border-radius: 5%;
+  border-radius: 8px;
 }
 .icon-1:hover{ 
   background:rgb(255, 7, 61);
@@ -321,7 +321,7 @@
 .icon-2{
   background:rgb(238, 102, 11);
   margin: 0px 20px 0px 50px;  
-  border-radius: 5%;
+  border-radius: 8px;
 } 
 .icon-2:hover{ 
   background:rgb(255,117 , 16);
