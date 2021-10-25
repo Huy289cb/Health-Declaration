@@ -14,25 +14,27 @@ import NicePagination from '../Component/Pagination/NicePagination';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import DescriptionIcon from '@material-ui/icons/Description';
-toast.configure({
+toast.configure( {
   autoClose: 2000,
   draggable: false,
   limit: 3
-});
+} );
 
-function MaterialButton(props) {
+function MaterialButton ( props )
+{
   const { t, i18n } = useTranslation();
   const { item } = props;
   return <div>
-    <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
+    <IconButton size="small" onClick={ () => props.onSelect( item, 0 ) }>
       <Icon fontSize="small" color="primary">edit</Icon>
     </IconButton>
-    <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+    <IconButton size="small" onClick={ () => props.onSelect( item, 1 ) }>
       <Icon fontSize="small" color="error">delete</Icon>
     </IconButton>
   </div>;
 }
-class AdministrativeUnitTable extends Component {
+class AdministrativeUnitTable extends Component
+{
   state = {
     rowsPerPage: 10,
     page: 1,
@@ -44,54 +46,62 @@ class AdministrativeUnitTable extends Component {
     shouldOpenImportExcelDialog: false
   };
 
-  updatePageData = (item) => {
+  updatePageData = ( item ) =>
+  {
     var searchObject = {};
-    if (item != null) {
-      this.setState({
+    if ( item != null )
+    {
+      this.setState( {
         page: 1,
         text: item.text,
         orgType: item.orgType,
-      }, () => {
+      }, () =>
+      {
         searchObject.text = this.state.text;
         searchObject.pageIndex = this.state.page;
         searchObject.pageSize = this.state.rowsPerPage;
         searchObject.orgType = this.state.orgType
-        searchByPage(searchObject).then(({ data }) => {
-          this.setState({
+        searchByPage( searchObject ).then( ( { data } ) =>
+        {
+          this.setState( {
             itemList: [...data.content],
             totalElements: data.totalElements,
             totalPages: data.totalPages
-          })
+          } )
           var treeValues = [];
 
           let itemListClone = [...data.content];
 
-          itemListClone.forEach(item => {
-            var items = this.getListItemChild(item);
-            treeValues.push(...items);
-          })
+          itemListClone.forEach( item =>
+          {
+            var items = this.getListItemChild( item );
+            treeValues.push( ...items );
+          } )
         }
         );
-      })
-    } else {
+      } )
+    } else
+    {
       searchObject.text = this.state.text;
       searchObject.pageIndex = this.state.page;
       searchObject.pageSize = this.state.rowsPerPage;
       searchObject.orgType = this.state.orgType
-      searchByPage(searchObject).then(({ data }) => {
-        this.setState({
+      searchByPage( searchObject ).then( ( { data } ) =>
+      {
+        this.setState( {
           itemList: [...data.content],
           totalElements: data.totalElements,
           totalPages: data.totalPages
-        })
+        } )
         var treeValues = [];
 
         let itemListClone = [...data.content];
 
-        itemListClone.forEach(item => {
-          var items = this.getListItemChild(item);
-          treeValues.push(...items);
-        })
+        itemListClone.forEach( item =>
+        {
+          var items = this.getListItemChild( item );
+          treeValues.push( ...items );
+        } )
       }
       );
     }
@@ -99,104 +109,132 @@ class AdministrativeUnitTable extends Component {
 
 
   //Paging handle start
-  setPage = (page) => {
-    this.setState({ page }, function () {
+  setPage = ( page ) =>
+  {
+    this.setState( { page }, function ()
+    {
       this.updatePageData()
-    })
+    } )
   }
-  setRowsPerPage = (event) => {
-    this.setState({ rowsPerPage: event.target.value, page: 1 }, function () {
+  setRowsPerPage = ( event ) =>
+  {
+    this.setState( { rowsPerPage: event.target.value, page: 1 }, function ()
+    {
       this.updatePageData()
-    })
+    } )
   }
-  handleChangePage = (event, newPage) => {
-    this.setPage(newPage)
+  handleChangePage = ( event, newPage ) =>
+  {
+    this.setPage( newPage )
   }
   //Paging handle end
 
-  handleClose = () => {
-    this.setState({
+  handleClose = () =>
+  {
+    this.setState( {
       shouldOpenEditorDialog: false,
       shouldOpenConfirmationDialog: false,
       shouldOpenConfirmationDeleteListDialog: false,
       shouldOpenImportExcelDialog: false
-    }, () => {
+    }, () =>
+    {
       this.updatePageData();
-    });
+    } );
   };
 
-  handleEditItem = item => {
-    this.setState({
+  handleEditItem = item =>
+  {
+    this.setState( {
       item: item,
       shouldOpenEditorDialog: true
-    });
+    } );
   };
   //handle popup open/close end
 
   //handle delete start
-  async handleDeleteList(list) {
+  async handleDeleteList ( list )
+  {
     let listAlert = [];
     // let { t } = this.props;
     let success = 0;
     let error = 0;
-    for (var i = 0; i < list.length; i++) {
-      try {
-        await deleteItem(list[i].id).then(({data})=>{
-          if(data){
+    for ( var i = 0; i < list.length; i++ )
+    {
+      try
+      {
+        await deleteItem( list[i].id ).then( ( { data } ) =>
+        {
+          if ( data )
+          {
             success++;
-          }else{
+          } else
+          {
             error++;
           }
-        });
-      } catch (error) {
-        listAlert.push(list[i].name);
+        } );
+      } catch ( error )
+      {
+        listAlert.push( list[i].name );
       }
     }
 
-    if(success != 0){
-      toast.success("Xóa thành công" + " " + success);
+    if ( success != 0 )
+    {
+      toast.success( "Xóa thành công" + " " + success );
     }
-    if(error != 0){
-      toast.info("Không thể xóa vì có dữ liệu rằng buộc" + " " + error);
+    if ( error != 0 )
+    {
+      toast.info( "Không thể xóa vì có dữ liệu rằng buộc" + " " + error );
     }
   };
-  handleDeleteListItem = (event) => {
+  handleDeleteListItem = ( event ) =>
+  {
     let { t } = this.props
-    if (this.data != null && this.data.length > 0) {
-      this.handleDeleteList(this.data).then(() => {
+    if ( this.data != null && this.data.length > 0 )
+    {
+      this.handleDeleteList( this.data ).then( () =>
+      {
         this.updatePageData();
-      })
-    } else {
-      toast.warning(t('toast.please_select'));
+      } )
+    } else
+    {
+      toast.warning( t( 'toast.please_select' ) );
     };
     this.handleClose()
   }
-  handleConfirmDeleteItem = () => {
+  handleConfirmDeleteItem = () =>
+  {
     let { t } = this.props
-    deleteItem(this.state.id).then(({data}) => {
-      if(data){
-        toast.success(t('toast.delete_success'));
+    deleteItem( this.state.id ).then( ( { data } ) =>
+    {
+      if ( data )
+      {
+        toast.success( t( 'toast.delete_success' ) );
         this.updatePageData();
-      }else{
-        toast.info(t('toast.delete_error'));
+      } else
+      {
+        toast.info( t( 'toast.delete_error' ) );
       }
       this.handleClose();
-    });
+    } );
   };
-  handleDelete = id => {
-    this.setState({
+  handleDelete = id =>
+  {
+    this.setState( {
       id,
       shouldOpenConfirmationDialog: true
-    });
+    } );
   };
   //handle delete end
 
-  importExcel = () => {
-    this.setState({
+  importExcel = () =>
+  {
+    this.setState( {
       shouldOpenImportExcelDialog: true,
-    });
+    } );
   };
-  getListItemChild(item) {
+  getListItemChild ( item )
+  {
     var result = [];
     var root = {};
     root.name = item.name;
@@ -206,20 +244,24 @@ class AdministrativeUnitTable extends Component {
     root.displayOrder = item.displayOrder;
     root.foundedDate = item.foundedDate;
     root.parentId = item.parentId;
-    result.push(root);
-    if (item.children) {
-      item.children.forEach(child => {
-        var childs = this.getListItemChild(child);
-        result.push(...childs);
-      });
+    result.push( root );
+    if ( item.children )
+    {
+      item.children.forEach( child =>
+      {
+        var childs = this.getListItemChild( child );
+        result.push( ...childs );
+      } );
     }
     return result;
   }
-  componentDidMount() {
+  componentDidMount ()
+  {
     this.updatePageData();
   }
 
-  render() {
+  render ()
+  {
     const { t, i18n } = this.props;
     let {
       itemList,
@@ -230,166 +272,176 @@ class AdministrativeUnitTable extends Component {
 
     let columns = [
       {
-        title: t("administrative_unit.code"),
+        title: t( "administrative_unit.code" ),
         field: "code",
         width: '100'
       },
       {
-        title: t('administrative_unit.parent1'),
+        title: t( 'administrative_unit.parent1' ),
         field: "name",
         width: '100'
       },
       {
-        title: t('administrative_unit.parent2'),
+        title: t( 'administrative_unit.parent2' ),
         field: "parent.name",
       },
       {
-        title: t('administrative_unit.parent3'),
+        title: t( 'administrative_unit.parent3' ),
         field: "parent.parent.name",
       },
       {
-        title: t("general.action"),
+        title: t( "general.action" ),
         field: "custom",
         width: '100',
         type: 'numeric',
-        render: rowData => <MaterialButton item={rowData}
-          onSelect={(rowData, method) => {
-            if (method === 0) {
-              getById(rowData.id).then(({ data }) => {
-                this.setState({
+        render: rowData => <MaterialButton item={ rowData }
+          onSelect={ ( rowData, method ) =>
+          {
+            if ( method === 0 )
+            {
+              getById( rowData.id ).then( ( { data } ) =>
+              {
+                this.setState( {
                   item: data,
                   shouldOpenEditorDialog: true
-                });
-              })
-            } else if (method === 1) {
-              this.handleDelete(rowData.id);
-            } else {
-              alert('Call Selected Here:' + rowData.id);
+                } );
+              } )
+            } else if ( method === 1 )
+            {
+              this.handleDelete( rowData.id );
+            } else
+            {
+              alert( 'Call Selected Here:' + rowData.id );
             }
-          }}
+          } }
         />
       },
     ]
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
-          <Breadcrumb routeSegments={[{ name: t('administrative_unit.title') }]} />
+          <Breadcrumb routeSegments={ [{ name: t( 'administrative_unit.title' ) }] } />
         </div>
-        <Grid container spacing={3}>
+        <Grid container spacing={ 3 }>
 
-          <Grid item md={6} sm={12}>
-            
-              <>
-                <Button
-                  className="mb-16 mr-16 btn btn-success d-inline-flex"
-                  startIcon={<AddIcon />}
-                  variant="contained"
-                  onClick={() => {
-                    this.handleEditItem({ startDate: new Date(), endDate: new Date() });
-                  }
-                  }
-                >
-                  {t('general.button.add')}
-                </Button>
-                <Button
-                  className="mb-16 mr-16 btn btn-warning d-inline-flex"
-                  variant="contained"
-                  startIcon={<DeleteIcon />}
-                  onClick={() => this.setState({ shouldOpenConfirmationDeleteListDialog: true })}>
-                  {t('general.button.delete')}
-                </Button>
-                <Button
-                  className="mb-16 mr-16 btn btn-secondary d-inline-flex"
-                  startIcon={<DescriptionIcon />}
-                  variant="contained"
-                  onClick={this.importExcel}
-                >
-                  {t("general.button.importExcel")}
-                </Button>
-                {this.state.shouldOpenImportExcelDialog && (
-                  <ImportExcelDialog
-                    t={t}
-                    i18n={i18n}
-                    handleClose={this.handleClose}
-                    open={this.state.shouldOpenImportExcelDialog}
-                  />
-                )}
-                {shouldOpenConfirmationDeleteListDialog && (
-                  <ConfirmationDialog
-                    open={shouldOpenConfirmationDeleteListDialog}
-                    onClose={this.handleClose}
-                    onYesClick={this.handleDeleteListItem}
-                    title={t("confirm_dialog.delete_list.title")}
-                    text={t('confirm_dialog.delete_list.text')}
-                    agree={t("confirm_dialog.delete_list.agree")}
-                    cancel={t("confirm_dialog.delete_list.cancel")}
-                  />
-                )}
-              </>
+          <Grid item md={ 6 } sm={ 12 }>
+
+            <>
+              <Button
+                className="mb-16 mr-16 btn btn-success d-inline-flex"
+                startIcon={ <AddIcon /> }
+                variant="contained"
+                onClick={ () =>
+                {
+                  this.handleEditItem( { startDate: new Date(), endDate: new Date() } );
+                }
+                }
+              >
+                { t( 'general.button.add' ) }
+              </Button>
+              <Button
+                className="mb-16 mr-16 btn btn-warning d-inline-flex"
+                variant="contained"
+                startIcon={ <DeleteIcon /> }
+                onClick={ () => this.setState( { shouldOpenConfirmationDeleteListDialog: true } ) }>
+                { t( 'general.button.delete' ) }
+              </Button>
+              <Button
+                className="mb-16 mr-16 btn btn-secondary d-inline-flex"
+                startIcon={ <DescriptionIcon /> }
+                variant="contained"
+                onClick={ this.importExcel }
+              >
+                { t( "general.button.importExcel" ) }
+              </Button>
+              { this.state.shouldOpenImportExcelDialog && (
+                <ImportExcelDialog
+                  t={ t }
+                  i18n={ i18n }
+                  handleClose={ this.handleClose }
+                  open={ this.state.shouldOpenImportExcelDialog }
+                />
+              ) }
+              { shouldOpenConfirmationDeleteListDialog && (
+                <ConfirmationDialog
+                  open={ shouldOpenConfirmationDeleteListDialog }
+                  onClose={ this.handleClose }
+                  onYesClick={ this.handleDeleteListItem }
+                  title={ t( "confirm_dialog.delete_list.title" ) }
+                  text={ t( 'confirm_dialog.delete_list.text' ) }
+                  agree={ t( "confirm_dialog.delete_list.agree" ) }
+                  cancel={ t( "confirm_dialog.delete_list.cancel" ) }
+                />
+              ) }
+            </>
           </Grid>
-          <Grid item md={6} sm={12} xs={12} >
+          <Grid item md={ 6 } sm={ 12 } xs={ 12 } >
             <SearchInput
-              search={this.updatePageData}
-              t={t}
+              search={ this.updatePageData }
+              t={ t }
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={ 12 }>
             <MaterialTable
-              data={itemList}
-              columns={columns}
+              data={ itemList }
+              columns={ columns }
               // parentChildData={(row, rows) => {
               //   var list = rows.find((a) => a.id === row.parentId)
               //   return list
               // }}
-              options={{
+              options={ {
                 selection: "true",
                 actionsColumnIndex: -1,
                 paging: false,
                 search: false,
                 toolbar: false,
+                rowStyle: ( rowData, index ) => ( {
+                  backgroundColor: ( index % 2 === 1 ) ? '#EEE' : '#FFF',
+                } ),
                 maxBodyHeight: "440px",
                 headerStyle: {
                   backgroundColor: "#337ab7",
                   color: "#fff",
                 },
                 // tableLayout: 'fixed',
-              }}
-              onSelectionChange={(rows) => {
+              } }
+              onSelectionChange={ ( rows ) =>
+              {
                 this.data = rows;
                 // this.setState({selectedItems:rows});
-              }}
+              } }
             />
             <NicePagination
-              totalPages={this.state.totalPages}
-              handleChangePage={this.handleChangePage}
-              setRowsPerPage={this.setRowsPerPage}
-              pageSize={this.state.rowsPerPage}
-              pageSizeOption={[1, 2, 3, 5, 10, 25, 1000]}
-              t={t}
-              totalElements={this.state.totalElements}
-              page={this.state.page}
+              totalPages={ this.state.totalPages }
+              handleChangePage={ this.handleChangePage }
+              setRowsPerPage={ this.setRowsPerPage }
+              pageSize={ this.state.rowsPerPage }
+              pageSizeOption={ [1, 2, 3, 5, 10, 25, 1000] }
+              t={ t }
+              totalElements={ this.state.totalElements }
+              page={ this.state.page }
             />
 
-            {shouldOpenEditorDialog && (
+            { shouldOpenEditorDialog && (
               <AdministrativeUnitEditorDialog
-                handleClose={this.handleClose}
-                open={shouldOpenEditorDialog}
-                updatePageData={this.updatePageData}
-                item={this.state.item}
-                t={t} i18n={i18n}
+                handleClose={ this.handleClose }
+                open={ shouldOpenEditorDialog }
+                updatePageData={ this.updatePageData }
+                item={ this.state.item }
+                t={ t } i18n={ i18n }
               />
-            )}
-            {shouldOpenConfirmationDialog && (
+            ) }
+            { shouldOpenConfirmationDialog && (
               <ConfirmationDialog
-                open={shouldOpenConfirmationDialog}
-                onClose={this.handleClose}
-                onYesClick={this.handleConfirmDeleteItem}
-                title={t("confirm_dialog.delete.title")}
-                text={t('confirm_dialog.delete.text')}
-                agree={t("confirm_dialog.delete.agree")}
-                cancel={t("confirm_dialog.delete.cancel")}
+                open={ shouldOpenConfirmationDialog }
+                onClose={ this.handleClose }
+                onYesClick={ this.handleConfirmDeleteItem }
+                title={ t( "confirm_dialog.delete.title" ) }
+                text={ t( 'confirm_dialog.delete.text' ) }
+                agree={ t( "confirm_dialog.delete.agree" ) }
+                cancel={ t( "confirm_dialog.delete.cancel" ) }
               />
-            )}
+            ) }
 
             {/* {shouldOpenConfirmationDeleteListDialog && (
               <ConfirmationDialog

@@ -1,18 +1,19 @@
-import {
-  Grid,
-  TextField,
-  IconButton,
-  Icon,
-  Button,
-  TableHead,
-  TableCell,
-  TableRow,
-  Checkbox,
-  TablePagination,
-  Tooltip,
-  FormControl,
-  Input, InputAdornment,
-} from '@material-ui/core'
+import
+  {
+    Grid,
+    TextField,
+    IconButton,
+    Icon,
+    Button,
+    TableHead,
+    TableCell,
+    TableRow,
+    Checkbox,
+    TablePagination,
+    Tooltip,
+    FormControl,
+    Input, InputAdornment,
+  } from '@material-ui/core'
 import { createMuiTheme } from '@material-ui/core/styles'
 import React, { Component } from 'react'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
@@ -23,15 +24,16 @@ import MaterialTable, {
   MTableHeader,
 } from 'material-table'
 import { useTranslation, withTranslation, Trans } from 'react-i18next'
-import {
-  getFlatRootChild,
-  getAllByRoot,
-  deleteItem,
-  saveItem,
-  getItemById,
-  getAllItem,
-  deleteCheckItem
-} from './MenuService'
+import
+  {
+    getFlatRootChild,
+    getAllByRoot,
+    deleteItem,
+    saveItem,
+    getItemById,
+    getAllItem,
+    deleteCheckItem
+  } from './MenuService'
 import MenuDialog from './MenuDialog'
 import { Breadcrumb, ConfirmationDialog } from 'egret'
 import { Helmet } from 'react-helmet'
@@ -40,7 +42,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { Link } from "react-router-dom";
 import NotificationPopup from '../Component/NotificationPopup/NotificationPopup'
 
-const LightTooltip = withStyles((theme) => ({
+const LightTooltip = withStyles( ( theme ) => ( {
   tooltip: {
     backgroundColor: theme.palette.common.white,
     color: 'rgba(0, 0, 0, 0.87)',
@@ -51,27 +53,29 @@ const LightTooltip = withStyles((theme) => ({
     left: '-30px',
     width: '80px'
   }
-}))(Tooltip);
+} ) )( Tooltip );
 
-function MaterialButton(props) {
+function MaterialButton ( props )
+{
   const { t, i18n } = useTranslation()
   const item = props.item
   return (
     <div className="">
-      <LightTooltip title={t('general.button.edit')} placement="right-end" enterDelay={300} leaveDelay={200}>
-        <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
+      <LightTooltip title={ t( 'general.button.edit' ) } placement="right-end" enterDelay={ 300 } leaveDelay={ 200 }>
+        <IconButton size="small" onClick={ () => props.onSelect( item, 0 ) }>
           <Icon fontSize="small" color="primary">edit</Icon>
         </IconButton>
       </LightTooltip>
-      <LightTooltip title={t('general.button.delete')} placement="right-end" enterDelay={300} leaveDelay={200}>
-        <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+      <LightTooltip title={ t( 'general.button.delete' ) } placement="right-end" enterDelay={ 300 } leaveDelay={ 200 }>
+        <IconButton size="small" onClick={ () => props.onSelect( item, 1 ) }>
           <Icon fontSize="small" color="error">delete</Icon>
         </IconButton>
       </LightTooltip>
     </div>
   )
 }
-class Menu extends React.Component {
+class Menu extends React.Component
+{
   state = {
     rowsPerPage: 5,
     page: 0,
@@ -85,24 +89,30 @@ class Menu extends React.Component {
     shouldOpenNotificationPopup: false,
     Notification: ''
   }
-  constructor(props) {
-    super(props)
+  constructor ( props )
+  {
+    super( props )
     //this.state = {keyword: ''};
-    this.handleTextChange = this.handleTextChange.bind(this)
+    this.handleTextChange = this.handleTextChange.bind( this )
   }
-  handleTextChange(event) {
-    this.setState({ keyword: event.target.value })
+  handleTextChange ( event )
+  {
+    this.setState( { keyword: event.target.value } )
   }
 
-  handleKeyDownEnterSearch = (e) => {
-    if (e.key === 'Enter') {
+  handleKeyDownEnterSearch = ( e ) =>
+  {
+    if ( e.key === 'Enter' )
+    {
       this.search()
     }
   }
-  componentDidMount() {
+  componentDidMount ()
+  {
     this.updatePageData()
   }
-  getListItemChild(item) {
+  getListItemChild ( item )
+  {
     var result = [];
     var root = {};
     root.name = item.name;
@@ -112,66 +122,80 @@ class Menu extends React.Component {
     root.path = item.path;
     root.id = item.id;
     root.parentId = item.parentId;
-    result.push(root);
-    if (item.children) {
-      item.children.forEach(child => {
-        var childs = this.getListItemChild(child);
-        result.push(...childs);
-      });
+    result.push( root );
+    if ( item.children )
+    {
+      item.children.forEach( child =>
+      {
+        var childs = this.getListItemChild( child );
+        result.push( ...childs );
+      } );
     }
     return result;
   }
-  updatePageData = () => {
+  updatePageData = () =>
+  {
     var searchObject = {}
     searchObject.keyword = ''
     searchObject.pageIndex = this.state.page + 1
     searchObject.pageSize = this.state.rowsPerPage
-    getAllByRoot().then(({ data }) => {
+    getAllByRoot().then( ( { data } ) =>
+    {
       var itemList = [...data];
       var list = [];
-      itemList.forEach(item => {
-        var items = this.getListItemChild(item);
-        list.push(...items);
-      });
-      console.log(list);
-      this.setState({ itemList: list });
-    })
+      itemList.forEach( item =>
+      {
+        var items = this.getListItemChild( item );
+        list.push( ...items );
+      } );
+      console.log( list );
+      this.setState( { itemList: list } );
+    } )
   }
-  setPage = (page) => {
-    this.setState({ page }, function () {
+  setPage = ( page ) =>
+  {
+    this.setState( { page }, function ()
+    {
       this.updatePageData()
-    })
+    } )
   }
 
-  setRowsPerPage = (event) => {
-    this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
+  setRowsPerPage = ( event ) =>
+  {
+    this.setState( { rowsPerPage: event.target.value, page: 0 }, function ()
+    {
       this.updatePageData()
-    })
+    } )
   }
 
-  handleChangePage = (event, newPage) => {
-    this.setPage(newPage)
+  handleChangePage = ( event, newPage ) =>
+  {
+    this.setPage( newPage )
   }
 
-  handleOKEditClose = () => {
+  handleOKEditClose = () =>
+  {
     this.setState(
       {
         shouldOpenEditorDialog: false,
         shouldOpenConfirmationDialog: false,
       },
-      () => {
+      () =>
+      {
         this.updatePageData()
       }
     )
   }
 
-  handleDelete = (id) => {
-    this.setState({
+  handleDelete = ( id ) =>
+  {
+    this.setState( {
       id,
       shouldOpenConfirmationDialog: true,
-    })
+    } )
   }
-  handleDialogClose = () => {
+  handleDialogClose = () =>
+  {
     this.setState(
       {
         shouldOpenEditorDialog: false,
@@ -180,76 +204,89 @@ class Menu extends React.Component {
         shouldOpenNotificationPopup: false,
         data: [],
       },
-      () => {
+      () =>
+      {
         this.updatePageData()
       }
     )
   }
 
-  handleOKEditClose = () => {
-    this.setState({
+  handleOKEditClose = () =>
+  {
+    this.setState( {
       shouldOpenEditorDialog: false,
       shouldOpenConfirmationDialog: false,
       shouldOpenConfirmationDeleteAllDialog: false,
-    })
-    this.setPage(0)
+    } )
+    this.setPage( 0 )
   }
 
-  handleDelete = (id) => {
-    this.setState({
+  handleDelete = ( id ) =>
+  {
+    this.setState( {
       id,
       shouldOpenConfirmationDialog: true,
-    })
+    } )
   }
 
-  handleConfirmationResponse = () => {
-    if (this.state.itemList.length === 1 && this.state.page === 1) {
+  handleConfirmationResponse = () =>
+  {
+    if ( this.state.itemList.length === 1 && this.state.page === 1 )
+    {
       let count = this.state.page - 1
-      this.setState({
+      this.setState( {
         page: count,
-      })
+      } )
     }
-    deleteItem(this.state.id).then(() => {
+    deleteItem( this.state.id ).then( () =>
+    {
       this.updatePageData();
       this.handleDialogClose()
-    })
+    } )
   }
-  handleEditItem = (item) => {
-    this.setState({
+  handleEditItem = ( item ) =>
+  {
+    this.setState( {
       item: item,
       shouldOpenEditorDialog: true,
-    })
+    } )
 
   }
-  handleDeleteButtonClick = () => {
+  handleDeleteButtonClick = () =>
+  {
     if (
       typeof this.state.data === 'undefined' ||
       this.state.data.length === 0
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         shouldOpenNotificationPopup: true,
         Notification: "general.noti_check_data"
-      })
+      } )
       // alert('Chưa chọn dữ liệu')
-    } else {
-      this.setState({ shouldOpenConfirmationDeleteAllDialog: true })
+    } else
+    {
+      this.setState( { shouldOpenConfirmationDeleteAllDialog: true } )
     }
   }
-  handleDeleteAll = (event) => {
-    this.handleDeleteList(this.state.data).then(() => {
+  handleDeleteAll = ( event ) =>
+  {
+    this.handleDeleteList( this.state.data ).then( () =>
+    {
       this.updatePageData()
       // this.handleDialogClose()
-    })
+    } )
   }
 
-  render() {
+  render ()
+  {
     const { t, i18n } = this.props
     let { keyword, shouldOpenNotificationPopup } = this.state
-    let TitlePage = t('menu.title')
+    let TitlePage = t( 'menu.title' )
 
     let columns = [
       {
-        title: t('general.action'),
+        title: t( 'general.action' ),
         field: 'custom',
         align: 'left',
         width: '120',
@@ -265,31 +302,37 @@ class Menu extends React.Component {
           paddingRight: "0px",
           textAlign: "left",
         },
-        render: (rowData) => (
+        render: ( rowData ) => (
           <MaterialButton
-            item={rowData}
-            onSelect={(rowData, method) => {
-              if (method === 0) {
-                getItemById(rowData.id).then(({ data }) => {
-                  if (data.parent === null) {
+            item={ rowData }
+            onSelect={ ( rowData, method ) =>
+            {
+              if ( method === 0 )
+              {
+                getItemById( rowData.id ).then( ( { data } ) =>
+                {
+                  if ( data.parent === null )
+                  {
                     data.parent = {}
                   }
-                  this.setState({
+                  this.setState( {
                     item: data,
                     shouldOpenEditorDialog: true,
-                  })
-                })
-              } else if (method === 1) {
-                this.handleDelete(rowData.id)
-              } else {
-                alert('Call Selected Here:' + rowData.id)
+                  } )
+                } )
+              } else if ( method === 1 )
+              {
+                this.handleDelete( rowData.id )
+              } else
+              {
+                alert( 'Call Selected Here:' + rowData.id )
               }
-            }}
+            } }
           />
         ),
       },
       {
-        title: t('menu.description'), field: 'description', align: 'left', width: '150',
+        title: t( 'menu.description' ), field: 'description', align: 'left', width: '150',
         cellStyle: {
           minWidth: "200px",
           paddingLeft: "10px",
@@ -304,7 +347,7 @@ class Menu extends React.Component {
         },
       },
       {
-        title: t('menu.name'), field: 'name', width: '150',
+        title: t( 'menu.name' ), field: 'name', width: '150',
         cellStyle: {
           minWidth: "200px",
           paddingLeft: "10px",
@@ -319,7 +362,7 @@ class Menu extends React.Component {
         },
       },
       {
-        title: t('menu.code'), field: 'code', align: 'left', width: '150',
+        title: t( 'menu.code' ), field: 'code', align: 'left', width: '150',
         cellStyle: {
           minWidth: "200px",
           paddingLeft: "10px",
@@ -338,26 +381,26 @@ class Menu extends React.Component {
     return (
       <div className="m-sm-30">
         <Helmet>
-          <title>{TitlePage} | {t('web_site')}</title>
+          <title>{ TitlePage } | { t( 'web_site' ) }</title>
         </Helmet>
         <div className="mb-sm-30">
-          {/* <Breadcrumb routeSegments={[{ name: t('Supplier.title') }]} /> */}
+          {/* <Breadcrumb routeSegments={[{ name: t('Supplier.title') }]} /> */ }
           <Breadcrumb
-            routeSegments={[
-              { name: t('Dashboard.category'), path: '/list/supplier' },
+            routeSegments={ [
+              { name: t( 'Dashboard.category' ), path: '/list/supplier' },
               { name: TitlePage },
-            ]}
+            ] }
           />
         </div>
-        <Grid container spacing={2} justify="space-between">
-          <Grid item md={3} xs={12} >
+        <Grid container spacing={ 2 } justify="space-between">
+          <Grid item md={ 3 } xs={ 12 } >
             <Button
               className="align-bottom mr-16 mb-16"
               variant="contained"
               color="primary"
-              onClick={() => this.handleEditItem(null)}
+              onClick={ () => this.handleEditItem( null ) }
             >
-              {t('general.button.add')}
+              { t( 'general.button.add' ) }
             </Button>
             {/* <Button
               className="align-bottom mb-16"
@@ -368,16 +411,16 @@ class Menu extends React.Component {
               {t('general.delete')}
             </Button> */}
 
-            {this.state.shouldOpenConfirmationDeleteAllDialog && (
+            { this.state.shouldOpenConfirmationDeleteAllDialog && (
               <ConfirmationDialog
-                open={this.state.shouldOpenConfirmationDeleteAllDialog}
-                onConfirmDialogClose={this.handleDialogClose}
-                onYesClick={this.handleDeleteAll}
-                text={t('general.deleteAllConfirm')}
-                cancel={t('general.cancel')}
-                agree={t('general.agree')}
+                open={ this.state.shouldOpenConfirmationDeleteAllDialog }
+                onConfirmDialogClose={ this.handleDialogClose }
+                onYesClick={ this.handleDeleteAll }
+                text={ t( 'general.deleteAllConfirm' ) }
+                cancel={ t( 'general.cancel' ) }
+                agree={ t( 'general.agree' ) }
               />
-            )}
+            ) }
             {/* <TextField
               label={t('Supplier.search')}
               className="mb-16 mr-10"
@@ -418,87 +461,92 @@ class Menu extends React.Component {
                 />
             </FormControl>
           </Grid> */}
-          <Grid item xs={12}>
+          <Grid item xs={ 12 }>
             <div>
-              {this.state.shouldOpenEditorDialog && (
+              { this.state.shouldOpenEditorDialog && (
                 <MenuDialog
-                  t={t}
-                  i18n={i18n}
-                  handleClose={this.handleDialogClose}
-                  open={this.state.shouldOpenEditorDialog}
-                  handleOKEditClose={this.handleOKEditClose}
-                  item={this.state.item}
+                  t={ t }
+                  i18n={ i18n }
+                  handleClose={ this.handleDialogClose }
+                  open={ this.state.shouldOpenEditorDialog }
+                  handleOKEditClose={ this.handleOKEditClose }
+                  item={ this.state.item }
                 />
-              )}
+              ) }
 
-              {shouldOpenNotificationPopup && (
+              { shouldOpenNotificationPopup && (
                 <NotificationPopup
-                  title={t('general.noti')}
-                  open={shouldOpenNotificationPopup}
+                  title={ t( 'general.noti' ) }
+                  open={ shouldOpenNotificationPopup }
                   // onConfirmDialogClose={this.handleDialogClose}
-                  onYesClick={this.handleDialogClose}
-                  text={t(this.state.Notification)}
-                  agree={t('general.agree')}
+                  onYesClick={ this.handleDialogClose }
+                  text={ t( this.state.Notification ) }
+                  agree={ t( 'general.agree' ) }
                 />
-              )}
+              ) }
 
-              {this.state.shouldOpenConfirmationDialog && (
+              { this.state.shouldOpenConfirmationDialog && (
                 <ConfirmationDialog
-                  title={t('general.confirm')}
-                  open={this.state.shouldOpenConfirmationDialog}
-                  onConfirmDialogClose={this.handleDialogClose}
-                  onYesClick={this.handleConfirmationResponse}
-                  text={t('general.deleteConfirm')}
-                  agree={t('general.agree')}
-                  cancel={t('general.cancel')}
+                  title={ t( 'general.confirm' ) }
+                  open={ this.state.shouldOpenConfirmationDialog }
+                  onConfirmDialogClose={ this.handleDialogClose }
+                  onYesClick={ this.handleConfirmationResponse }
+                  text={ t( 'general.deleteConfirm' ) }
+                  agree={ t( 'general.agree' ) }
+                  cancel={ t( 'general.cancel' ) }
                 />
-              )}
+              ) }
             </div>
             <MaterialTable
-              title={t('general.list')}
-              data={this.state.itemList}
-              columns={columns}
-              parentChildData={(row, rows) => {
-                var list = rows.find((a) => a.id === row.parentId)
+              title={ t( 'general.list' ) }
+              data={ this.state.itemList }
+              columns={ columns }
+              parentChildData={ ( row, rows ) =>
+              {
+                var list = rows.find( ( a ) => a.id === row.parentId )
                 return list
-              }}
-              options={{
+              } }
+              options={ {
                 selection: false,
                 actionsColumnIndex: -1,
                 paging: false,
                 search: false,
                 toolbar: false,
+                rowStyle: ( rowData, index ) => ( {
+                  backgroundColor: ( index % 2 === 1 ) ? '#EEE' : '#FFF',
+                } ),
                 maxBodyHeight: "440px",
                 headerStyle: {
                   backgroundColor: "#337ab7",
                   color: "#fff",
                 },
                 // tableLayout: 'fixed',
-              }}
-              onSelectionChange={(rows) => {
+              } }
+              onSelectionChange={ ( rows ) =>
+              {
                 this.data = rows;
                 // this.setState({selectedItems:rows});
-              }}
+              } }
             />
 
             <TablePagination
               align="left"
               className="px-16"
-              rowsPerPageOptions={[1, 2, 3, 5, 10, 25]}
+              rowsPerPageOptions={ [1, 2, 3, 5, 10, 25] }
               component="div"
-              labelRowsPerPage={t('general.rows_per_page')}
-              labelDisplayedRows={({ from, to, count }) => `${from}-${to} ${t('general.of')} ${count !== -1 ? count : `more than ${to}`}`}
-              count={this.state.totalElements}
-              rowsPerPage={this.state.rowsPerPage}
-              page={this.state.page}
-              backIconButtonProps={{
+              labelRowsPerPage={ t( 'general.rows_per_page' ) }
+              labelDisplayedRows={ ( { from, to, count } ) => `${ from }-${ to } ${ t( 'general.of' ) } ${ count !== -1 ? count : `more than ${ to }` }` }
+              count={ this.state.totalElements }
+              rowsPerPage={ this.state.rowsPerPage }
+              page={ this.state.page }
+              backIconButtonProps={ {
                 'aria-label': 'Previous Page',
-              }}
-              nextIconButtonProps={{
+              } }
+              nextIconButtonProps={ {
                 'aria-label': 'Next Page',
-              }}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.setRowsPerPage}
+              } }
+              onChangePage={ this.handleChangePage }
+              onChangeRowsPerPage={ this.setRowsPerPage }
             />
           </Grid>
         </Grid>

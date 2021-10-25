@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import {FormControl, Input, Radio, InputAdornment, Grid, MuiThemeProvider, IconButton, Icon, TextField, Button, TableHead, TableCell, TableRow, Checkbox, TablePagination } from "@material-ui/core";
+import { FormControl, Input, Radio, InputAdornment, Grid, MuiThemeProvider, IconButton, Icon, TextField, Button, TableHead, TableCell, TableRow, Checkbox, TablePagination } from "@material-ui/core";
 import MaterialTable, { MTableToolbar, Chip, MTableBody, MTableHeader } from 'material-table';
-import {searchByPage, getById, deleteItem } from "./SymptomService";
+import { searchByPage, getById, deleteItem } from "./SymptomService";
 import SymptomEditorDialog from "./SymptomEditorDialog";
 import { Breadcrumb, ConfirmationDialog } from "egret";
 import { useTranslation, withTranslation, Trans } from 'react-i18next';
@@ -16,25 +16,27 @@ import { toast } from 'react-toastify';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import 'react-toastify/dist/ReactToastify.css';
-toast.configure({
+toast.configure( {
   autoClose: 2000,
   draggable: false,
   limit: 3
-});
+} );
 
-function MaterialButton(props) {
-    const { t, i18n } = useTranslation();
-    const { item } = props;
-    return <div>
-    <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
-        <Icon fontSize="small" color="primary">edit</Icon>
+function MaterialButton ( props )
+{
+  const { t, i18n } = useTranslation();
+  const { item } = props;
+  return <div>
+    <IconButton size="small" onClick={ () => props.onSelect( item, 0 ) }>
+      <Icon fontSize="small" color="primary">edit</Icon>
     </IconButton>
-    <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+    <IconButton size="small" onClick={ () => props.onSelect( item, 1 ) }>
       <Icon fontSize="small" color="error">delete</Icon>
     </IconButton>
   </div>;
 }
-class SymptomTable extends Component {
+class SymptomTable extends Component
+{
   state = {
     rowsPerPage: 10,
     page: 0,
@@ -45,37 +47,46 @@ class SymptomTable extends Component {
     shouldOpenConfirmationDialog: false,
     shouldOpenConfirmationDeleteAllDialog: false,
   };
-  constructor(props) {
-    super(props);
-    this.handleTextSearchChange = this.handleTextSearchChange.bind(this);
+  constructor ( props )
+  {
+    super( props );
+    this.handleTextSearchChange = this.handleTextSearchChange.bind( this );
   }
 
-  handleTextSearchChange = event => {
-    this.setState({ keyword: event.target.value }, function () {
-    })
+  handleTextSearchChange = event =>
+  {
+    this.setState( { keyword: event.target.value }, function ()
+    {
+    } )
   };
-  handleKeyDownEnterSearch = (e) => {
-    if (e.key === 'Enter') {
+  handleKeyDownEnterSearch = ( e ) =>
+  {
+    if ( e.key === 'Enter' )
+    {
       this.search()
     }
   }
-  async handleDeleteList(list) {
+  async handleDeleteList ( list )
+  {
     let { t } = this.props;
     let deleteSuccess = 0, deleteError = 0, error = 0;
-    for (let i = 0; i < list.length; i++) {
-    //   await deleteAdministrativeUnit(list[i].id).then((res) => {
-    //     deleteSuccess++;
-    //   }
-    //   ).catch(() => {
-    //     error++
-    //     // this.handleDialogClose();
-    //   });
+    for ( let i = 0; i < list.length; i++ )
+    {
+      //   await deleteAdministrativeUnit(list[i].id).then((res) => {
+      //     deleteSuccess++;
+      //   }
+      //   ).catch(() => {
+      //     error++
+      //     // this.handleDialogClose();
+      //   });
     }
-    if (deleteSuccess != 0) {
-      toast.info(t("Xóa thành công") + " " + deleteSuccess);
+    if ( deleteSuccess != 0 )
+    {
+      toast.info( t( "Xóa thành công" ) + " " + deleteSuccess );
     }
-    if (error != 0) {
-      toast.warning(t('Xóa không thành công') + " " + error);
+    if ( error != 0 )
+    {
+      toast.warning( t( 'Xóa không thành công' ) + " " + error );
     }
     this.updatePageData();
     this.handleDialogClose();
@@ -89,83 +100,102 @@ class SymptomTable extends Component {
   //     this.handleDialogClose();
   //   };
   // };
-  search() {
-    this.setState({ page: 0 }, function () {
+  search ()
+  {
+    this.setState( { page: 0 }, function ()
+    {
       var searchObject = {};
       searchObject.text = this.state.keyword;
       searchObject.pageIndex = this.state.page + 1;
       searchObject.pageSize = this.state.rowsPerPage;
-      searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-        this.setState({ symptomList: [...data.content], totalElements: data.totalElements })
-      });
-    
-    });
+      searchByPage( searchObject, this.state.page, this.state.rowsPerPage ).then( ( { data } ) =>
+      {
+        this.setState( { symptomList: [...data.content], totalElements: data.totalElements } )
+      } );
+
+    } );
   }
 
-  setRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
+  setRowsPerPage = event =>
+  {
+    this.setState( { rowsPerPage: event.target.value, page: 0 }, function ()
+    {
       this.search();
-    })
+    } )
   };
 
-  handleChangePage = (event, newPage) => {
-    this.updateData(newPage);
+  handleChangePage = ( event, newPage ) =>
+  {
+    this.updateData( newPage );
   };
-  updateData(pageNumber){
-    this.setState({ page: pageNumber }, function () {
+  updateData ( pageNumber )
+  {
+    this.setState( { page: pageNumber }, function ()
+    {
       var searchObject = {};
       searchObject.text = this.state.keyword;
       searchObject.pageIndex = this.state.page + 1;
       searchObject.pageSize = this.state.rowsPerPage;
-      searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-        this.setState({ symptomList: [...data.content], totalElements: data.totalElements })
-      });
-    });
+      searchByPage( searchObject, this.state.page, this.state.rowsPerPage ).then( ( { data } ) =>
+      {
+        this.setState( { symptomList: [...data.content], totalElements: data.totalElements } )
+      } );
+    } );
   }
-  handleDialogClose = () => {
-    this.setState({
+  handleDialogClose = () =>
+  {
+    this.setState( {
       shouldOpenEditorDialog: false,
       shouldOpenConfirmationDialog: false,
       shouldOpenConfirmationDeleteAllDialog: false,
-    }, function(){
-        this.updatePageData();
-    });
+    }, function ()
+    {
+      this.updatePageData();
+    } );
 
   };
 
-  handleDelete = id => {
-    this.setState({
+  handleDelete = id =>
+  {
+    this.setState( {
       id,
       shouldOpenConfirmationDialog: true
-    });
+    } );
   };
 
-  handleConfirmationResponse = () => {
+  handleConfirmationResponse = () =>
+  {
     let { t } = this.props;
-    deleteItem(this.state.id).then(() => {
+    deleteItem( this.state.id ).then( () =>
+    {
       this.updatePageData();
       this.handleDialogClose();
-      toast.success(t("Xóa thành công"));
-    }).catch(() => {
-      toast.warning(t('Xóa không thành công'));
+      toast.success( t( "Xóa thành công" ) );
+    } ).catch( () =>
+    {
+      toast.warning( t( 'Xóa không thành công' ) );
       this.handleDialogClose();
-    });
+    } );
   };
- 
-  componentDidMount() {
+
+  componentDidMount ()
+  {
     this.updatePageData();
   }
-  updatePageData = () => {
+  updatePageData = () =>
+  {
     var searchObject = {};
     searchObject.keyword = this.state.keyword;
     searchObject.pageIndex = this.state.page + 1;
     searchObject.pageSize = this.state.rowsPerPage;
-    searchByPage(searchObject).then(({ data }) => {
-      this.setState({ symptomList: [...data.content], totalElements: data.totalElements })
-    });
+    searchByPage( searchObject ).then( ( { data } ) =>
+    {
+      this.setState( { symptomList: [...data.content], totalElements: data.totalElements } )
+    } );
   }
 
-  render() {
+  render ()
+  {
     const { t, i18n } = this.props;
     let {
       rowsPerPage,
@@ -180,7 +210,7 @@ class SymptomTable extends Component {
 
     let columns = [
       {
-        title: t("general.action"),
+        title: t( "general.action" ),
         field: "custom",
         align: "left",
         width: "250",
@@ -195,25 +225,30 @@ class SymptomTable extends Component {
           paddingRight: "0px",
           textAlign: "left",
         },
-        render: rowData => <MaterialButton item={rowData}
-          onSelect={(rowData, method) => {
-            if (method === 0) {
-              getById(rowData.id).then(({ data }) => {
-                this.setState({
+        render: rowData => <MaterialButton item={ rowData }
+          onSelect={ ( rowData, method ) =>
+          {
+            if ( method === 0 )
+            {
+              getById( rowData.id ).then( ( { data } ) =>
+              {
+                this.setState( {
                   item: data,
                   shouldOpenEditorDialog: true
-                });
-              })
-            } else if (method === 1) {
-              this.handleDelete(rowData.id);
-            } else {
-              alert('Call Selected Here:' + rowData.id);
+                } );
+              } )
+            } else if ( method === 1 )
+            {
+              this.handleDelete( rowData.id );
+            } else
+            {
+              alert( 'Call Selected Here:' + rowData.id );
             }
-          }}
+          } }
         />
       },
       {
-        title: t("Mã triệu chứng"), field: "code", width: "150",
+        title: t( "Mã triệu chứng" ), field: "code", width: "150",
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -227,7 +262,7 @@ class SymptomTable extends Component {
         },
       },
       {
-        title: t('Tên triệu chứng'), field: "name", align: "left", width: "150",
+        title: t( 'Tên triệu chứng' ), field: "name", align: "left", width: "150",
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -241,14 +276,14 @@ class SymptomTable extends Component {
         },
       },
       {
-        title: t('Loại triệu chứng'), field: "type", align: "left", width: "150",
-        render: (rowData) =>
-          rowData.type=="type1" ? (
+        title: t( 'Loại triệu chứng' ), field: "type", align: "left", width: "150",
+        render: ( rowData ) =>
+          rowData.type == "type1" ? (
             <span>
               Triệu chứng thường gặp
             </span>
           ) : (
-            rowData.type=="type2"?"Triệu chứng nặng":""
+            rowData.type == "type2" ? "Triệu chứng nặng" : ""
           ),
         headerStyle: {
           minWidth: "150px",
@@ -268,147 +303,150 @@ class SymptomTable extends Component {
       <div className="m-sm-30">
         <div className="mb-sm-30">
           <Helmet>
-            <title>{t("Triệu chứng")} | {t("web_site")}</title>
+            <title>{ t( "Triệu chứng" ) } | { t( "web_site" ) }</title>
           </Helmet>
-          <Breadcrumb routeSegments={[{ name: t("Danh mục"), path: "/directory/apartment" }, { name: t('Triệu chứng') }]} />
+          <Breadcrumb routeSegments={ [{ name: t( "Danh mục" ), path: "/directory/apartment" }, { name: t( 'Triệu chứng' ) }] } />
         </div>
-        <Grid container spacing={3}>
-          <Grid item lg={7} md={7} sm={12} xs={12}>
+        <Grid container spacing={ 3 }>
+          <Grid item lg={ 7 } md={ 7 } sm={ 12 } xs={ 12 }>
             <Button
-                className="mb-16 mr-16 btn btn-success d-inline-flex"
-                startIcon={<AddIcon />}
-                variant="contained"
-                onClick={() => {
-                    this.setState({ shouldOpenEditorDialog: true, item: {} })
+              className="mb-16 mr-16 btn btn-success d-inline-flex"
+              startIcon={ <AddIcon /> }
+              variant="contained"
+              onClick={ () =>
+              {
+                this.setState( { shouldOpenEditorDialog: true, item: {} } )
                 //this.handleEditItem({ startDate: new Date(), endDate: new Date() });
-                }
-                }
+              }
+              }
             >
-                {t('general.button.add')}
+              { t( 'general.button.add' ) }
             </Button>
             <Button
-                className="mb-16 mr-16 btn btn-warning d-inline-flex"
-                variant="contained"
-                startIcon={<DeleteIcon />}
-                onClick={() =>  this.setState({ shouldOpenConfirmationDeleteAllDialog: true })}>
-                {t('general.button.delete')}
+              className="mb-16 mr-16 btn btn-warning d-inline-flex"
+              variant="contained"
+              startIcon={ <DeleteIcon /> }
+              onClick={ () => this.setState( { shouldOpenConfirmationDeleteAllDialog: true } ) }>
+              { t( 'general.button.delete' ) }
             </Button>
           </Grid>
-          <Grid item lg={5} md={5} sm={12} xs={12} >
+          <Grid item lg={ 5 } md={ 5 } sm={ 12 } xs={ 12 } >
             <FormControl fullWidth>
               <Input
                 className='mt-10 search_box w-100 stylePlaceholder'
                 type="text"
                 name="keyword"
-                value={keyword}
-                onChange={this.handleTextSearchChange}
-                onKeyDown={this.handleKeyDownEnterSearch}
-                placeholder={t('Tìm kiếm')}
+                value={ keyword }
+                onChange={ this.handleTextSearchChange }
+                onKeyDown={ this.handleKeyDownEnterSearch }
+                placeholder={ t( 'Tìm kiếm' ) }
                 id="search_box"
                 startAdornment={
                   <InputAdornment >
                     <Link to="#"> <SearchIcon
-                      onClick={() => this.search(keyword)}
-                      style={{
+                      onClick={ () => this.search( keyword ) }
+                      style={ {
                         position: "absolute",
                         top: "0",
                         right: "0"
-                      }} /></Link>
+                      } } /></Link>
                   </InputAdornment>
                 }
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={ 12 }>
             <MaterialTable
-              title={t('List')}
-              data={this.state.symptomList}
-              columns={columns}
+              title={ t( 'List' ) }
+              data={ this.state.symptomList }
+              columns={ columns }
 
-              parentChildData={(row, rows) => {
-                var list = rows.find(a => a.id === row.parentId);
+              parentChildData={ ( row, rows ) =>
+              {
+                var list = rows.find( a => a.id === row.parentId );
                 return list;
-              }}
-              options={{
+              } }
+              options={ {
                 selection: true,
                 actionsColumnIndex: -1,
                 paging: false,
                 search: false,
-                rowStyle: (rowData, index) => ({
-                  backgroundColor: (index % 2 === 1) ? '#EEE' : '#FFF',
-                }),
+                rowStyle: ( rowData, index ) => ( {
+                  backgroundColor: ( index % 2 === 1 ) ? '#EEE' : '#FFF',
+                } ),
                 maxBodyHeight: '450px',
                 minBodyHeight: '370px',
                 headerStyle: {
-                    backgroundColor: "#337ab7",
-                    color: "#fff",
-                  },
+                  backgroundColor: "#337ab7",
+                  color: "#fff",
+                },
                 padding: 'dense',
                 toolbar: false
-              }}
-              onSelectionChange={(rows) => {
+              } }
+              onSelectionChange={ ( rows ) =>
+              {
                 this.data = rows;
-              }}
-              localization={{
+              } }
+              localization={ {
                 body: {
-                  emptyDataSourceMessage: `${t(
+                  emptyDataSourceMessage: `${ t(
                     "general.emptyDataMessageTable"
-                  )}`,
+                  ) }`,
                 },
-              }}
-           
+              } }
+
             />
             <TablePagination
               align="left"
               className="px-16"
-              rowsPerPageOptions={[1, 2, 5, 10, 25, 50, 100]}
+              rowsPerPageOptions={ [1, 2, 5, 10, 25, 50, 100] }
               component="div"
-              labelRowsPerPage={t('general.rows_per_page')}
-              labelDisplayedRows={({ from, to, count }) => `${from}-${to} ${t('of')} ${count !== -1 ? count : `more than ${to}`}`}
-              count={this.state.totalElements}
-              rowsPerPage={this.state.rowsPerPage}
-              page={this.state.page}
-              backIconButtonProps={{
+              labelRowsPerPage={ t( 'general.rows_per_page' ) }
+              labelDisplayedRows={ ( { from, to, count } ) => `${ from }-${ to } ${ t( 'of' ) } ${ count !== -1 ? count : `more than ${ to }` }` }
+              count={ this.state.totalElements }
+              rowsPerPage={ this.state.rowsPerPage }
+              page={ this.state.page }
+              backIconButtonProps={ {
                 "aria-label": "Previous Page"
-              }}
-              nextIconButtonProps={{
+              } }
+              nextIconButtonProps={ {
                 "aria-label": "Next Page"
-              }}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.setRowsPerPage}
+              } }
+              onChangePage={ this.handleChangePage }
+              onChangeRowsPerPage={ this.setRowsPerPage }
             />
 
-            {shouldOpenEditorDialog && (
+            { shouldOpenEditorDialog && (
               <SymptomEditorDialog
-                handleClose={this.handleDialogClose}
-                open={shouldOpenEditorDialog}
-                item={this.state.item}
-                t={t} i18n={i18n}
+                handleClose={ this.handleDialogClose }
+                open={ shouldOpenEditorDialog }
+                item={ this.state.item }
+                t={ t } i18n={ i18n }
               />
-            )}
-            
-            {shouldOpenConfirmationDialog && (
+            ) }
+
+            { shouldOpenConfirmationDialog && (
               <ConfirmationDialog
-                open={shouldOpenConfirmationDialog}
-                onClose={this.handleDialogClose}
-                onYesClick={this.handleConfirmationResponse}
-                title={t("confirm_dialog.delete.title")}
-                text={t('confirm_dialog.delete.text')}
-                agree={t("confirm_dialog.delete.agree")}
-                cancel={t("confirm_dialog.delete.cancel")}
+                open={ shouldOpenConfirmationDialog }
+                onClose={ this.handleDialogClose }
+                onYesClick={ this.handleConfirmationResponse }
+                title={ t( "confirm_dialog.delete.title" ) }
+                text={ t( 'confirm_dialog.delete.text' ) }
+                agree={ t( "confirm_dialog.delete.agree" ) }
+                cancel={ t( "confirm_dialog.delete.cancel" ) }
               />
-            )}
-            {shouldOpenConfirmationDeleteAllDialog && (
+            ) }
+            { shouldOpenConfirmationDeleteAllDialog && (
               <ConfirmationDialog
-                open={shouldOpenConfirmationDeleteAllDialog}
-                onClose={this.handleDialogClose}
+                open={ shouldOpenConfirmationDeleteAllDialog }
+                onClose={ this.handleDialogClose }
                 //onYesClick={this.handleDeleteAll}
-                title={t("confirm_dialog.delete.title")}
-                text={t('confirm_dialog.delete.text')}
-                agree={t("confirm_dialog.delete.agree")}
-                cancel={t("confirm_dialog.delete.cancel")}
+                title={ t( "confirm_dialog.delete.title" ) }
+                text={ t( 'confirm_dialog.delete.text' ) }
+                agree={ t( "confirm_dialog.delete.agree" ) }
+                cancel={ t( "confirm_dialog.delete.cancel" ) }
               />
-            )}
+            ) }
           </Grid>
         </Grid>
       </div>

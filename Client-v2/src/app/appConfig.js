@@ -1,9 +1,9 @@
 const APPLICATION_PATH = "/";
-module.exports = Object.freeze({
+module.exports = Object.freeze( {
     ROOT_PATH: APPLICATION_PATH,
     ACTIVE_LAYOUT: "layout1", //layout1 = vertical, layout2=horizontal
-    API_ENPOINT: "http://localhost:8992/healthdeclaration", //local
-    // API_ENPOINT: "http://healthdeclaration.globits.net:9002/healthdeclaration", //online
+    // API_ENPOINT: "http://localhost:8992/healthdeclaration", //local
+    API_ENPOINT: "http://healthdeclaration.globits.net:9002/healthdeclaration", //online
     // API_ENPOINT: "http://q7tankieng.cov21.vn:9003/healthdeclaration", //online
     LOGIN_PAGE: APPLICATION_PATH + "session/signin", //Nếu là Spring
     REGISTRY_PAGE: APPLICATION_PATH + "session/signup",
@@ -12,7 +12,7 @@ module.exports = Object.freeze({
     //HOME_PAGE:APPLICATION_PATH+"dashboard/learning-management"//Nếu là Keycloak
     //HOME_PAGE:APPLICATION_PATH+"landing3",//Link trang landing khi bắt đầu
 
-    REGISTER_USER_TYPE:{
+    REGISTER_USER_TYPE: {
 
     },
     GET_PERSONAL_HEALTH_RECORD_TYPE: {
@@ -22,15 +22,15 @@ module.exports = Object.freeze({
         remoteWork: 4 //{key:4, value:"Bác sĩ - nhân viên y tế làm từ xa"}
     },
     SUSPECTEDLEVEL: [
-        { key:"normal", value: "Bình thường"},
-        { key: "f0", value: "F0"},
-        { key: "f1", value: "F1"}
+        { key: "normal", value: "Bình thường" },
+        { key: "f0", value: "F0" },
+        { key: "f1", value: "F1" }
     ],
     PERSONAL_HEALTH_RECORD_TYPE: [
         { key: 1, value: "Dân tự khai báo" },
         { key: 2, value: "Tổ y tế" },
         { key: 3, value: "Khám trực tiếp" },
-        { key: 4, value: "Khám từ xa"}
+        { key: 4, value: "Khám từ xa" }
     ],
     RESULT_TEST: [{ key: 1, value: "Dương tính" }, { key: 2, value: "Âm tính" }],
     ENCOUNTER_TYPE: [
@@ -183,4 +183,4 @@ module.exports = Object.freeze({
             display: "Tại chỗ",
         },
     ]
-});
+} );
