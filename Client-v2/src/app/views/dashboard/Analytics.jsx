@@ -191,13 +191,13 @@ class Analytics extends Component {
       ({ data }) => {
         let titleDialog="";
         if(level<1){
-          titleDialog="Danh sách không triệu chứng";
+          titleDialog="Danh sách mức nguy cơ thấp";
         }else if(level==1){
-          titleDialog="Danh sách Có triệu chứng khác";
+          titleDialog="Danh sách mức nguy cơ trung bình";
         }else if(level==2){
-          titleDialog="Danh sách Có triệu chứng cần cấp cứu	";
+          titleDialog="Danh sách mức nguy cơ cao";
         }else if(level==3){
-          titleDialog="Danh sách SPO2 thấp và nhịp thở không bình thường";
+          titleDialog="Danh sách mức nguy cơ rất cao";
         }
         this.setState({ listCasetData: data,openViewListPatientDialog:true,title:titleDialog });
     });
