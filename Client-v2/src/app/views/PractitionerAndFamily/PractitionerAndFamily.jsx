@@ -352,39 +352,37 @@ class PractitionerAndFamily extends Component
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
-          <Breadcrumb routeSegments={ [{ name: t( 'Phân công chăm sóc hộ gia đình' ) }] } />
+          <Breadcrumb routeSegments={ [{ name: 'Phân công chăm sóc hộ gia đình'}] } />
         </div>
         <Grid container spacing={ 1 }>
-          <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
+          <Grid item lg={ 6 } md={ 6 } sm={ 12 } xs={ 12 }>
             <Button
               variant="contained"
               className="mr-12 btn btn-primary d-inline-flex"
               color="primary"
               onClick={ () => this.updatePractitioner( 2 ) }
             >
-              { t( "Phân công NVYT tại chỗ " ) }
+              Phân công NVYT tại chỗ
             </Button>
-          </Grid>
-          <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
             <Button
               variant="contained"
               className="mr-12 btn btn-secondary d-inline-flex"
               color="primary"
               onClick={ () => this.updatePractitioner( 1 ) }
             >
-              { t( "Phân công NVYT từ xa" ) }
+              Phân công NVYT từ xa
             </Button>
           </Grid>
           <Grid item md={ 6 } sm={ 12 } xs={ 12 }>
             <Grid container spacing={ 2 } style={ { display: "flex", justifyContent: "flex-end" } }>
-              <Grid item lg={ 8 } md={ 8 } sm={ 6 } xs={ 6 }>
+              <Grid item lg={ 7 } md={ 7 } sm={ 6 } xs={ 6 }>
                 <SearchInput
                   search={ this.updatePageData }
                   t={ t }
                 />
               </Grid>
               { ( role == "ROLE_ADMIN" || role == "ROLE_SUPER_ADMIN" ) &&
-                <Grid item lg={ 4 } md={ 4 } sm={ 6 } xs={ 6 }>
+                <Grid item lg={ 5 } md={ 5 } sm={ 6 } xs={ 6 }>
                   <Button
                     className="btn_s_right d-inline-flex btn btn-primary-d"
                     variant="contained"

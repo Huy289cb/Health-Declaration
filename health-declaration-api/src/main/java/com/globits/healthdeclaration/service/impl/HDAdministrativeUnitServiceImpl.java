@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import com.globits.healthdeclaration.domain.Family;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -530,6 +531,27 @@ public class HDAdministrativeUnitServiceImpl extends GenericServiceImpl<HDAdmini
 			return listData;
 		}
 		return null;
+	}
+
+	@Override
+	public Boolean checkCode(HDAdministrativeUnitDto dto) {
+		boolean result= true;
+		if (dto.getCode() != null && StringUtils.hasText(dto.getCode())) {
+			List<HDAdministrativeUnit> entities = repository.findListByCode(dto.getCode());
+			if (entities != null && entities.size() > 0) {
+				for (HDAdministrativeUnit administrativeUnit : entities) {
+					if (dto.getId() != null) {
+						if (administrativeUnit.getId().equals(dto.getId())) {
+							result = false;
+							break;
+						}
+					}
+				}
+			} else {
+				result = false;
+			}
+		}
+		return result;
 	}
 
 }

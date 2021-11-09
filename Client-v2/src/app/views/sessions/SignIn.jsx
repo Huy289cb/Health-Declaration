@@ -21,6 +21,14 @@ import localStorageService from "app/services/localStorageService";
 import PersonIcon from '@material-ui/icons/Person';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import './SignIn.scss';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure({
+  autoClose: 4000,
+  draggable: false,
+  limit: 3
+});
 
 const styles = theme => ({
   wrapper: {
@@ -201,9 +209,10 @@ class SignIn extends Component {
                                 color="secondary"
                                 disabled={this.props.login.loading}
                                 onClick={() => {
-                                  this.props.history.push({
-                                    pathname: '/session/signup'
-                                  });
+                                  // this.props.history.push({
+                                  //   pathname: '/session/signup'
+                                  // });
+                                  toast("Sắp ra mắt");
                                 }}
                                 type="button"
                               >

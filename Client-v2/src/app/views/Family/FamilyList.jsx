@@ -19,6 +19,9 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { getAllInfoByUserLogin } from "../User/UserService";
 import Filter from "../PractitionerAndFamily/Filter";
 import appConfig from "app/appConfig";
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import PractitionerDialog from "./PractitionerDialog";
+
 toast.configure({
   autoClose: 2000,
   draggable: false,
@@ -29,6 +32,9 @@ function MaterialButton(props) {
   const { t, i18n } = useTranslation();
   const { item, isEdit, isDelete, isView } = props;
   return <div>
+    {/* {isEdit && <IconButton size="small" onClick={() => props.onSelect(item, 3)}>
+      <AssignmentIndIcon fontSize="small" color="primary"/>
+    </IconButton>} */}
     {isView && <IconButton size="small" onClick={() => props.onSelect(item, 2)}>
       <Icon fontSize="small" color="primary">visibility</Icon>
     </IconButton>}
@@ -49,6 +55,7 @@ class FamilyList extends Component {
     shouldOpenEditorDialog: false,
     shouldOpenConfirmationDialog: false,
     shouldOpenConfirmationDeleteListDialog: false,
+    shouldOpenPractitionerDialog: false,
     isAddNew: false,
     isEdit: false,
     isDelete: false,
@@ -112,6 +119,7 @@ class FamilyList extends Component {
       shouldOpenEditorDialog: false,
       shouldOpenConfirmationDialog: false,
       shouldOpenConfirmationDeleteListDialog: false,
+      shouldOpenPractitionerDialog: false,
     }, () => {
       this.updatePageData();
     });
@@ -134,29 +142,6 @@ class FamilyList extends Component {
   //handle popup open/close end
 
   //handle delete start
-  async handleDeleteList(list) {
-    let listAlert = [];
-    let { t } = this.props
-    for (var i = 0; i < list.length; i++) {
-      try {
-        await deleteItem(list[i].id);
-      } catch (error) {
-        listAlert.push(list[i].name);
-      }
-    }
-    this.handleClose()
-    toast.success(t('toast.delete_success'));
-  };
-  handleDeleteListItem = (event) => {
-    let { t } = this.props
-    if (this.data != null) {
-      this.handleDeleteList(this.data).then(() => {
-        this.updatePageData();
-      })
-    } else {
-      toast.warning(t('toast.please_select'));
-    };
-  }
   handleConfirmDeleteItem = async () => {
     let { t } = this.props;
     await deleteItem(this.state.id).then(({ data }) => {
@@ -179,26 +164,6 @@ class FamilyList extends Component {
     });
   };
   //handle delete end
-
-  // getListItemChild(item) {
-  //   var result = [];
-  //   var root = {};
-  //   root.name = item.name;
-  //   root.code = item.code;
-  //   root.id = item.id;
-  //   root.description = item.description;
-  //   root.displayOrder = item.displayOrder;
-  //   root.foundedDate = item.foundedDate;
-  //   root.parentId = item.parentId;
-  //   result.push(root);
-  //   if (item.children) {
-  //     item.children.forEach(child => {
-  //       var childs = this.getListItemChild(child);
-  //       result.push(...childs);
-  //     });
-  //   }
-  //   return result;
-  // }
 
   componentWillMount() {
     getAllInfoByUserLogin().then((resp) => {
@@ -252,37 +217,32 @@ class FamilyList extends Component {
       shouldOpenConfirmationDeleteListDialog,
       shouldOpenEditorDialog,
       role, isDelete, isView, isEdit, readOnly, isAddNew,
-      checkedFilter
+      checkedFilter,
+      shouldOpenPractitionerDialog,
     } = this.state;
 
     let columns = [
-      // {
-      //   title: t("Mã"),
-      //   field: "code",
-      //   width: '100'
-      // },
       {
-        title: t('Họ và tên chủ hộ'),
+        title: 'Chủ hộ',
         field: "name",
         width: '150'
       },
       {
-        title: t('Tuổi'),
+        title: 'Tuổi',
         field: "age",
         width: '100'
       },
       {
-        title: t('SĐT'),
+        title: 'SĐT',
         field: "phoneNumber",
         width: '100'
       },
       {
-        title: t('administrative_unit.title'),
+        title: "Địa chỉ",
         field: "administrativeUnit.name",
       },
       {
-        title: t('Nhân viên y tế tại chỗ'),
-        field: "detailAddress",
+        title: 'Nhân viên y tế tại chỗ',
         render: rowData => {
           if (rowData.listPractitioner && rowData.listPractitioner.length > 0) {
             let item = rowData.listPractitioner.find((e) => e.type == 2);
@@ -293,8 +253,7 @@ class FamilyList extends Component {
         }
       },
       {
-        title: t('Nhân viên y tế tư vấn từ xa'),
-        field: "detailAddress",
+        title: 'Nhân viên y tế từ xa',
         render: rowData => {
           if (rowData.listPractitioner && rowData.listPractitioner.length > 0) {
             let item = rowData.listPractitioner.find((e) => e.type == 1);
@@ -305,7 +264,7 @@ class FamilyList extends Component {
         }
       },
       {
-        title: t("general.action"),
+        title: "Thao tác",
         field: "custom",
         width: '100',
         type: 'numeric',
@@ -313,7 +272,6 @@ class FamilyList extends Component {
           onSelect={(rowData, method) => {
             if (method === 0) {
               getById(rowData.id).then(({ data }) => {
-                console.log(data)
                 this.setState({
                   item: data,
                   readOnly: false,
@@ -332,6 +290,14 @@ class FamilyList extends Component {
                   item: data,
                   readOnly: true,
                   shouldOpenEditorDialog: true
+                });
+              })
+            } else if (method === 3) {
+              getById(rowData.id).then(({ data }) => {
+                this.setState({
+                  item: data,
+                  readOnly: false,
+                  shouldOpenPractitionerDialog: true
                 });
               })
             }
@@ -358,13 +324,13 @@ class FamilyList extends Component {
                 onClick={() => { this.handleEditItem({ startDate: new Date(), endDate: new Date() });}}>
                 {t('general.button.add')}
               </Button>}
-              {isDelete && <Button
+              {/* {isDelete && <Button
                 className="mb-16 mr-16 btn btn-warning d-inline-flex"
                 variant="contained"
                 startIcon={<DeleteIcon />}
                 onClick={() => this.setState({ shouldOpenConfirmationDeleteListDialog: true })}>
                 {t('general.button.delete')}
-              </Button>}
+              </Button>} */}
 
               {shouldOpenConfirmationDeleteListDialog && (
                 <ConfirmationDialog
@@ -445,7 +411,7 @@ class FamilyList extends Component {
                 paging: false,
                 search: false,
                 toolbar: false,
-                maxBodyHeight: "440px",
+                // maxBodyHeight: "440px",
                 headerStyle: {
                   backgroundColor: "#3366ff",
                   color: "#fff",
@@ -489,8 +455,16 @@ class FamilyList extends Component {
                 cancel={t("confirm_dialog.delete.cancel")}
               />
             )}
+            {shouldOpenPractitionerDialog &&
+              <PractitionerDialog
+                handleClose={this.handleClose}
+                open={shouldOpenPractitionerDialog}
+                item={this.state.item}
+                readOnly={this.state.readOnly}
+              />
+            }
 
-            {shouldOpenConfirmationDeleteListDialog && (
+            {/* {shouldOpenConfirmationDeleteListDialog && (
               <ConfirmationDialog
                 open={shouldOpenConfirmationDeleteListDialog}
                 onClose={this.handleClose}
@@ -500,7 +474,7 @@ class FamilyList extends Component {
                 agree={t("confirm_dialog.delete_list.agree")}
                 cancel={t("confirm_dialog.delete_list.cancel")}
               />
-            )}
+            )} */}
           </Grid>
         </Grid>
       </div>

@@ -16,8 +16,7 @@ import com.globits.healthdeclaration.HealthDeclarationEnumsType.SymptomType;
 public class Symptom extends BaseObject {
 
 	@Column(name = "type", nullable = true)
-	@Enumerated(value = EnumType.STRING)
-	private SymptomType type;//(Type : basic = 1; Serious =2)
+	private Integer type;//(Type : basic = 1; Serious =2)
 
 	private String code;//
 	private String name;//
@@ -41,11 +40,12 @@ public class Symptom extends BaseObject {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public SymptomType getType() {
+
+	public Integer getType() {
 		return type;
 	}
-	public void setType(SymptomType type) {
+
+	public void setType(Integer type) {
 		this.type = type;
 	}
-	
 }

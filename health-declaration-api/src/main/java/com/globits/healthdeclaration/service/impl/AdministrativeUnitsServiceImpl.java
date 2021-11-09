@@ -41,7 +41,8 @@ public class AdministrativeUnitsServiceImpl extends GenericServiceImpl<Administr
 		String orderBy = " ORDER BY entity.modifyDate DESC";
 
 		if (dto.getText() != null && !dto.getText().isEmpty())
-			where += " AND entity.code LIKE :text OR entity.name LIKE :text";
+			where += " AND (entity.code LIKE :text OR entity.name LIKE :text " +
+					"OR entity.parent.name LIKE :text OR entity.parent.code LIKE :text)";
 
 		hql += where + orderBy;
 		Query query = manager.createQuery(hql, AdministrativeUnitDto.class);

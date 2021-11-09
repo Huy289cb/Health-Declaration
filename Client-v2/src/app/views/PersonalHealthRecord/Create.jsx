@@ -23,6 +23,7 @@ import {
   FormHelperText,
   RadioGroup,
   Radio,
+  InputAdornment,
 } from "@material-ui/core";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import FamilyInputPopup from "../Component/SelectFamilyPopup/InputPopup";
@@ -277,6 +278,7 @@ class Create extends React.Component {
       pcrTestDate: null,
       haveSymptom: null,
       symptomText: "",
+      familyMemberId: null,
     });
   };
 
@@ -383,13 +385,11 @@ class Create extends React.Component {
         let listNormalSymptom = [];
         let listSevereSymptom = [];
         data.content.forEach((item) => {
-          if (item.type) {
-            if (item.type == "type1") {
-              listNormalSymptom.push(item);
-            }
-            if (item.type == "type2") {
-              listSevereSymptom.push(item);
-            }
+          if (item?.type == 1) {
+            listNormalSymptom.push(item);
+          }
+          if (item?.type == 1) {
+            listSevereSymptom.push(item);
           }
         });
         this.setState({ listNormalSymptom, listSevereSymptom });
@@ -433,15 +433,15 @@ class Create extends React.Component {
         let listNormalSymptom = [];
         let listSevereSymptom = [];
         data.content.forEach((item) => {
-          if (item.type) {
-            if (item.type == "type1") {
-              listNormalSymptom.push(item);
-            }
-            if (item.type == "type2") {
-              listSevereSymptom.push(item);
-            }
+          if (item?.type == 1) {
+            listNormalSymptom.push(item);
+          }
+          if (item?.type == 2) {
+            listSevereSymptom.push(item);
           }
         });
+        console.log(listNormalSymptom);
+        console.log(listSevereSymptom);
         this.setState({ listNormalSymptom, listSevereSymptom });
       }
     });
@@ -553,6 +553,68 @@ class Create extends React.Component {
     this.setState({ familyMember });
   };
 
+  renderSelectOptions = () =>
+  {
+    if ( this.state?.family?.familyMembers )
+    {
+      return this.state.family.familyMembers.map( ( item, i ) =>
+      {
+        return (
+          <MenuItem key={ item.id } value={ item.id }>
+            { item.member?.displayName ? item.member?.displayName : "" }
+          </MenuItem>
+        );
+      } );
+    }
+  }
+
+  changeFamilyMember = ( familyMemberId ) =>
+  {
+    let { family } = this.state;
+    let familyMember = family && family.familyMembers ? family.familyMembers.find( element => element.id == familyMemberId ) : null;
+    if ( familyMember && familyMember.id )
+    {
+      this.setState( { familyMemberId: familyMember.id, familyMember: familyMember }, () =>
+      {
+        this.updatePageData();
+      } )
+      if ( familyMember )
+      {
+        familyMember.member.backgroundDiseases = [];
+        if ( familyMember.member && familyMember.member.listBackgroundDisease )
+        {
+          familyMember.member.listBackgroundDisease.forEach( element =>
+          {
+            familyMember.member.backgroundDiseases.push( element.backgroundDisease );
+          } );
+          this.setState( { familyMember } );
+        }
+        if ( familyMember.member && familyMember.member.weight && familyMember.member.height )
+        {
+          this.getBMI( Number( familyMember.member.height ), Number( familyMember.member.weight ) );
+        } else
+        {
+          this.setState( { bmi: "", bmiText: "" } );
+        }
+      }
+    }
+  }
+
+  handleChangeHeightWeight = (value, type) => {
+    const familyMember = this.state.familyMember;
+    if (familyMember?.member) {
+      familyMember.member[type] = value;
+      this.setState( { familyMember }, () => {
+        const familyMember = this.state.familyMember;
+          if ( familyMember?.member?.weight && familyMember?.member?.height ) {
+            this.getBMI( Number( familyMember?.member?.height ), Number( familyMember.member.weight ) );
+          }
+      } );
+    } else {
+      toast.warn("Chưa chọn thành viên");
+    }
+  }
+
   render() {
     let { t } = this.props;
     let {
@@ -589,6 +651,7 @@ class Create extends React.Component {
       symptomText,
       listDataBackgroundDisease,
       backgroundDiseases,
+      familyMemberId,
     } = this.state;
     return (
       <>
@@ -661,29 +724,10 @@ class Create extends React.Component {
                 </div>
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Grid
-                  className=""
-                  container
-                  spacing={2}
-                  style={{ padding: "12px" }}
-                >
+                <Grid className="" container spacing={2} style={{ paddingTop: "12px" }}>
                   {/* code */}
                   {!isUser && (
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                      {/* <FamilyInputPopup
-                    family={family}
-                    setFamily={(item) => {
-                      this.setState({ family: item });
-                    }}
-                    size="small"
-                    variant="outlined"
-                    label={
-                      <span className="font">
-                        <span style={{ color: "red" }}> *</span>
-                        {t("Hộ gia đình")}
-                      </span>
-                    }
-                  /> */}
+                    <Grid item sm={ 12 } xs={ 12 }>
                       <TextValidator
                         className="nice-input w-100"
                         disabled
@@ -691,593 +735,241 @@ class Create extends React.Component {
                         id="family"
                         size="small"
                         name="family"
-                        label={
-                          <span className="font">
-                            <span style={{ color: "red" }}> * </span>
-                            {t("Hộ gia đình")}
-                          </span>
-                        }
+                        label={ <span className="font">
+                          <span style={ { color: "red" } }> * </span>
+                          Hộ gia đình
+                        </span> }
                         value={
-                          family
-                            ? (family.code ? family.code + " | " : "") +
-                              (family.name ? family.name + " | " : "") +
-                              (family.detailAddress ? family.detailAddress : "")
-                            : ""
+                          family ? ( family.code ? family.code + " | " : "" ) + ( family.name ? family.name + " | " : "" )
+                            + ( family.detailAddress ? family.detailAddress : "" ) : ""
                         }
                         required
                         variant="outlined"
-                        validators={["required"]}
-                        errorMessages={[t("general.errorMessages_required")]}
+                        validators={ ["required"] }
+                        errorMessages={ [t( "general.errorMessages_required" )] }
                       />
                     </Grid>
                   )}
-                  <Grid item lg={3} md={3} sm={12} xs={12}>
-                    <FormControl
-                      className="nice-input"
-                      error={this.state.selectFamilyMemberError}
-                      fullWidth={true}
-                      variant="outlined"
-                      size="small"
-                    >
+                  <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
+                    <FormControl className="nice-input" fullWidth={ true } variant="outlined" size="small">
                       <InputLabel htmlFor="familyMembers-simple">
                         {
                           <span className="">
-                            <span style={{ color: "red" }}> * </span>
-                            {t("Chọn thành viên gia đình")}
+                            <span style={ { color: "red" } }> * </span>
+                            Chọn thành viên gia đình
                           </span>
                         }
                       </InputLabel>
                       <Select
-                        label={
-                          <span className="">
-                            <span style={{ color: "red" }}> * </span>
-                            {t("Chọn thành viên gia đình")}
-                          </span>
-                        }
-                        value={familyMember ? familyMember : null}
-                        onChange={(event) => {
-                          this.setState({
-                            familyMember: event.target.value,
-                            selectFamilyMemberHelperText: "",
-                            selectFamilyMemberError: false,
-                          });
-                          if (event.target.value) {
-                            event.target.value.member.backgroundDiseases = [];
-                            if (
-                              event.target.value.member &&
-                              event.target.value.member.listBackgroundDisease
-                            ) {
-                              event.target.value.member.listBackgroundDisease.forEach(
-                                (element) => {
-                                  event.target.value.member.backgroundDiseases.push(
-                                    element.backgroundDisease
-                                  );
-                                }
-                              );
-                              this.setState({
-                                familyMember: event.target.value,
-                              });
-                            }
-                            // let str = "";
-                            // event.target.value.member && event.target.value.member.listBackgroundDisease
-                            //   && event.target.value.member.listBackgroundDisease.forEach((e) => {
-                            //     str += e.backgroundDisease.name + ", "
-                            //   });
-                            // str = str.replace(/,\s*$/, "");
-                            // this.setState({ anamnesis: str });
-                            if (
-                              event.target.value.member &&
-                              event.target.value.member.weight &&
-                              event.target.value.member.height
-                            ) {
-                              this.getBMI(
-                                Number(event.target.value.member.height),
-                                Number(event.target.value.member.weight)
-                              );
-                            } else {
-                              this.setState({ bmi: "", bmiText: "" });
-                            }
-                            this.setState(
-                              { familyMemberId: event.target.value.id },
-                              () => {
-                                this.updatePageData();
-                              }
-                            );
+                        label={ <span className="">
+                          <span style={ { color: "red" } }> * </span>
+                            Chọn thành viên gia đình
+                        </span> }
+                        value={ familyMemberId ? familyMemberId : "" }
+                        onChange={ ( event ) => this.changeFamilyMember( event.target.value )}
+                        validators={ ["required"] }
+                        errorMessages={ [t( "general.required" )] }
+                        disabled={!family}
+                        onClick={() => {
+                          if ( !this.state?.family?.familyMembers ) {
+                            toast.warn("Chưa chọn hộ gia đình");
                           }
                         }}
-                        inputProps={{
-                          name: "familyMembers",
-                          id: "familyMembers-simple",
-                        }}
-                        validators={["required"]}
-                        errorMessages={[t("general.required")]}
                       >
-                        {family &&
-                          family.familyMembers &&
-                          family.familyMembers.map((item) => {
-                            return (
-                              <MenuItem key={item.id} value={item}>
-                                {item.member && item.member.displayName
-                                  ? item.member.displayName
-                                  : ""}
-                              </MenuItem>
-                            );
-                          })}
+                        { family?.familyMembers && this.renderSelectOptions() }
                       </Select>
-                      <FormHelperText>
-                        {this.state.selectFamilyMemberHelperText}
-                      </FormHelperText>
                     </FormControl>
                   </Grid>
-                  {/* <Grid item lg={6} md={6} sm={12} xs={12}>
-                  <TextValidator
-                    className="w-100"
-                    label={t("Họ tên")}
-                    disabled
-                    // onChange={this.handleChange}
-                    type="text"
-                    name="name"
-                    value={familyMember ? (familyMember.member ? familyMember.member.displayName : "") : ""}
-                    variant="outlined"
-                    size="small"
-                  />
-                </Grid> */}
-                  {/* <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <Grid container spacing={1}> */}
-                  <Grid item lg={3} md={3} sm={6} xs={6}>
+                  <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 6 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={t("Tuổi")}
+                      label="Tuổi"
                       disabled
-                      // onChange={this.handleChange}
                       type="number"
                       name="age"
-                      value={
-                        familyMember
-                          ? familyMember.member
-                            ? familyMember.member.age
-                              ? familyMember.member.age
-                              : ""
-                            : ""
-                          : ""
-                      }
+                      value={ familyMember?.member?.age ? familyMember?.member?.age : "" }
                       variant="outlined"
                       size="small"
                     />
                   </Grid>
-                  <Grid item lg={3} md={3} sm={6} xs={6}>
+                  <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 6 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={t("Giới tính")}
+                      label="Giới tính"
                       disabled
-                      // onChange={this.handleChange}
                       type="text"
                       name="gender"
-                      value={
-                        familyMember
-                          ? familyMember.member
-                            ? familyMember.member.gender == "F"
-                              ? "Nữ"
-                              : familyMember.member.gender == "M"
-                              ? "Nam"
-                              : ""
-                            : ""
-                          : ""
-                      }
+                      value={ (familyMember?.member?.gender == "F") ? "Nữ" : ( familyMember?.member?.gender == "M") ? "Nam" : ""}
                       variant="outlined"
                       size="small"
                     />
                   </Grid>
-                  <Grid item lg={3} md={3} sm={12} xs={12}>
+                  
+                  <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                     <TextValidator
-                      className="nice-input w-100"
-                      label={t("Chiều cao(cm)")}
-                      disabled
-                      // onChange={this.handleChange}
-                      type="text"
-                      name="height"
-                      value={
-                        familyMember
-                          ? familyMember.member
-                            ? familyMember.member.height
-                              ? familyMember.member.height
-                              : ""
-                            : ""
-                          : ""
-                      }
-                      variant="outlined"
-                      size="small"
-                      step={0.0001}
-                    />
+                        className="nice-input w-100"
+                        label="Số điện thoại cá nhân"
+                        disabled
+                        onChange={this.handleChange}
+                        type="text"
+                        name="phoneNumber"
+                        value={familyMember?.member?.phoneNumber ? familyMember?.member?.phoneNumber : ""}
+                        variant="outlined"
+                        size="small"
+                      />
                   </Grid>
-                  <Grid item lg={3} md={3} sm={12} xs={12}></Grid>
-                  <Grid item lg={3} md={3} sm={12} xs={12}>
+                  <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={t("Cân nặng(kg)")}
-                      // disabled={(familyMember && familyMember.member) ? true : false}
-                      onChange={(event) => {
-                        // if (familyMember && familyMember.member) {
-                        familyMember.member.weight = event.target.value;
-                        this.setState({ familyMember });
-                        if (familyMember.member.height) {
-                          this.getBMI(
-                            Number(familyMember.member.height),
-                            Number(event.target.value)
-                          );
-                        }
-                        // }
+                      label="Chiều cao"
+                      disabled={!familyMember?.member}
+                      onChange={ ( event ) => {
+                        this.handleChangeHeightWeight(event.target.value, 'height');
                       }}
                       type="text"
+                      name="height"
+                      value={ familyMember?.member?.height ? familyMember?.member?.height : "" }
+                      variant="outlined"
+                      size="small"
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">(cm)</InputAdornment>
+                      }}
+                    />
+                  </Grid>
+                  <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
+                    <TextValidator
+                      className="nice-input w-100"
+                      label="Cân nặng"
+                      disabled={!familyMember?.member}
+                      onChange={ ( event ) => {
+                        this.handleChangeHeightWeight(event.target.value, 'weight');
+                      }}
+                      type="number"
                       name="weight"
-                      value={
-                        familyMember
-                          ? familyMember.member
-                            ? familyMember.member.weight
-                              ? familyMember.member.weight
-                              : ""
-                            : ""
-                          : ""
-                      }
+                      value={ familyMember?.member?.weight ? familyMember?.member?.weight : "" }
                       variant="outlined"
                       size="small"
-                      step={0.0001}
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">(kg)</InputAdornment>
+                      }}
                     />
                   </Grid>
-
-                  <Grid item lg={3} md={3} sm={12} xs={12}>
+                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={t("Email")}
+                      label="Chỉ số BMI"
                       disabled
-                      // onChange={this.handleChange}
-                      type="text"
-                      name="email"
-                      value={
-                        familyMember
-                          ? familyMember.member
-                            ? familyMember.member.email
-                              ? familyMember.member.email
-                              : ""
-                            : ""
-                          : ""
-                      }
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item lg={3} md={3} sm={12} xs={12}>
-                    <TextValidator
-                      className="nice-input w-100"
-                      label={t("Số thẻ BHYT")}
-                      disabled
-                      // onChange={this.handleChange}
-                      type="text"
-                      name="healthInsuranceCardNumber"
-                      value={
-                        familyMember
-                          ? familyMember.member
-                            ? familyMember.member.healthInsuranceCardNumber
-                              ? familyMember.member.healthInsuranceCardNumber
-                              : ""
-                            : ""
-                          : ""
-                      }
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  {/* </Grid>
-                </Grid> */}
-                  <Grid item lg={3} md={3} sm={12} xs={12}>
-                    {familyMember &&
-                      familyMember.member &&
-                      familyMember.member.phoneNumber && (
-                        <a
-                          href={
-                            "tel:" +
-                            (familyMember
-                              ? familyMember.member
-                                ? familyMember.member.phoneNumber
-                                  ? familyMember.member.phoneNumber
-                                  : ""
-                                : ""
-                              : "")
-                          }
-                        >
-                          <Button
-                            startIcon={<Icon>call</Icon>}
-                            variant="contained"
-                            className="btn-primary-d d-inline-flex w-100"
-                          >
-                            {familyMember
-                              ? familyMember.member
-                                ? familyMember.member.phoneNumber
-                                  ? familyMember.member.phoneNumber
-                                  : ""
-                                : ""
-                              : ""}
-                          </Button>
-                        </a>
-                      )}
-                    {/* <TextValidator
-                    className="nice-input w-100"
-                    label={t("Số điện thoại cá nhân")}
-                    disabled
-                    // onChange={this.handleChange}
-                    type="text"
-                    name="phoneNumber"
-                    value={familyMember ? (familyMember.member ? (familyMember.member.phoneNumber ? familyMember.member.phoneNumber : "") : "") : ""}
-                    variant="outlined"
-                    size="small"
-                  /> */}
-                  </Grid>
-                  <Grid item lg={3} md={3} sm={12} xs={12}>
-                    <TextValidator
-                      className="nice-input w-100"
-                      label={t("Chỉ số BMI")}
-                      disabled
-                      type="text"
+                      type="number"
                       name="bmi"
-                      value={bmi ? bmi : ""}
+                      value={ bmi ? bmi : "" }
                       variant="outlined"
                       size="small"
-                      step={0.0001}
                     />
                   </Grid>
-
-                  <Grid item lg={6} md={6} sm={12} xs={12}>
+                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
-                      label={t("Đánh giá chỉ số BMI")}
+                      label="Đánh giá chỉ số BMI"
                       disabled
                       type="text"
                       name="bmiText"
-                      value={bmiText ? bmiText : ""}
+                      value={ bmiText ? bmiText : "" }
                       variant="outlined"
                       size="small"
                     />
                   </Grid>
-                  <Grid item lg={3} md={3} sm={12} xs={12}>
-                    <FormControl
-                      style={{ marginLeft: "20%" }}
-                      component="fieldset"
-                      error={this.state.radioError}
-                      disabled={familyMember ? false : true}
-                    >
-                      <FormLabel component="legend">
-                        <span style={{ color: "red" }}> * </span>Có bệnh nền:{" "}
-                      </FormLabel>
-                      <RadioGroup
-                        row
-                        aria-label="haveBackgroundDisease"
-                        name="haveBackgroundDisease"
-                        value={
-                          familyMember && familyMember.member
-                            ? familyMember.member.haveBackgroundDisease
-                            : null
-                        }
-                        onChange={(event) => {
-                          if (event.target.value === "true") {
+                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
+                    <FormControl error={ this.state.radioError }
+                      disabled={ familyMember ? false : true }
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}>
+                      <span><span style={ { color: "red" } }> * </span>Có bệnh nền:</span>
+                      <RadioGroup row aria-label="haveBackgroundDisease" name="haveBackgroundDisease"
+                        value={ familyMember && familyMember.member ? familyMember.member.haveBackgroundDisease : null }
+                        onChange={ ( event ) => {
+                          if ( event.target.value === "true" ) {
                             familyMember.member.haveBackgroundDisease = true;
-                          } else {
+                          }
+                          else {
                             familyMember.member.haveBackgroundDisease = false;
                             familyMember.member.backgroundDiseases = [];
                           }
-                          this.setState({
-                            familyMember,
-                            radioHelperText: "",
-                            radioError: false,
-                          });
-                        }}
-                      >
-                        <FormControlLabel
-                          value={true}
-                          control={
-                            <Radio
-                              checked={
-                                familyMember && familyMember.member
-                                  ? familyMember.member
-                                      .haveBackgroundDisease === true
-                                    ? true
-                                    : false
-                                  : false
-                              }
-                            />
-                          }
-                          label="Có"
-                        />
-                        <FormControlLabel
-                          value={false}
-                          control={
-                            <Radio
-                              checked={
-                                familyMember && familyMember.member
-                                  ? familyMember.member
-                                      .haveBackgroundDisease === false
-                                    ? true
-                                    : false
-                                  : false
-                              }
-                            />
-                          }
-                          label="Không"
-                        />
+                          this.setState( { familyMember, radioHelperText: "", radioError: false } )
+                        }}>
+                        <FormControlLabel value={ true }
+                          control={ <Radio checked={ familyMember && familyMember.member ? ( familyMember.member.haveBackgroundDisease === true ? true : false ) : false } /> }
+                          label="Có" />
+                        <FormControlLabel value={ false }
+                          control={ <Radio checked={ familyMember && familyMember.member ? ( familyMember.member.haveBackgroundDisease === false ? true : false ) : false } /> }
+                          label="Không" />
                       </RadioGroup>
-                      <FormHelperText>
-                        {this.state.radioHelperText}
-                      </FormHelperText>
+                      <FormHelperText>{ this.state.radioHelperText }</FormHelperText>
                     </FormControl>
                   </Grid>
-                  <Grid item lg={9} md={9} sm={12} xs={12}>
+                  <Grid item lg={ 9 } md={ 12 } sm={ 12 } xs={ 12 }>
                     <Autocomplete
                       className="nice-input w-100"
-                      disabled={
-                        familyMember && familyMember.member
-                          ? familyMember.member.haveBackgroundDisease
-                            ? false
-                            : true
-                          : true
-                      }
-                      style={{ width: "100%" }}
+                      disabled={ familyMember && familyMember.member ? ( familyMember.member.haveBackgroundDisease ? false : true ) : true }
+                      style={ { width: "100%", paddingTop: "0px" } }
                       multiple
                       id="combo-box-demo"
-                      defaultValue={
-                        familyMember &&
-                        familyMember.member &&
-                        familyMember.member.backgroundDiseases
-                          ? familyMember.member.backgroundDiseases
-                          : []
-                      }
-                      value={
-                        familyMember &&
-                        familyMember.member &&
-                        familyMember.member.backgroundDiseases
-                          ? familyMember.member.backgroundDiseases
-                          : []
-                      }
-                      options={
-                        listDataBackgroundDisease
-                          ? listDataBackgroundDisease
-                          : []
-                      }
-                      getOptionSelected={(option, value) =>
+                      defaultValue={ familyMember && familyMember.member && familyMember.member.backgroundDiseases ? familyMember.member.backgroundDiseases : [] }
+                      value={ familyMember && familyMember.member && familyMember.member.backgroundDiseases ? familyMember.member.backgroundDiseases : [] }
+                      options={ listDataBackgroundDisease ? listDataBackgroundDisease : [] }
+                      getOptionSelected={ ( option, value ) =>
                         option.id === value.id
                       }
-                      getOptionLabel={(option) =>
-                        option.name ? option.name : ""
-                      }
-                      onChange={(event, value) => {
-                        this.selectListBackgroundDisease(value);
-                      }}
-                      renderInput={(params) => (
+                      getOptionLabel={ ( option ) => option.name ? option.name : "" }
+                      onChange={ ( event, value ) =>
+                      {
+                        this.selectListBackgroundDisease( value );
+                      } }
+                      renderInput={ ( params ) => (
                         <TextValidator
-                          {...params}
-                          value={
-                            familyMember &&
-                            familyMember.member &&
-                            familyMember.member.backgroundDiseases
-                              ? familyMember.member.backgroundDiseases
-                              : []
-                          }
-                          label={
-                            <span className="font">{t("Tiền sử bệnh")}</span>
-                          }
+                          { ...params }
+                          value={ familyMember && familyMember.member && familyMember.member.backgroundDiseases ? familyMember.member.backgroundDiseases : [] }
+                          label={<span className="font">Bệnh nền</span>}
                           variant="outlined"
                           size="small"
                           fullWidth
                         />
-                      )}
+                      ) }
                     />
-                    {/* <TextField
-                    className="nice-input w-100"
-                    label={t("Tiền sử bệnh")}
-                    disabled
-                    // onChange={this.handleChange}
-                    type="text"
-                    name="healthInsuranceCardNumber"
-                    value={anamnesis ? anamnesis : ""}
-                    variant="outlined"
-                    size="small"
-                  // multiline
-                  // rows={3}
-                  /> */}
                   </Grid>
-                  {/* <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <fieldset>
-                    <legend>Người liên hệ khác: </legend>
-                    <Grid container spacing={2} style={{ padding: "4px" }}>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
-                        <TextValidator
-                          className="w-100"
-                          label={t("Họ tên")}
-                          onChange={this.handleChange}
-                          type="text"
-                          name="contactPersonName"
-                          value={contactPersonName ? contactPersonName : ""}
-                          // validators={["required"]}
-                          // errorMessages={[t("general.errorMessages_required")]}
-                          variant="outlined"
-                          size="small"
-                        />
-                      </Grid>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
-                        <TextValidator
-                          className="w-100"
-                          label={t("Mối quan hệ")}
-                          onChange={this.handleChange}
-                          type="text"
-                          name="contactPersonRelation"
-                          value={contactPersonRelation ? contactPersonRelation : ""}
-                          // validators={["required"]}
-                          // errorMessages={[t("general.errorMessages_required")]}
-                          variant="outlined"
-                          size="small"
-                        />
-                      </Grid>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
-                        <TextValidator
-                          className="w-100"
-                          label={t("Số điện thoại liên hệ")}
-                          onChange={this.handleChange}
-                          type="text"
-                          name="contactPersonPhone"
-                          value={contactPersonPhone ? contactPersonPhone : ""}
-                          // validators={["required"]}
-                          // errorMessages={[t("general.errorMessages_required")]}
-                          variant="outlined"
-                          size="small"
-                        />
-                      </Grid>
-                    </Grid>
-                  </fieldset>
-                </Grid> */}
                   <Grid item lg={12} md={12} sm={12} xs={12}>
                     <div className="head-line">Xét nghiệm COVID</div>
                     <Grid container spacing={2} style={{ padding: "12px" }}>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
-                        <FormControl
-                          style={{ marginLeft: "12%" }}
-                          component="fieldset"
-                          error={this.state.radioErrorHaveTest}
-                        >
-                          <FormLabel component="legend">
-                            <span style={{ color: "red" }}> * </span>Có xét
-                            nghiệm:{" "}
-                          </FormLabel>
-                          <RadioGroup
-                            row
-                            aria-label="position"
-                            name="position"
-                            defaultValue="top"
-                            onChange={(value) => {
-                              this.handleChange(value, "haveTest");
-                            }}
+                    <Grid item lg={ 4 } md={ 4 } sm={ 12 } xs={ 12 }>
+                        <FormControl error={ this.state.radioErrorHaveTest }
+                          style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}>
+                          <span><span style={ { color: "red" } }> * </span>Có xét nghiệm:</span>
+                          <RadioGroup row
+                            aria-label="position" name="position" defaultValue="top"
+                            onChange={ ( value ) => { this.handleChange( value, "haveTest" ) } }
                           >
                             <FormControlLabel
-                              value={true}
-                              control={
-                                <Radio
-                                  checked={haveTest === true ? true : false}
-                                />
-                              }
+                              value={ true }
+                              control={ <Radio checked={ haveTest === true ? true : false } /> }
                               label="Có"
                               labelPlacement="end"
                             />
                             <FormControlLabel
-                              value={false}
-                              control={
-                                <Radio
-                                  checked={haveTest === false ? true : false}
-                                />
-                              }
+                              value={ false }
+                              control={ <Radio checked={ haveTest === false ? true : false } /> }
                               label="Không"
                               labelPlacement="end"
                             />
                           </RadioGroup>
-                          <FormHelperText>
-                            {this.state.radioHelperTextHaveTest}
-                          </FormHelperText>
+                          <FormHelperText>{ this.state.radioHelperTextHaveTest }</FormHelperText>
                         </FormControl>
                       </Grid>
                       <Grid item lg={4} md={4} sm={12} xs={12}>
@@ -1524,7 +1216,7 @@ class Create extends React.Component {
                   <Grid item lg={12} md={12} sm={12} xs={12}>
                     <div className="head-line">Các chỉ số</div>
                     <Grid container spacing={2} style={{ padding: "12px" }}>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
+                      <Grid item lg={2} md={4} sm={12} xs={12}>
                         <FormControl
                           className="nice-input"
                           fullWidth={true}
@@ -1559,7 +1251,7 @@ class Create extends React.Component {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
+                      <Grid item lg={2} md={4} sm={12} xs={12}>
                         <FormControl
                           className="nice-input"
                           // error={this.state.breathingRateError}
@@ -1595,7 +1287,7 @@ class Create extends React.Component {
                           {/* <FormHelperText>{this.state.breathingRateHelperText}</FormHelperText>  */}
                         </FormControl>
                       </Grid>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
+                      <Grid item lg={2} md={4} sm={12} xs={12}>
                         <FormControl
                           className="nice-input"
                           fullWidth={true}
@@ -1628,7 +1320,7 @@ class Create extends React.Component {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item lg={4} md={6} sm={12} xs={12}>
+                      <Grid item lg={3} md={6} sm={12} xs={12}>
                         <TextValidator
                           className="nice-input w-100"
                           label={
@@ -1644,9 +1336,12 @@ class Create extends React.Component {
                           errorMessages={["Phải là số dương"]}
                           variant="outlined"
                           size="small"
+                          InputProps={{
+                            endAdornment: <InputAdornment position="end">(mmHg)</InputAdornment>
+                          }}
                         />
                       </Grid>
-                      <Grid item lg={4} md={6} sm={12} xs={12}>
+                      <Grid item lg={3} md={6} sm={12} xs={12}>
                         <TextValidator
                           className="nice-input w-100"
                           label={
@@ -1670,6 +1365,9 @@ class Create extends React.Component {
                           ]}
                           variant="outlined"
                           size="small"
+                          InputProps={{
+                            endAdornment: <InputAdornment position="end">(mmHg)</InputAdornment>
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -1677,7 +1375,7 @@ class Create extends React.Component {
                   <Grid item lg={12} md={12} sm={12} xs={12}>
                     <div className="head-line">Triệu chứng</div>
                     <Grid container style={{ padding: "12px" }}>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
+                      <Grid item lg={3} md={3} sm={12} xs={12}>
                         <FormControl
                           component="fieldset"
                           error={this.state.radioErrorHaveSymptom}
@@ -1708,48 +1406,12 @@ class Create extends React.Component {
                               (symptomText ? true : false)
                             }
                           />
-                          {/* <FormLabel component="legend"><span style={{ color: "red" }}> *</span>Có triệu chứng: </FormLabel>
-                          <RadioGroup row
-                            aria-label="position" name="position" defaultValue="top"
-                            onChange={(value) => { this.handleChange(value, "haveSymptom") }}
-                          >
-                            <FormControlLabel
-                              value={true}
-                              control={<Radio checked={haveSymptom === true ? true : false} />}
-                              label="Có"
-                              labelPlacement="end"
-                            />
-                            <FormControlLabel
-                              value={false}
-                              control={<Radio checked={haveSymptom === false ? true : false} />}
-                              label="Không"
-                              labelPlacement="end"
-                            />
-                          </RadioGroup> */}
                           <FormHelperText>
                             {this.state.radioHelperTextHaveSymptom}
                           </FormHelperText>
                         </FormControl>
                       </Grid>
-                      <Grid item lg={8} md={8} sm={12} xs={12}>
-                        <TextValidator
-                          disabled={haveSymptom ? haveSymptom : false}
-                          className="nice-input w-100"
-                          label={
-                            <span className="font">
-                              {t("Triệu chứng khác")}
-                            </span>
-                          }
-                          multiLine={true}
-                          rows={5}
-                          onChange={this.handleChange}
-                          type="text"
-                          name="symptomText"
-                          value={symptomText ? symptomText : ""}
-                          variant="outlined"
-                          size="small"
-                        />
-                      </Grid>
+                      <Grid item lg={9} md={9} sm={12} xs={12}></Grid>
                       {listNormalSymptom &&
                         listNormalSymptom.map((item) => {
                           return (
@@ -1805,7 +1467,7 @@ class Create extends React.Component {
                                     //xoá
                                     severeSymptoms = severeSymptoms.filter(
                                       (e) => {
-                                        return e.id != item.id;
+                                        return e.symptom.id != item.id;
                                       }
                                     );
                                   }
@@ -1824,40 +1486,27 @@ class Create extends React.Component {
                             </Grid>
                           );
                         })}
+                        <Grid item sm={ 12 } xs={ 12 } className="mt-8">
+                          <TextValidator
+                            disabled={haveSymptom ? haveSymptom : false}
+                            className="nice-input w-100"
+                            label={
+                              <span className="font">
+                                {t("Triệu chứng khác")}
+                              </span>
+                            }
+                            multiLine={true}
+                            rows={5}
+                            onChange={this.handleChange}
+                            type="text"
+                            name="symptomText"
+                            value={symptomText ? symptomText : ""}
+                            variant="outlined"
+                            size="small"
+                          />
+                        </Grid>
                     </Grid>
                   </Grid>
-                  {/* <Grid item lg={6} md={6} sm={12} xs={12}>
-                  <fieldset>
-                    <legend>Triệu chứng nặng: </legend>
-                    <Grid container spacing={2} style={{ padding: "4px" }}>
-                      {listSevereSymptom && listSevereSymptom.map((item) => {
-                        return (
-                          <Grid item lg={6} md={6} sm={12} xs={12}>
-                            <FormControlLabel
-                              onChange={(event, value) => {
-                                if (value) {
-                                  //thêm
-                                  if (!severeSymptoms) {
-                                    severeSymptoms = [];
-                                  }
-                                  severeSymptoms = [...severeSymptoms, { symptom: item }]
-                                } else {
-                                  //xoá
-                                  severeSymptoms = severeSymptoms.filter((e) => {
-                                    return e.id != item.id;
-                                  })
-                                }
-                                this.setState({ severeSymptoms });
-                              }}
-                              control={<Checkbox value={item} />}
-                              label={item ? (item.symptom ? item.symptom.name : item.name) : ''}
-                            />
-                          </Grid>
-                        )
-                      })}
-                    </Grid>
-                  </fieldset>
-                </Grid> */}
                 </Grid>
                 <div className="dialog-footer">
                   <DialogActions className="p-0">

@@ -20,10 +20,9 @@ export const getByPageByParentId = (searchDto) => {
     return axios.post(url, searchDto);
 };
 
-export const checkCode = (id, code) => {
-    const config = { params: { id: id, code: code } };
+export const checkCode = (dto) => {
     var url = ConstantList.API_ENPOINT + path + "/checkCode";
-    return axios.get(url, config);
+    return axios.post(url, dto);
 };
 
 export const getById = id => {

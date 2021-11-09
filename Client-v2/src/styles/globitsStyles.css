@@ -186,7 +186,7 @@
 }
 
 .bgc-danger-tp1 {
-  background-color: rgba(218, 78, 53, 0.925) !important;
+  background-color: rgb(255, 74, 74) !important;
 }
 
 .dialog-container .MuiDialog-paperScrollPaper {
@@ -297,6 +297,14 @@
   }
 }
 
+.product-table {
+  border-color: rgb(95, 95, 95);
+}
+
+.product-table td, .product-table th  {
+  font-size: 1rem;
+}
+
 .product-table .MuiTableCell-root {
   border-bottom: rgba(0, 0, 0, 0.125);
 }
@@ -306,7 +314,6 @@
 }
 .icon {
   background: rgb(3, 185, 155);
-  margin: 0px 40px 0px 40px;
   border-radius: 8px;
 }
 .icon:hover {
@@ -316,16 +323,14 @@
   background: rgb(20, 200, 170);
 }
 .icon-1 {
-  background: rgb(240, 2, 51);
-  margin: 0px 40px 0px 40px;
+  background: #e74c3c;
   border-radius: 8px;
 }
 .icon-1:hover {
-  background: rgb(255, 7, 61);
+  background: #fa5947;
 }
 .icon-2 {
   background: rgb(238, 102, 11);
-  margin: 0px 40px 0px 40px;
   border-radius: 8px;
 }
 .icon-2:hover {
@@ -333,7 +338,6 @@
 }
 .icon-3 {
   background: rgb(20, 71, 212);
-  margin: 0px 40px 0px 40px;
   border-radius: 8px;
 }
 .icon-3:hover {

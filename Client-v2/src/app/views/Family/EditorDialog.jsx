@@ -746,7 +746,7 @@ class EditorDialog extends Component {
 
                 {familyMembers && <Grid item xs={12}>
                   <fieldset className="member_table--wrapper">
-                    <legend>Danh sách thành viên trong hộ gia đình </legend>
+                    <legend>Danh sách thành viên</legend>
                     <table className="member_table" border={1} style={{ 'width': '100%', overflow: 'auto' }}>
                       <tr>
                         <th>STT</th>

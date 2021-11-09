@@ -338,7 +338,9 @@ public class FamilyMemberServiceImpl extends GenericServiceImpl<FamilyMember, UU
         }
 
 		if (dto.getText() != null && StringUtils.hasText(dto.getText())) {
-			whereClause += " AND (entity.member.displayName LIKE :text OR entity.member.healthInsuranceCardNumber LIKE :text OR entity.family.name LIKE :text ) ";
+			whereClause += " AND (entity.member.displayName LIKE :text OR " +
+					"entity.member.healthInsuranceCardNumber LIKE :text OR entity.family.name LIKE :text " +
+					"OR entity.relationship LIKE :text ) ";
 		}
 
         sql += joinSql + whereClause + orderBy;

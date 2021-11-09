@@ -72,4 +72,12 @@ public class RestHDAdministrativeUnitsController {
 		Boolean result = service.deleteById(UUID.fromString(id));
 		return new ResponseEntity<Boolean>(result, (result != null) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
+
+	@RequestMapping(value = "/checkCode", method = RequestMethod.POST)
+	public ResponseEntity<Boolean> checkCode(
+			@RequestBody HDAdministrativeUnitDto dto) {
+		Boolean result = service.checkCode(dto);
+		return new ResponseEntity<Boolean>(result,
+				(result != null) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+	}
 }

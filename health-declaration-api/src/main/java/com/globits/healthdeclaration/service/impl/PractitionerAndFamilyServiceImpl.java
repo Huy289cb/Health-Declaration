@@ -86,7 +86,11 @@ public class PractitionerAndFamilyServiceImpl extends GenericServiceImpl<Practit
         String sql = "select new com.globits.healthdeclaration.dto.PractitionerAndFamilyDto(entity, p, f) from PractitionerAndFamily as entity ";
 
         if (dto.getText() != null && StringUtils.hasText(dto.getText())) {
-            whereClause += " AND (entity.name LIKE :text " + "OR entity.code LIKE :text) ";
+            whereClause += " AND (entity.practitioner.displayName LIKE :text " +
+					"OR entity.practitioner.code LIKE :text " +
+					"OR entity.family.name LIKE :text " +
+					"OR entity.family.code LIKE :text " +
+					"OR entity.family.phoneNumber LIKE :text) ";
         }
         if (dto.getPractitionerId() != null) {
             whereClause += " AND ( entity.practitioner.id = :practitionerId ) ";

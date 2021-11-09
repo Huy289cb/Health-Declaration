@@ -70,7 +70,7 @@ function MaterialButton ( props )
 class PerrsonalHealthRecord extends Component
 {
   state = {
-    rowsPerPage: 50,
+    rowsPerPage: 25,
     page: 1,
     listData: [],
     item: {},
@@ -222,6 +222,7 @@ class PerrsonalHealthRecord extends Component
         healthCareGroupId: item.healthCareGroupId,
         administrativeUnitId: item.administrativeUnitId,
         resolveStatus: item.resolveStatus,
+        type: item.type
       }, () =>
       {
         this.search( searchObject );
@@ -241,11 +242,12 @@ class PerrsonalHealthRecord extends Component
     searchObject.healthCareGroupId = this.state.healthCareGroupId;
     searchObject.administrativeUnitId = this.state.administrativeUnitId;
     searchObject.resolveStatus = this.state.resolveStatus;
+    searchObject.type = this.state.type;
     searchObject.lastRecord = true;
     searchByPage( searchObject ).then( ( { data } ) =>
     {
       this.setState( {
-        listData: [...data.content],
+        listData: data.content,
         totalElements: data.totalElements,
         totalPages: data.totalPages
       } )
@@ -384,7 +386,7 @@ class PerrsonalHealthRecord extends Component
         }
       },
       {
-        title: t( "general.action" ),
+        title: "Thao tác",
         field: "custom",
         align: "left",
         width: "250",
@@ -397,9 +399,9 @@ class PerrsonalHealthRecord extends Component
       <div className="m-sm-30">
         <div className="mb-sm-30">
           <Helmet>
-            <title>{ t( "Danh sách cập nhật kết quả" ) } | { t( "web_site" ) }</title>
+            <title>Danh sách cập nhật kết quả</title>
           </Helmet>
-          <Breadcrumb routeSegments={ [{ name: t( "Danh mục" ), path: "/directory/apartment" }, { name: t( 'Danh sách cập nhật kết quả' ) }] } />
+          <Breadcrumb routeSegments={ [{ name: "Danh mục" }, { name: 'Danh sách cập nhật kết quả' }] } />
         </div>
         <Grid container spacing={ 3 }>
           <Grid item lg={ 6 } md={ 6 } sm={ 12 } xs={ 12 }>
@@ -409,18 +411,8 @@ class PerrsonalHealthRecord extends Component
               color="primary"
               onClick={ () => this.setState( this.linkToEncounter() ) }
             >
-              { t( 'Thăm khám' ) }
+              Thăm khám
             </Button>
-            {/* <Button
-              className="mb-16 mr-16"
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                this.setState({ shouldOpenConfirmationDeleteAllDialog: true })
-              }
-            >
-              {t("Delete")}
-            </Button> */}
           </Grid>
           <Grid item lg={ 6 } md={ 6 } sm={ 12 } xs={ 12 } >
             <Grid container spacing={ 2 } style={ { display: "flex", justifyContent: "flex-end" } }>
@@ -473,10 +465,8 @@ class PerrsonalHealthRecord extends Component
           </Grid> ) }
           <Grid item xs={ 12 }>
             <MaterialTable
-              title={ t( 'List' ) }
               data={ this.state.listData }
               columns={ columns }
-
               parentChildData={ ( row, rows ) =>
               {
                 var list = rows.find( a => a.id === row.parentId );
@@ -529,7 +519,7 @@ class PerrsonalHealthRecord extends Component
               } }
 
             />
-            { this.state.listData && this.state.listData.length > 0 &&
+            { this.state.totalElements > 0 &&
               <NicePagination
                 totalPages={ this.state.totalPages }
                 handleChangePage={ this.handleChangePage }
@@ -539,28 +529,10 @@ class PerrsonalHealthRecord extends Component
                 t={ t }
                 totalElements={ this.state.totalElements }
                 page={ this.state.page }
-                isSimple={ true }
+                // isSimple={ true }
               />
             }
-            {/* <TablePagination
-              align="left"
-              className="px-16"
-              rowsPerPageOptions={[1, 2, 5, 10, 25, 50, 100]}
-              component="div"
-              labelRowsPerPage={t('general.rows_per_page')}
-              labelDisplayedRows={({ from, to, count }) => `${from}-${to} ${t('of')} ${count !== -1 ? count : `more than ${to}`}`}
-              count={this.state.totalElements}
-              rowsPerPage={this.state.rowsPerPage}
-              page={this.state.page}
-              backIconButtonProps={{
-                "aria-label": "Previous Page"
-              }}
-              nextIconButtonProps={{
-                "aria-label": "Next Page"
-              }}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.setRowsPerPage}
-            /> */}
+            
 
             { shouldOpenConfirmationDialog && (
               <ConfirmationDialog
@@ -587,10 +559,9 @@ class PerrsonalHealthRecord extends Component
                 open={ shouldOpenConfirmationViewDialog }
                 onConfirmDialogClose={ this.handleClose }
                 onYesClick={ this.handleDeleteListItem }
-                title={ t( "Thông báo" ) }
-                text={ t( 'Chưa có thông tin cập nhật sức khoẻ của người này!' ) }
-                // agree={t("confirm_dialog.delete_list.agree")}
-                cancel={ t( "Đóng" ) }
+                title="Thông báo"
+                text='Chưa có thông tin cập nhật sức khoẻ của người này!'
+                cancel="Đóng"
               />
             ) }
           </Grid>

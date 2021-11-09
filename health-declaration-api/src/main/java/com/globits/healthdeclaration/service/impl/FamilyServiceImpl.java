@@ -175,7 +175,9 @@ public class FamilyServiceImpl extends GenericServiceImpl<Family, UUID> implemen
 		}
 		if (dto.getText() != null && StringUtils.hasText(dto.getText())) {
 			whereClause += " AND (entity.name LIKE :text "
-					+ "OR entity.code LIKE :text OR entity.age LIKE :text OR entity.phoneNumber LIKE :text OR entity.detailAddress LIKE :text ) ";
+					+ "OR entity.code LIKE :text OR entity.age LIKE :text " +
+					"OR entity.phoneNumber LIKE :text " +
+					"OR entity.detailAddress LIKE :text) ";
 		}
 		if (dto.getListUnit() != null && dto.getListUnit().size() > 0) {
 			whereClause += " AND (entity.administrativeUnit.id IN :listUnit )";

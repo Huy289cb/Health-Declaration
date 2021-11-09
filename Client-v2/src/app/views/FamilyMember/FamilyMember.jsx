@@ -340,9 +340,9 @@ class FamilyMember extends Component {
         <div className="mb-sm-30">
           <Breadcrumb routeSegments={[{ name: t('FamilyMember.title') }]} />
         </div>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
 
-          <Grid item md={6} sm={12}>
+          <Grid item md={9} sm={12}>
 
             <>
             {role !== "ROLE_HEALTHCARE_STAFF" &&
@@ -359,7 +359,7 @@ class FamilyMember extends Component {
               </Button>}
             </>
           </Grid>
-          <Grid item md={6} sm={12} xs={12} >
+          <Grid item md={3} sm={12} xs={12} >
             <SearchInput
               search={this.updatePageData}
               t={t}
@@ -379,7 +379,7 @@ class FamilyMember extends Component {
                 paging: false,
                 search: false,
                 toolbar: false,
-                maxBodyHeight: "440px",
+                // maxBodyHeight: "440px",
                 headerStyle: {
                   backgroundColor: "#3366ff",
                   color: "#fff",

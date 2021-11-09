@@ -530,7 +530,7 @@ class FamilyMemberEditorDialog extends Component {
                   size="small"
                 />
               </Grid>
-              <Grid item lg={4} md={4} sm={12} xs={12}>
+              <Grid item lg={3} md={3} sm={12} xs={12}>
                 <TextValidator
                   disabled={readOnly}
                   className="w-100"
@@ -547,7 +547,7 @@ class FamilyMemberEditorDialog extends Component {
                   size="small"
                 />
               </Grid>
-              <Grid item lg={6} md={6} sm={12} xs={12}>
+              <Grid item lg={3} md={3} sm={12} xs={12}>
                 <TextValidator
                   disabled={readOnly}
                   className="w-100"

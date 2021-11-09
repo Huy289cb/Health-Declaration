@@ -183,7 +183,9 @@ public class PersonalHealthRecordServiceImpl extends GenericServiceImpl<Personal
 			whereClause += " AND paf.practitioner.id = :practitionerId ";
 		}
 		if (dto.getText() != null && StringUtils.hasText(dto.getText())) {
-			whereClause += " AND (entity.familyMember.family.name LIKE :text OR entity.familyMember.family.phoneNumber LIKE :text ) ";
+			whereClause += " AND (entity.familyMember.family.name LIKE :text " +
+					"OR entity.familyMember.family.phoneNumber LIKE :text " +
+					"OR entity.familyMember.relationship LIKE :text ) ";
 		}
 
 		if (dto.getFamilyMemberId() != null) {

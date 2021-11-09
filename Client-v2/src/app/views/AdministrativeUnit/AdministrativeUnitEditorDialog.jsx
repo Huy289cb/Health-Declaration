@@ -74,22 +74,28 @@ class AdministrativeUnitEditorDialog extends Component {
     obj.emergencyPhone = values.emergencyPhone;
     obj.hotZalo = values.hotZalo;
     obj.parentId = values.parent ? values.parent.id : null;
-    if (id) {
-      update(obj).then(() => {
-        toast.success(t('toast.update_success'));
-        this.setState({ loading: false })
-        this.props.handleClose()
-      });
-    } else {
-      addNew(obj).then((response) => {
-        if (response.data != null && response.status === 200) {
-          this.state.id = response.data.id
-          this.setState({ ...this.state, loading: false })
-          toast.success(t('toast.add_success'));
-          this.props.handleClose()
+    checkCode(obj).then(({data}) => {
+      if (data == true) {
+        toast.warn("Mã đơn vị đã tồn tại");
+      } else {
+        if (id) {
+            update(obj).then(() => {
+              toast.success(t('toast.update_success'));
+              this.setState({ loading: false })
+              this.props.handleClose()
+            });
+        } else {
+          addNew(obj).then((response) => {
+            if (response.data != null && response.status === 200) {
+              this.state.id = response.data.id
+              this.setState({ ...this.state, loading: false })
+              toast.success(t('toast.add_success'));
+              this.props.handleClose()
+            }
+          });
         }
-      });
-    }
+      }
+    })
   };
   componentWillUnmount() {
     this.props.updatePageData();

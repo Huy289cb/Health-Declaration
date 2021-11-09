@@ -38,4 +38,6 @@ public interface HDAdministrativeUnitService extends GenericService<HDAdministra
     Page<HDAdministrativeUnitDto> searchByDto(HDAdministrativeUnitSearchDto dto);
     
 	List<HDAdministrativeUnitDto> importExcel(List<HDAdministrativeUnitImportExcel> dtos);
+
+    Boolean checkCode(HDAdministrativeUnitDto dto);
 }

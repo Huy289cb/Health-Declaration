@@ -26,6 +26,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import clsx from 'clsx';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { SYMPTOM_TYPE } from "../../appConfig";
 toast.configure({
   autoClose: 1000,
   draggable: false,
@@ -52,10 +53,6 @@ class SymptomEditorDialog extends Component {
     parentId: "",
     type: "",
   };
-  listType = [
-      { number:"type1", description:"Triệu chứng thường gặp", key:"type1"},
-      { number:"type2", description:"Triệu chứng nặng", key:"type2"},
-  ]
   handleChange = (event, source) => {
     event.persist();
     if (source === "switch") {
@@ -233,13 +230,10 @@ class SymptomEditorDialog extends Component {
               <Grid item sm={12} xs={12}>
                 <FormControl fullWidth={true} variant="outlined" size="small">
                     <InputLabel htmlFor="type-simple">
-                        {
-                          <span className="">
-                            {t("Loại triệu chứng")}
-                          </span>
-                        }
+                      Loại triệu chứng
                     </InputLabel>
                     <Select
+                        label="Loại triệu chứng"
                         // style={{ marginTop: '16px' }}
                         value={type ? type : null}
                         onChange={(key) => this.selectType(key)}
@@ -250,10 +244,10 @@ class SymptomEditorDialog extends Component {
                         validators={["required"]}
                         errorMessages={[t("general.required")]}
                     >
-                        {this.listType.map((item) => {
+                        {SYMPTOM_TYPE.map((item) => {
                             return (
-                                <MenuItem key={item.number} value={item.number}>
-                                    {item.description}
+                                <MenuItem key={item.value} value={item.value}>
+                                    {item.display}
                                 </MenuItem>
                             );
                         })}

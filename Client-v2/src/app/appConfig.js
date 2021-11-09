@@ -2,9 +2,7 @@ const APPLICATION_PATH = "/";
 module.exports = Object.freeze({
     ROOT_PATH: APPLICATION_PATH,
     ACTIVE_LAYOUT: "layout1", //layout1 = vertical, layout2=horizontal
-    // API_ENPOINT: "http://localhost:8992/health-declaration", //local
-    API_ENPOINT: "http://healthdeclaration.globits.net:9002/healthdeclaration", //online
-    // API_ENPOINT: "http://q7tankieng.cov21.vn:9003/healthdeclaration", //online
+    API_ENPOINT: "http://localhost:8992/health-declaration", //local
     LOGIN_PAGE: APPLICATION_PATH + "session/signin", //Nếu là Spring
     REGISTRY_PAGE: APPLICATION_PATH + "session/signup",
     FORGOT_PASSWORD_PAGE: APPLICATION_PATH + "session/forgot-password",
@@ -16,7 +14,7 @@ module.exports = Object.freeze({
 
     },
     GET_PERSONAL_HEALTH_RECORD_TYPE: {
-        family: 1, //{key:1, value:"Dân tự khai báo"}, 
+        family: 1, //{key:1, value:"Khai báo y tế"}, 
         medical_team: 2, //{key:2, value:"Tổ y tế"},
         practitioner: 3,  //{key:3, value:"Bác sĩ - nhân viên y tế làm tại chỗ"}
         remoteWork: 4 //{key:4, value:"Bác sĩ - nhân viên y tế làm từ xa"}
@@ -27,7 +25,7 @@ module.exports = Object.freeze({
         { key: "f1", value: "F1"}
     ],
     PERSONAL_HEALTH_RECORD_TYPE: [
-        { key: 1, value: "Dân tự khai báo" },
+        { key: 1, value: "Khai báo y tế" },
         { key: 2, value: "Tổ y tế" },
         { key: 3, value: "Khám trực tiếp" },
         { key: 4, value: "Khám từ xa"}
@@ -152,8 +150,7 @@ module.exports = Object.freeze({
         {
             key: "Level0",
             value: -1,
-            display: "Mức nguy cơ thấp",
-            bgc: "rgba(8, 173, 108, 0.5)"
+            display: "Mức nguy cơ thấp"
         },
         {
             key: "Level1",
@@ -170,7 +167,7 @@ module.exports = Object.freeze({
             key: "Level3",
             value: 3,
             display: "Mức nguy cơ rất cao",
-            bgc: "rgba(218, 78, 53, 0.925)"
+            bgc: "rgb(255 114 90)"
         }
     ],
     PRACTITIONER_TYPE_CONST: [
@@ -181,6 +178,16 @@ module.exports = Object.freeze({
         {
             value: 2,
             display: "Tại chỗ",
+        },
+    ],
+    SYMPTOM_TYPE: [
+        {
+            value: 1,
+            display: "Triệu chứng thường gặp",
+        },
+        {
+            value: 2,
+            display: "Triệu chứng nặng",
         },
     ]
 });

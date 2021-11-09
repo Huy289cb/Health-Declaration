@@ -5,18 +5,20 @@ import com.globits.healthdeclaration.HealthDeclarationEnumsType.SymptomType;
 import com.globits.healthdeclaration.domain.Symptom;
 
 public class SymptomDto extends BaseObjectDto {
-	private SymptomType type;//(Type : basic = 1; Serious =2)
+	private Integer type;//(Type : basic = 1; Serious =2)
 
 	private String code;//
 	private String name;//
 	private String description;//
-	
-	public SymptomType getType() {
+
+	public Integer getType() {
 		return type;
 	}
-	public void setType(SymptomType type) {
+
+	public void setType(Integer type) {
 		this.type = type;
 	}
+
 	public String getCode() {
 		return code;
 	}

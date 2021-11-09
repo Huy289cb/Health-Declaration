@@ -16,6 +16,10 @@ import { toast } from 'react-toastify';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import 'react-toastify/dist/ReactToastify.css';
+import { SYMPTOM_TYPE } from "../../appConfig";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import NicePagination from '../Component/Pagination/NicePagination';
+
 toast.configure({
   autoClose: 2000,
   draggable: false,
@@ -37,7 +41,8 @@ function MaterialButton(props) {
 class SymptomTable extends Component {
   state = {
     rowsPerPage: 10,
-    page: 0,
+    page: 1,
+    totalPages: 0,
     symptomList: [],
     item: {},
     keyword: '',
@@ -90,20 +95,20 @@ class SymptomTable extends Component {
   //   };
   // };
   search() {
-    this.setState({ page: 0 }, function () {
+    this.setState({ page: 1 }, function () {
       var searchObject = {};
       searchObject.text = this.state.keyword;
-      searchObject.pageIndex = this.state.page + 1;
+      searchObject.pageIndex = this.state.page;
       searchObject.pageSize = this.state.rowsPerPage;
       searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-        this.setState({ symptomList: [...data.content], totalElements: data.totalElements })
+        this.setState({ symptomList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages, })
       });
     
     });
   }
 
   setRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
+    this.setState({ rowsPerPage: event.target.value, page: 1 }, function () {
       this.search();
     })
   };
@@ -115,10 +120,10 @@ class SymptomTable extends Component {
     this.setState({ page: pageNumber }, function () {
       var searchObject = {};
       searchObject.text = this.state.keyword;
-      searchObject.pageIndex = this.state.page + 1;
+      searchObject.pageIndex = this.state.page;
       searchObject.pageSize = this.state.rowsPerPage;
       searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-        this.setState({ symptomList: [...data.content], totalElements: data.totalElements })
+        this.setState({ symptomList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages, })
       });
     });
   }
@@ -158,10 +163,11 @@ class SymptomTable extends Component {
   updatePageData = () => {
     var searchObject = {};
     searchObject.keyword = this.state.keyword;
-    searchObject.pageIndex = this.state.page + 1;
+    searchObject.pageIndex = this.state.page;
     searchObject.pageSize = this.state.rowsPerPage;
+    searchObject.type = this.state.symptomType?.value;
     searchByPage(searchObject).then(({ data }) => {
-      this.setState({ symptomList: [...data.content], totalElements: data.totalElements })
+      this.setState({ symptomList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages, })
     });
   }
 
@@ -180,7 +186,7 @@ class SymptomTable extends Component {
 
     let columns = [
       {
-        title: t("general.action"),
+        title: "Thao tác",
         field: "custom",
         align: "left",
         width: "250",
@@ -213,7 +219,7 @@ class SymptomTable extends Component {
         />
       },
       {
-        title: t("Mã triệu chứng"), field: "code", width: "150",
+        title: "Mã triệu chứng", field: "code", width: "150",
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -227,7 +233,7 @@ class SymptomTable extends Component {
         },
       },
       {
-        title: t('Tên triệu chứng'), field: "name", align: "left", width: "150",
+        title: 'Tên triệu chứng', field: "name", align: "left", width: "150",
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -241,15 +247,10 @@ class SymptomTable extends Component {
         },
       },
       {
-        title: t('Loại triệu chứng'), field: "type", align: "left", width: "150",
-        render: (rowData) =>
-          rowData.type=="type1" ? (
-            <span>
-              Triệu chứng thường gặp
-            </span>
-          ) : (
-            rowData.type=="type2"?"Triệu chứng nặng":""
-          ),
+        title: 'Loại triệu chứng', field: "type", align: "left", width: "150",
+        render: (rowData) => {
+          return SYMPTOM_TYPE.find((e) => e.value == rowData.type)?.display;
+        },
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -268,12 +269,12 @@ class SymptomTable extends Component {
       <div className="m-sm-30">
         <div className="mb-sm-30">
           <Helmet>
-            <title>{t("Triệu chứng")} | {t("web_site")}</title>
+            <title>Triệu chứng</title>
           </Helmet>
-          <Breadcrumb routeSegments={[{ name: t("Danh mục"), path: "/directory/apartment" }, { name: t('Triệu chứng') }]} />
+          <Breadcrumb routeSegments={[{ name: "Danh mục" }, { name: "Triệu chứng" }]} />
         </div>
         <Grid container spacing={3}>
-          <Grid item lg={7} md={7} sm={12} xs={12}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
                 className="mb-16 mr-16 btn btn-success d-inline-flex"
                 startIcon={<AddIcon />}
@@ -284,17 +285,34 @@ class SymptomTable extends Component {
                 }
                 }
             >
-                {t('general.button.add')}
+                Thêm mới
             </Button>
             <Button
                 className="mb-16 mr-16 btn btn-warning d-inline-flex"
                 variant="contained"
                 startIcon={<DeleteIcon />}
                 onClick={() =>  this.setState({ shouldOpenConfirmationDeleteAllDialog: true })}>
-                {t('general.button.delete')}
+                  Xoá
             </Button>
           </Grid>
-          <Grid item lg={5} md={5} sm={12} xs={12} >
+          <Grid item lg={3} md={3} sm={12} xs={12} >
+            <Autocomplete
+                options={SYMPTOM_TYPE ? SYMPTOM_TYPE : []}
+                getOptionLabel={(option) => option.display}
+                id="symptomType"
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        variant="outlined"
+                        size="small"
+                        label="Loại triệu chứng"
+                        className="input"
+                    />
+                )}
+                onChange={(event, value) => this.setState({symptomType: value}, () => this.updatePageData())}
+            />
+          </Grid>
+          <Grid item lg={3} md={3} sm={12} xs={12} >
             <FormControl fullWidth>
               <Input
                 className='mt-10 search_box w-100 stylePlaceholder'
@@ -358,24 +376,15 @@ class SymptomTable extends Component {
               }}
            
             />
-            <TablePagination
-              align="left"
-              className="px-16"
-              rowsPerPageOptions={[1, 2, 5, 10, 25, 50, 100]}
-              component="div"
-              labelRowsPerPage={t('general.rows_per_page')}
-              labelDisplayedRows={({ from, to, count }) => `${from}-${to} ${t('of')} ${count !== -1 ? count : `more than ${to}`}`}
-              count={this.state.totalElements}
-              rowsPerPage={this.state.rowsPerPage}
-              page={this.state.page}
-              backIconButtonProps={{
-                "aria-label": "Previous Page"
-              }}
-              nextIconButtonProps={{
-                "aria-label": "Next Page"
-              }}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.setRowsPerPage}
+            <NicePagination
+              totalPages={ this.state.totalPages }
+              handleChangePage={ this.handleChangePage }
+              setRowsPerPage={ this.setRowsPerPage }
+              pageSize={ this.state.rowsPerPage }
+              pageSizeOption={ [1, 2, 3, 5, 10, 25, 1000] }
+              t={ t }
+              totalElements={ this.state.totalElements }
+              page={ this.state.page }
             />
 
             {shouldOpenEditorDialog && (

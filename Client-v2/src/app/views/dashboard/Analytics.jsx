@@ -332,7 +332,8 @@ class Analytics extends Component {
               <Link to={"/personal-health-record/create"}>
                 <Card elevation={3} className="p-32 py-32 text-center h-100 click icon">
                   <div className="text-white margin-auto">
-                    <div className="card-title text-white uppercase m-0">{t("Cập nhật thông tin sức khỏe")}</div>
+                    <div className="card-title text-white uppercase m-0">Khai báo y tế</div>
+                    <div className="text-white uppercase m-0">Cập nhật thông tin sức khoẻ</div>
                   </div>
                 </Card>
               </Link>
@@ -341,7 +342,8 @@ class Analytics extends Component {
               <Link to={"/familyMember"}>
                 <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon-2">
                   <div className="text-white margin-auto">
-                    <div className="card-title text-white uppercase m-0">{t("Quản lý thành viên hộ gia đình")}</div>
+                    <div className="card-title text-white uppercase m-0">Thành viên</div>
+                    <div className="text-white uppercase m-0">Quản lý thông tin thành viên gia đình</div>
                   </div>
                 </Card>
               </Link>
@@ -351,8 +353,8 @@ class Analytics extends Component {
                 <a href={"tel:" + emegencyPhone}>
                   <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon-1">
                     <div className="text-white margin-auto">
-                      <div className="card-title text-white uppercase m-0">Gọi số cấp cứu địa bàn phường</div>
-                      <div className="uppercase m-0">{emegencyPhone}</div>
+                      <div className="card-title text-white uppercase m-0">{emegencyPhone}</div>
+                      <div className="text-white uppercase m-0">Số điện thoại cấp cứu</div>
                     </div> 
                   </Card>
                 </a>
@@ -363,8 +365,8 @@ class Analytics extends Component {
                 <a href={"https://zalo.me/" + hotZalo}>
                   <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon-3">
                     <div className="text-white margin-auto">
-                      <div className="card-title text-white uppercase m-0">Số zalo nóng</div>
-                      <div className="uppercase m-0">{hotZalo}</div>
+                      <div className="card-title text-white uppercase m-0">{hotZalo}</div>
+                      <div className="uppercase m-0">Số zalo tổ y tế</div>
                     </div>
                   </Card>
                 </a>
@@ -538,27 +540,30 @@ class Analytics extends Component {
                 <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon " >
                 {/* bgc-green-d1 */}
                   <div className="text-white margin-auto">
-                    <div className="card-title text-white uppercase m-0 ">{t("Quản lý Hộ gia đình")}</div>
+                    <div className="card-title text-white uppercase m-0 ">Quản lý hộ gia đình</div>
+                    <div className="text-white m-0 ">Quản lý thông tin các hộ gia đình tham gia hệ thống</div>
                   </div>
                 </Card>
               </Link>
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Link to={"/encounter/create"}>
+              <Link to={"/health-record"}>
                 <Card elevation={3} className=" p-32 py-32 text-center h-100 click icon-1 ">
                   <div className="text-white margin-auto">
-                    <div className="card-title text-white uppercase m-0">{t("Phiếu thăm khám")}</div>
+                    <div className="card-title text-white uppercase m-0">Danh sách cập nhật kết quả</div>
+                    <div className="text-white m-0 ">Danh sách đánh giá nguy cơ theo khai báo y tế và thăm khám</div>
+
                   </div>
                 </Card>
               </Link> 
             </Grid>
             {reportData && <Grid item lg={12} md={12} sm={12} xs={12}>
               <div className="text-primary-d2 margin-auto margin-padding">
-                <div className="card-title text-primary-d2 uppercase m-0 text-center">{t("Diễn biến dịch bệnh")}</div>
+                <div className="card-title text-primary-d2 uppercase m-0 text-center">Thống kê theo đơn vị hành chính và mức nguy cơ</div>
                 {reportData.code=="town" &&  <ArrowBackIcon onClick={()=>this.reportByComuneId(reportData?.details[0]?.parentAdminUnitid)}/>}
                 {reportData.code=="quarter" &&  <ArrowBackIcon onClick={()=>this.reportByDistrict()}/>}
                 <div className="card-body">
-                  <Table className="product-table margin-padding  " border={1}>
+                  <Table className="product-table margin-padding" border={1}>
                     <TableHead>
                       <TableRow>
                         <TableCell className="px-24">Đơn vị hành chính</TableCell>
@@ -584,7 +589,7 @@ class Analytics extends Component {
                                 <a href="#">{element.adminUnit}</a>
                               }
                             </TableCell>
-                            <TableCell className="px-24 text-white bgc-danger-tp1" align="center">
+                            <TableCell className="px-24 text-color bgc-danger-tp1 " align="center">
                               {reportData.code=="commune" && 
                                 <Link onClick={()=>this.getListPatientByAdminUnit(3,element.adminUnitId,'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')}>
                                   {element.serious}
@@ -601,7 +606,7 @@ class Analytics extends Component {
                                 </Link>
                               }
                             </TableCell>
-                            <TableCell className="px-24 text-white bg-secondary" align="center">
+                            <TableCell className="px-24 text-color bg-secondary" align="center">
                               {reportData.code=="commune" && 
                                 <Link onClick={()=>this.getListPatientByAdminUnit(2,element.adminUnitId,'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')}>
                                   {element.medium}
@@ -618,7 +623,7 @@ class Analytics extends Component {
                                 </Link>
                               }
                             </TableCell>
-                            <TableCell className="px-24 text-white bgc-secondary-l2" align="center">                              
+                            <TableCell className="px-24 text-color bgc-secondary-l2" align="center">                              
                               {reportData.code=="commune" && 
                                 <Link onClick={()=>this.getListPatientByAdminUnit(1,element.adminUnitId,'00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000')}>
                                   {element.normal}
@@ -635,7 +640,7 @@ class Analytics extends Component {
                                 </Link>
                               }
                             </TableCell>
-                            <TableCell className="px-24 text-white bg-light-green" align="center">
+                            <TableCell className="px-24 text-color bg-light-green" align="center">
                               {/* {element.noSymtom} */}
                               {reportData.code=="commune" && 
                                 <Link onClick={()=>this.getListPatientByAdminUnit(-1,element.adminUnitId,'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')}>

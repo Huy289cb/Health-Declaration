@@ -15,29 +15,11 @@ import {
 } from "../AdministrativeUnit/AdministrativeUnitService";
 import { searchByPage as getHealthCareGroup } from "../HealthCareGroup/HealthCareGroupService";
 import './Filter.css';
-import { RESOLVE_STATUS_CONST } from 'app/appConfig';
+import { RESOLVE_STATUS_CONST, PERSONAL_HEALTH_RECORD_TYPE } from 'app/appConfig';
 import localStorageService from "app/services/localStorageService";
 
 class Filter extends React.Component {
     state = {
-        // provinceOfResidenceSearch: {
-        //     pageIndex: 0,
-        //     pageSize: 10000000,
-        //     isGetAllCity: true,
-        // },
-        // provinceOfResidence: null,
-        // districtOfResidence: null,
-        // districtOfResidenceSearch: {},
-        // wardOfResidenceSearch: {},
-        // wardOfResidence: null,
-        // administrativeUnit: null,
-        // hamletOfResidenceSearch: {},
-    }
-    changeSelected = (value, source) => {
-        let { t } = this.props;
-        if (source === "healthCareGroup") {
-            this.setState({ healthCareGroupId: value ? (value.id ? value.id : null) : null })
-        }
         
     }
 
@@ -84,7 +66,9 @@ class Filter extends React.Component {
 
     handleSelectdministrativeUnit = (value, source) => {
         if ("provinceOfResidence" == source) {
-          this.setState({ provinceOfResidence: value });
+          this.setState({ provinceOfResidence: value }, () => {
+            this.handleSearch()
+            });
     
           if (value != null) {
             getAdministrativeUnitByPage({
@@ -103,7 +87,9 @@ class Filter extends React.Component {
           }
         }
         if ("districtOfResidence" == source) {
-          this.setState({ districtOfResidence: value });
+          this.setState({ districtOfResidence: value }, () => {
+            this.handleSearch()
+            });
           if (value != null) {
             getAdministrativeUnitByPage({
                 pageIndex: 0,
@@ -120,7 +106,9 @@ class Filter extends React.Component {
           }
         }
         if ("wardOfResidence" == source) {
-          this.setState({ wardOfResidence: value });
+            this.setState({ wardOfResidence: value }, () => {
+                this.handleSearch()
+            });
           if (value != null) {
             getAdministrativeUnitByPage({
                 pageIndex: 0,
@@ -136,7 +124,9 @@ class Filter extends React.Component {
           }
         }
         if ("residentialArea" == source) {
-            this.setState({ residentialArea: value });
+            this.setState({ residentialArea: value }, () => {
+                this.handleSearch()
+            });
             if (value != null) {
               getAdministrativeUnitByPage({
                   pageIndex: 0,
@@ -152,9 +142,46 @@ class Filter extends React.Component {
             }
           }
         if ("residentialGroup" == source) {
-          this.setState({ residentialGroup: value });
+            this.setState({ residentialGroup: value }, () => {
+                this.handleSearch()
+            });
         }
     };
+
+    handleSearch = () => {
+        const {
+            districtOfResidence,
+            wardOfResidence,
+            provinceOfResidence,
+            residentialGroup,
+            resolveStatus,
+            residentialArea,
+         } = this.state;
+         console.log(this.state);
+        let searchObject = {};
+        searchObject.healthCareGroupId = this.state.healthCareGroupId;
+        searchObject.type = this.state.type?.key;
+        if (resolveStatus != null) {
+            searchObject.resolveStatus = resolveStatus.value;
+        }
+        if (residentialGroup != null) {
+            searchObject.administrativeUnitId = residentialGroup.id;
+        }
+        else if (residentialArea != null) {
+            searchObject.administrativeUnitId = residentialArea.id;
+        }
+        else if (wardOfResidence != null) {
+            searchObject.administrativeUnitId = wardOfResidence.id;
+        }
+        else if (districtOfResidence != null) {
+            searchObject.administrativeUnitId = districtOfResidence.id;
+        }
+        else if (provinceOfResidence != null) {
+            searchObject.administrativeUnitId = provinceOfResidence.id;
+        }
+        console.log(searchObject);
+        this.props.search(searchObject)
+    }
 
     render() {
         let { t, search } = this.props;
@@ -174,7 +201,6 @@ class Filter extends React.Component {
             resolveStatus,
             role,
          } = this.state;
-         console.log(role);
         return (
             <Grid className="filter-container" container spacing={2}>
             {(role == "ROLE_ADMIN" || role == "ROLE_SUPER_ADMIN") &&
@@ -290,7 +316,13 @@ class Filter extends React.Component {
                             />
                         )}
                         // getOptionSelected={(option, value) => option.code === value.code}
-                        onChange={(event, value) => { this.changeSelected(value, "healthCareGroup") }}
+                        onChange={(event, value) => { 
+
+                            this.setState({ healthCareGroupId: value?.id }, () => {
+                                this.handleSearch();
+                            })
+
+                        }}
                     />
                 </Grid>
             </>}
@@ -310,74 +342,44 @@ class Filter extends React.Component {
                             />
                         )}
                         onChange={(event, value) => { 
-                            this.setState({ resolveStatus: value })
+                            this.setState({ resolveStatus: value }, () => { 
+                                this.handleSearch();
+                            })
                          }}
                     />
-                    {/* <FormControl fullWidth={true} variant="outlined" size="small">
-                        <InputLabel htmlFor="temperature-simple">
-                            {
-                            <span>{t("Trạng thái xử lý")}</span>
-                            }
-                        </InputLabel>
-                        <Select
-                            label={
-                            <span>{t("Trạng thái xử lý")}</span>
-                            }
-                            value={resolveStatus ? resolveStatus : ""}
-                            onChange={(event) => {
-                            this.setState({ resolveStatus: event.target.value })
-                            }}
-                            inputProps={{
-                            name: "resolveStatus",
-                            id: "resolveStatus-simple",
-                            }}
-                            validators={["required"]}
-                            errorMessages={[t("general.required")]}
-                        >
-                            {RESOLVE_STATUS_CONST.map((item) => {
-                                console.log(item);
-                            return (
-                                <MenuItem key={item.key} value={item.value}>
-                                    {item.display ? item.display : ""}
-                                </MenuItem>
-                            );
-                            })}
-                        </Select>
-                    </FormControl> */}
                 </Grid>
                 <Grid item md={3} lg={3} sm={3} xs={6}>
-                    <h6 className="text-primary-d2">&nbsp;</h6>
+                <h6 className="text-primary-d2">Loại cập nhật</h6>
+                    <Autocomplete
+                        options={PERSONAL_HEALTH_RECORD_TYPE ? PERSONAL_HEALTH_RECORD_TYPE : []}
+                        getOptionLabel={(option) => option.value}
+                        id="type"
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                variant="outlined"
+                                size="small"
+                                label=""
+                                className="input"
+                            />
+                        )}
+                        onChange={(event, value) => { 
+                            this.setState({ type: value }, () => { 
+                                this.handleSearch();
+                            })
+                         }}
+                    />
+                    {/* <h6 className="text-primary-d2">&nbsp;</h6>
                     <Button
                         variant="contained"
                         className="btn btn-primary-d d-inline-flex"
                         onClick={() => {
-                            var searchObject = {};
-                            searchObject.healthCareGroupId = this.state.healthCareGroupId;
-                            if (resolveStatus != null) {
-                                searchObject.resolveStatus = resolveStatus.value;
-                            }
-                            
-                            if (residentialGroup != null) {
-                                searchObject.administrativeUnitId = residentialGroup.id;
-                            }
-                            else if (residentialArea != null) {
-                                searchObject.administrativeUnitId = residentialArea.id;
-                            }
-                            else if (wardOfResidence != null) {
-                                searchObject.administrativeUnitId = wardOfResidence.id;
-                            }
-                            else if (districtOfResidence != null) {
-                                searchObject.administrativeUnitId = districtOfResidence.id;
-                            }
-                            else if (provinceOfResidence != null) {
-                                searchObject.administrativeUnitId = provinceOfResidence.id;
-                            }
-                            search(searchObject)
+                            this.handleSearch();
                         }}
                     >
                         <SearchIcon />
-                        {t("general.button.search")}
-                    </Button>
+                        Tìm kiếm
+                    </Button> */}
                 </Grid>
             </Grid>
         );

@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import com.globits.healthdeclaration.HealthDeclarationEnumsType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -54,6 +55,9 @@ public class SymptomServiceImpl extends GenericServiceImpl<Symptom, UUID> implem
 		if (dto.getText() != null && StringUtils.hasText(dto.getText())) {
 			whereClause += " AND ( entity.name LIKE :text OR entity.code LIKE :text ) ";
 		}
+		if (dto.getType() != null) {
+			whereClause += " AND ( entity.type = :type ) ";
+		}
 
 		sql += whereClause + orderBy;
 		sqlCount += whereClause;
@@ -63,6 +67,10 @@ public class SymptomServiceImpl extends GenericServiceImpl<Symptom, UUID> implem
 		if (dto.getText() != null && StringUtils.hasText(dto.getText())) {
 			q.setParameter("text", '%' + dto.getText().trim() + '%');
 			qCount.setParameter("text", '%' + dto.getText().trim() + '%');
+		}
+		if (dto.getType() != null) {
+			q.setParameter("type", dto.getType());
+			qCount.setParameter("type", dto.getType());
 		}
 		int startPosition = pageIndex * pageSize;
 		q.setFirstResult(startPosition);
