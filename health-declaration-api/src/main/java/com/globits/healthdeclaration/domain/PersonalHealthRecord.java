@@ -45,6 +45,9 @@ public class PersonalHealthRecord extends BaseObject {
     @Column(name = "spo2")
     private Integer spo2;
 
+	@Column(name = "pulse_rate")
+	private Integer pulseRate;
+
     @Column(name = "breathing_rate")
     private Integer breathingRate;
 
@@ -364,5 +367,13 @@ public class PersonalHealthRecord extends BaseObject {
 
 	public void setSymptomText(String symptomText) {
 		this.symptomText = symptomText;
+	}
+
+	public Integer getPulseRate() {
+		return pulseRate;
+	}
+
+	public void setPulseRate(Integer pulseRate) {
+		this.pulseRate = pulseRate;
 	}
 }

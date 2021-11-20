@@ -93,7 +93,7 @@ public class HealthCareGroupServiceImpl extends GenericServiceImpl<HealthCareGro
 			whereClause += " AND ( hcgau.administrativeUnit.id IN (:lstAdministrativeUnitId) ) ";
 		}
 		if (dto.getText() != null && StringUtils.hasText(dto.getText())) {
-			whereClause += " AND ( entity.name LIKE :text OR entity.code LIKE :text ) ";
+			whereClause += " AND ( entity.name LIKE :text OR entity.code LIKE :text OR entity.personInCharge LIKE :text ) ";
 		}
 
 		sql += joinSql + whereClause + orderBy;
@@ -142,6 +142,23 @@ public class HealthCareGroupServiceImpl extends GenericServiceImpl<HealthCareGro
 			if (entity == null) {
 				entity = new HealthCareGroup();
 			}
+			if (dto.getName() == null || StringUtils.isEmpty(dto.getName())) {
+				return null;
+			}
+			if (dto.getCode() == null || StringUtils.isEmpty(dto.getCode())) {
+				return null;
+			}
+			if (dto.getPhoneNumber1() == null || StringUtils.isEmpty(dto.getPhoneNumber1())) {
+				return null;
+			}
+			if (dto.getAddress() == null || StringUtils.isEmpty(dto.getAddress())) {
+				return null;
+			}
+			if (dto.getListHealthCareGroupAdministrativeUnits() == null ||
+					(dto.getListHealthCareGroupAdministrativeUnits() != null &&
+							dto.getListHealthCareGroupAdministrativeUnits().size() == 0)) {
+				return null;
+			}
 
 			entity.setName(dto.getName());
 			entity.setCode(dto.getCode());
@@ -150,6 +167,7 @@ public class HealthCareGroupServiceImpl extends GenericServiceImpl<HealthCareGro
 			entity.setPhoneNumber2(dto.getPhoneNumber2());
 			entity.setZalo(dto.getZalo());
 			entity.setFaceBook(dto.getFaceBook());
+			entity.setPersonInCharge(dto.getPersonInCharge());
 			if(dto.getListHealthCareGroupAdministrativeUnits()!=null && dto.getListHealthCareGroupAdministrativeUnits().size()>0) {
 				Set<HealthCareGroupAdministrativeUnit> healthCareGroupAdministrativeUnitSet = new HashSet<>();
 				for(HealthCareGroupAdministrativeUnitDto haDto : dto.getListHealthCareGroupAdministrativeUnits()) {

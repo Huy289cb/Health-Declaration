@@ -246,7 +246,7 @@ class SelectPractitionerPopup extends React.Component {
                 toolbar: false,
                 maxBodyHeight: "440px",
                 headerStyle: {
-                  backgroundColor: "#2a80c8",
+                  backgroundColor: "#3366ff",
                   color: "#fff",
                 },
                 rowStyle: (rowData, index) => ({

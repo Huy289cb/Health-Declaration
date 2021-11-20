@@ -20,6 +20,7 @@ import Filter from "./Filter";
 import { searchByPage } from "./PersonalHealthRecordService";
 import "styles/globitsStyles.css";
 import NicePagination from '../Component/Pagination/NicePagination';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 toast.configure( {
   autoClose: 2000,
   draggable: false,
@@ -338,15 +339,15 @@ class PerrsonalHealthRecord extends Component
         title: "STT", width: "10", render: rowData => ( this.state.page - 1 ) * this.state.rowsPerPage + rowData.tableData.id + 1
       },
       {
-        title: t( "Chủ hộ" ), field: "code", width: "150",
+        title: "Chủ hộ", field: "code", width: "150",
         render: rowData => rowData.familyMember ? ( rowData.familyMember.family ? rowData.familyMember.family.name : '' ) : ''
       },
       {
-        title: t( 'Họ tên thành viên' ), field: "name", align: "left", width: "150",
+        title: 'Họ tên thành viên', field: "name", align: "left", width: "150",
         render: rowData => rowData.familyMember ? ( rowData.familyMember.member ? rowData.familyMember.member.displayName : '' ) : ''
       },
       {
-        title: t( 'SPO2' ), field: "spo2", align: "left", width: "150",
+        title: 'SPO2', field: "spo2", align: "left", width: "150",
         render: ( rowData ) =>
         {
           const found = ConstantList.SPO2_CONST.find( element => element.value == rowData.spo2 );
@@ -354,7 +355,7 @@ class PerrsonalHealthRecord extends Component
         }
       },
       {
-        title: t( 'Nhịp thở' ), field: "breathingRate", align: "left", width: "150",
+        title: 'Nhịp thở', field: "breathingRate", align: "left", width: "150",
         render: ( rowData ) =>
         {
           const found = ConstantList.BREATHINGRATE_CONST.find( element => element.value == rowData.breathingRate );
@@ -362,23 +363,23 @@ class PerrsonalHealthRecord extends Component
         }
       },
       {
-        title: t( 'Mối quan hệ' ), field: "name", align: "left", width: "150",
+        title: 'Mối quan hệ', field: "name", align: "left", width: "150",
         render: rowData => rowData.familyMember ? ( rowData.familyMember.relationship ) : ''
       },
       {
-        title: t( 'Loại cập nhật' ), field: "type", align: "left", width: "150",
+        title: 'Loại cập nhật', field: "type", align: "left", width: "150",
         render: ( rowData ) =>
         {
           const found = ConstantList.PERSONAL_HEALTH_RECORD_TYPE.find( element => element.key == rowData.type );
           return found ? found.value : '';
         }
       },
+      // {
+      //   title: 'Số thẻ BHYT', field: "name", align: "left", width: "150",
+      //   render: rowData => rowData.familyMember ? ( rowData.familyMember.member ? rowData.familyMember.member.healthInsuranceCardNumber : '' ) : ''
+      // },
       {
-        title: t( 'Số thẻ BHYT' ), field: "name", align: "left", width: "150",
-        render: rowData => rowData.familyMember ? ( rowData.familyMember.member ? rowData.familyMember.member.healthInsuranceCardNumber : '' ) : ''
-      },
-      {
-        title: t( 'Trạng thái' ), field: "resolveStatus", align: "left", width: "150",
+        title: 'Trạng thái', field: "resolveStatus", align: "left", width: "150",
         render: ( rowData ) =>
         {
           const found = ConstantList.RESOLVE_STATUS_CONST.find( element => element.value == rowData.resolveStatus );
@@ -406,7 +407,8 @@ class PerrsonalHealthRecord extends Component
         <Grid container spacing={ 3 }>
           <Grid item lg={ 6 } md={ 6 } sm={ 12 } xs={ 12 }>
             <Button
-              className="mb-16 mr-16"
+              startIcon={<AccountBoxIcon />}
+              className="btn btn-primary-d d-inline-flex"
               variant="contained"
               color="primary"
               onClick={ () => this.setState( this.linkToEncounter() ) }
@@ -500,7 +502,7 @@ class PerrsonalHealthRecord extends Component
                   } )
                 },
                 headerStyle: {
-                  backgroundColor: '#4FAA6D',
+                  backgroundColor: '#3366ff',
                   color: '#fff',
                 },
                 padding: 'dense',
@@ -538,7 +540,7 @@ class PerrsonalHealthRecord extends Component
               <ConfirmationDialog
                 title={ t( "confirm" ) }
                 open={ shouldOpenConfirmationDialog }
-                onConfirmDialogClose={ this.handleDialogClose }
+                onClose={ this.handleDialogClose }
                 onYesClick={ this.handleConfirmationResponse }
                 text={ t( 'DeleteConfirm' ) }
                 Yes={ t( 'general.Yes' ) }
@@ -557,7 +559,7 @@ class PerrsonalHealthRecord extends Component
             { shouldOpenConfirmationViewDialog && (
               <ConfirmationDialog
                 open={ shouldOpenConfirmationViewDialog }
-                onConfirmDialogClose={ this.handleClose }
+                onClose={ this.handleClose }
                 onYesClick={ this.handleDeleteListItem }
                 title="Thông báo"
                 text='Chưa có thông tin cập nhật sức khoẻ của người này!'

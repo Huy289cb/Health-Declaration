@@ -13,6 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'styles/globitsStyles.css';
 import BackgroundDiseaseEditorDialog from "./BackgroundDiseaseEditorDialog";
 import { deleteItem, getById, searchByPage } from "./BackgroundDiseaseService";
+import NicePagination from '../Component/Pagination/NicePagination';
+
 toast.configure({
   autoClose: 2000,
   draggable: false,
@@ -357,24 +359,15 @@ class BackgroundDiseaseTable extends Component {
               }}
            
             />
-            <TablePagination
-              align="left"
-              className="px-16"
-              rowsPerPageOptions={[1, 2, 5, 10, 25, 50, 100]}
-              component="div"
-              labelRowsPerPage={t('general.rows_per_page')}
-              labelDisplayedRows={({ from, to, count }) => `${from}-${to} ${t('of')} ${count !== -1 ? count : `more than ${to}`}`}
-              count={this.state.totalElements}
-              rowsPerPage={this.state.rowsPerPage}
-              page={this.state.page}
-              backIconButtonProps={{
-                "aria-label": "Previous Page"
-              }}
-              nextIconButtonProps={{
-                "aria-label": "Next Page"
-              }}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.setRowsPerPage}
+            <NicePagination
+              totalPages={ this.state.totalPages }
+              handleChangePage={ this.handleChangePage }
+              setRowsPerPage={ this.setRowsPerPage }
+              pageSize={ this.state.rowsPerPage }
+              pageSizeOption={ [1, 2, 3, 5, 10, 25, 1000] }
+              t={ t }
+              totalElements={ this.state.totalElements }
+              page={ this.state.page }
             />
 
             {shouldOpenEditorDialog && (

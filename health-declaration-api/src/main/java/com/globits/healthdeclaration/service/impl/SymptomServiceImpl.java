@@ -106,6 +106,15 @@ public class SymptomServiceImpl extends GenericServiceImpl<Symptom, UUID> implem
 				entity = new Symptom();
 			}
 
+			if (dto.getName() == null || StringUtils.isEmpty(dto.getName())) {
+				return null;
+			}
+			if (dto.getCode() == null || StringUtils.isEmpty(dto.getCode())) {
+				return null;
+			}
+			if (dto.getType() == null) {
+				return null;
+			}
 			entity.setName(dto.getName());
 			entity.setCode(dto.getCode());
 			entity.setType(dto.getType());

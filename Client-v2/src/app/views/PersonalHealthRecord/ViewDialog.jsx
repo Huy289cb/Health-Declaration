@@ -67,8 +67,8 @@ class ViewDialog extends Component {
         pcrResults,
         systolicBloodPressure,
         diastolicBloodPressure,
+        pulseRate,
     } = this.state;
-    console.log(this.state);
     return (
       <Dialog
         className="dialog-container"
@@ -96,34 +96,28 @@ class ViewDialog extends Component {
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <b>Người khai báo: </b>{familyMember.member ? familyMember.member.displayName : ""}
                 </Grid>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <b>Xét nghiệm COVID: </b>
-                    {haveTest ? "Có" : "Không"}
+                <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <b>Xét nghiệm nhanh: </b> {haveQuickTest ? "Có" : "Không"}
+                    <ul style={{ marginTop: 0, marginBottom: 0 }}>
+                        {quickTestDate && <li>
+                            <b>Ngày xét nghiệm: </b>{moment(quickTestDate).format("DD/MM/YYYY")}
+                        </li>}
+                        {quickTestResults && <li>
+                            <b>Kết quả xét nghiệm: </b>{appConfig.RESULT_TEST.find((e) => e.key == quickTestResults).value}
+                        </li>}
+                    </ul>
                 </Grid>
-                {haveTest && haveQuickTest &&
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <b>Xét nghiệm nhanh: </b>
-                    <ul style={{marginTop: 0, marginBottom: 0}}>
-                      {quickTestDate && <li>
-                        <b>Ngày xét nghiệm: </b>{moment(quickTestDate).format("DD/MM/YYYY")}
-                      </li>}
-                      {quickTestResults &&<li>
-                        <b>Kết quả xét nghiệm: </b>{appConfig.RESULT_TEST.find((e) => e.key == quickTestResults).value}
-                      </li>}
+                <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <b>Xét nghiệm PCR: </b> {havePCR ? "Có" : "Không"}
+                    <ul style={{ marginTop: 0, marginBottom: 0 }}>
+                        {pcrTestDate && <li>
+                            <b>Ngày xét nghiệm: </b>{moment(pcrTestDate).format("DD/MM/YYYY")}
+                        </li>}
+                        {pcrResults && <li>
+                            <b>Kết quả xét nghiệm: </b>{appConfig.RESULT_TEST.find((e) => e.key == pcrResults).value}
+                        </li>}
                     </ul>
-                </Grid>}
-                {haveTest && havePCR &&
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <b>Xét nghiệm PCR: </b>
-                    <ul style={{marginTop: 0, marginBottom: 0}}>
-                      {pcrTestDate && <li>
-                        <b>Ngày xét nghiệm: </b>{moment(pcrTestDate).format("DD/MM/YYYY")}
-                      </li>}
-                      {pcrResults &&<li>
-                        <b>Kết quả xét nghiệm: </b>{appConfig.RESULT_TEST.find((e) => e.key == pcrResults).value}
-                      </li>}
-                    </ul>
-                </Grid>}
+                </Grid>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <b>Nhịp thở(lần/phút): </b>
                     {breathingRate ? appConfig.BREATHINGRATE_CONST.find((element) => element.value === breathingRate).key : ""}
@@ -131,6 +125,9 @@ class ViewDialog extends Component {
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <b>Nhiệt độ (°C): </b>
                     {temperature ? appConfig.TEMPERATURE_CONST.find((element) => element.value === temperature).key : ""}
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <b>Mạch (lần/phút): </b>{pulseRate}
                 </Grid>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <b>Chỉ số SpO2: </b>
@@ -173,7 +170,7 @@ class ViewDialog extends Component {
                 color="secondary"
                 onClick={() => handleClose()}
                 >
-                {t("Đóng")}
+                Đóng
                 </Button>
             </div>
             </DialogActions>

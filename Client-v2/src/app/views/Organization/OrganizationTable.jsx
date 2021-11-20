@@ -332,7 +332,7 @@ class OrganizationTable extends Component {
                 <ConfirmationDialog
                   title={t("general.confirm")}
                   open={shouldOpenConfirmationDialog}
-                  onConfirmDialogClose={this.handleDialogClose}
+                  onClose={this.handleDialogClose}
                   onYesClick={this.handleConfirmationResponse}
                   text={t('general.deleteConfirm')}
                   cancel = {t("general.cancel")}

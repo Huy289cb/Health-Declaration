@@ -33,7 +33,16 @@ import {
   saveUserOrg,
   saveUser
 } from "./UserService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import SaveIcon from '@material-ui/icons/Save';
+import BlockIcon from '@material-ui/icons/Block';
 
+toast.configure({
+  autoClose: 2000,
+  draggable: false,
+  limit: 3,
+});
 class UserEditorDialog extends Component {
   constructor(props) {
     super(props);
@@ -125,8 +134,6 @@ class UserEditorDialog extends Component {
   }
   handleFormSubmit = () => {
     let { id, user, wardOfResidence } = this.state;
-    let userOrg = {};
-
     if (user == null) {
       user = {};
     }
@@ -136,25 +143,29 @@ class UserEditorDialog extends Component {
     user.roles = this.state.roles;
     user.active = this.state.active;
     user.changePass = this.state.changePass;
-    user.isActive = this.state.isActive;
+    user.isActive = true;
     user.password = this.state.password;
+    user.healthCareGroup = this.state.healthCareGroup;
+    user.org = this.state.org;
+    user.id = this.state.id;
+    user.administrativeUnit = wardOfResidence;
 
-    userOrg = user;
-    // userOrg.userType = this.state.userType;
-    userOrg.healthCareGroup = this.state.healthCareGroup;
-    userOrg.org = this.state.org;
-    userOrg.id = this.state.id;
-    userOrg.administrativeUnit = wardOfResidence;
-
-    getUserByUsername(this.state.username).then((data) => {
-      if (data.data && data.id) {
+    getUserByUsername(this.state.username).then(({data}) => {
+      if (data.id) {
         if (!user.id || (id && data.id != user.id)) {
-          alert("Tên đăng nhập đã tồn tại!");
+          toast.warn("Tên đăng nhập đã tồn tại, hãy thử với tên đăng nhập khác");
           return;
         }
       }
-      saveUser(userOrg).then(() => {
+      saveUser(user).then(() => {
         this.props.handleOKEditClose();
+        if (this.state.id) {
+          toast.success("Đã cập nhật tài khoản");
+        } else {
+          toast.success("Thêm tài khoản thành công");
+        }
+      }).catch(() => {
+        toast.warn("Có lỗi xảy ra, vui lòng thử lại sau")
       });
     });
   };
@@ -634,15 +645,6 @@ class UserEditorDialog extends Component {
                   />
                 </Grid>
               )}
-              <Grid item sm={6} xs={12}>
-                <FormControlLabel
-                  value={active}
-                  name="active"
-                  onChange={(active) => this.handleChange(active, "active")}
-                  control={<Checkbox checked={active} />}
-                  label={t("user.active")}
-                />
-              </Grid>
               {/*----- Active AutoGenCode --------*/}
 
               {changePass != null && changePass == true ? (
@@ -698,34 +700,24 @@ class UserEditorDialog extends Component {
             </Grid>
           </DialogContent>
           <DialogActions spacing={4} className="flex flex-end flex-middle">
-            <Grid
-              container
-              spacing={2}
-              direction="row"
-              justify="flex-end"
-              alignItems="center"
-              md={12}
-              xs={12}
-              lg={12}
-              sm={12}
-            >
               <Button
+                startIcon={<BlockIcon />}
                 variant="contained"
+                className="mr-12 btn btn-secondary d-inline-flex"
                 color="secondary"
-                className="mt-8 mr-16 mb-16"
                 onClick={() => this.props.handleClose()}
               >
-                {t("Cancel")}
+                Huỷ
               </Button>
               <Button
+                startIcon={<SaveIcon />}
                 variant="contained"
-                className="mt-8 mr-16 mb-16"
+                className="mr-12 btn btn-primary-d d-inline-flex"
                 color="primary"
                 type="submit"
               >
-                {t("Save")}
+                Lưu
               </Button>
-            </Grid>
           </DialogActions>
         </ValidatorForm>
 

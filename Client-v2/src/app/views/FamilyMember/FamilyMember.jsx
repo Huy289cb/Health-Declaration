@@ -211,23 +211,24 @@ class FamilyMember extends Component {
     getAllInfoByUserLogin().then((resp) => {
       let data = resp ? resp.data : null;
       if (data) {
-        if (data.admin) {
+        this.setState({userInfo: data})
+        if (data.admin || data.user) {
           this.setState({ isEdit: true, isDelete: true, isView: true }, () => {
-        this.updatePageData();
+            this.updatePageData();
           });
         }
         if (data.healthCareStaff) {
           this.setState({ isEdit: false, isDelete: false, isView: true }, () => {
-        this.updatePageData();
+            this.updatePageData();
           });
         }
-        if (data.user || data.medicalTeam) {
+        if (data.medicalTeam) {
           this.setState({ isEdit: true, isDelete: false, isView: true }, () => {
-        this.updatePageData();
+            this.updatePageData();
           });
+        } else {
+          this.updatePageData();
         }
-  
-        this.updatePageData();
       }
     })
   }
@@ -333,6 +334,91 @@ class FamilyMember extends Component {
           }}
         />
       }
+    ]
+    let columnsFF = [
+      {
+        title: "STT", width: "10",
+        headerStyle: {
+          minWidth: "50px",
+          paddingLeft: "10px",
+          paddingRight: "0px",
+        },
+        cellStyle: {
+          minWidth: "50px",
+          paddingLeft: "10px",
+          paddingRight: "0px",
+          textAlign: "left",
+        }, render: rowData => (this.state.page - 1) * this.state.rowsPerPage + rowData.tableData.id + 1
+      },
+      {
+        title: t('FamilyMember.fullName'), field: "", align: "left", width: "150",
+        render: (rowData) =>
+          rowData.member ? (
+            <span>
+              {rowData.member.displayName}
+            </span>
+          ) : (
+            ""
+          ),
+      },
+      { title: t('FamilyMember.relationship'), field: "relationship" },
+      {
+        title: t('FamilyMember.healthInsuranceCardNumber'), field: "",
+        render: (rowData) =>
+          rowData.member ? (
+            <span>
+              {rowData.member.healthInsuranceCardNumber}
+            </span>
+          ) : (
+            ""
+          ),
+      },
+      {
+        title: t("general.action"),
+        field: "custom",
+        width: "250",
+        headerStyle: {
+          minWidth: "50px",
+          paddingLeft: "10px",
+          paddingRight: "0px",
+        },
+        cellStyle: {
+          minWidth: "50px",
+          paddingLeft: "10px",
+          paddingRight: "0px",
+          textAlign: "left",
+        },
+        render: rowData => <MaterialButton item={rowData} isDelete={isDelete} isEdit={isEdit} isView={isView}
+          onSelect={(rowData, method) => {
+            if (method === 0) {
+              getById(rowData.id).then(({ data }) => {
+                this.setState({
+                  item: data,
+                  readOnly:false,
+                  shouldOpenEditorDialog: true
+                });
+              })
+            } else if (method === 1) {
+              this.handleDelete(rowData.id);
+            }
+            else if (method === 2) {
+              getById(rowData.id).then(({ data }) => {
+                if (data) {
+                  data.isView = true;
+                }
+                this.setState({
+                  item: data,
+                  readOnly:true,
+                  shouldOpenEditorDialog: true
+                });
+              })
+            }
+            else {
+              alert('Call Selected Here:' + rowData.id);
+            }
+          }}
+        />
+      }
 
     ]
     return (
@@ -368,11 +454,7 @@ class FamilyMember extends Component {
           <Grid item xs={12}>
             <MaterialTable
               data={itemList}
-              columns={columns}
-              // parentChildData={(row, rows) => {
-              //   var list = rows.find((a) => a.id === row.parentId)
-              //   return list
-              // }}
+              columns={this.state.userInfo?.user ? columnsFF : columns}
               options={{
                 selection: false,
                 actionsColumnIndex: -1,

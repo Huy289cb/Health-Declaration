@@ -39,6 +39,9 @@ import SelectParentPopup from "./SelectParentPopup";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import SaveIcon from '@material-ui/icons/Save';
 import BlockIcon from '@material-ui/icons/Block';
+import 'styles/globitsStyles.css';
+
+
 function PaperComponent(props) {
   return (
     <Draggable
@@ -264,7 +267,7 @@ class SupplierDialog extends React.Component {
                 <Button
                   size="small"
                   style={{ float: 'right' }}
-                  // className=" mt-10"
+                  className="btn btn-primary-d"
                   variant="contained"
                   color="primary"
                   onClick={this.openParentPopup}
@@ -282,7 +285,7 @@ class SupplierDialog extends React.Component {
                   label={<span><span style={{ color: "red" }}></span>{t('menu.parent')}</span>}
                   className="w-80"
                   value={
-                    (this.state.parent != null) ? this.state.parent.name : ''
+                    this.state.parent ? this.state.parent.name : ""
                   }
                 />
 

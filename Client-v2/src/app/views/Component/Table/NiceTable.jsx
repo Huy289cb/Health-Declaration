@@ -33,7 +33,7 @@ export default function NiceTable(props) {
                     toolbar: false,
                     maxBodyHeight: "440px",
                     headerStyle: {
-                        backgroundColor: "#2a80c8",
+                        backgroundColor: "#3366ff",
                         color: "#fff",
                     },
                     rowStyle: (rowData, index) => ({

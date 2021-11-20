@@ -40,23 +40,23 @@ module.exports = Object.freeze({
         { key: "decision2", number: 2, description: "Tiếp tục theo dõi ở nhà" }
     ],
     SPO2_CONST: [
-        { key: "<70", value: -2 },  //<70
-        { key: "70-87", value: -1 },  //70-87
+        // { key: "<70", value: -2 },  //<70
+        // { key: "70-87", value: -1 },  //70-87
+        // {
+        //     key: "87-89",
+        //     value: 1    //87-89
+        // },
+        // {
+        //     key: "90-91",
+        //     value: 2    //90-91
+        // },
         {
-            key: "87-89",
-            value: 1    //87-89
+            key: "<92",
+            value: 3    //<92
         },
         {
-            key: "90-91",
-            value: 2    //90-91
-        },
-        {
-            key: "92-93",
-            value: 3    //92-93
-        },
-        {
-            key: "94",
-            value: 4    //94
+            key: "92-94",
+            value: 4    //92-94
         },
         {
             key: "95-96",

@@ -154,11 +154,11 @@ public class HealthDeclarationEnumsType {
 
 	public static enum PersonalHealthRecordSpO2{
 		// Chỉ số SpO2
-		opt1(-1),		//SpO2 <87
-		opt2(1),		//SpO2 87-89
-		opt3(2),		//SpO2 90-91
-		opt4(3),		//SpO2 92-93
-		opt5(4),		//SpO2 94
+//		opt1(-1),		//SpO2 <87
+//		opt2(1),		//SpO2 87-89
+//		opt3(2),		//SpO2 90-91
+		opt4(3),		//SpO2 <92
+		opt5(4),		//SpO2 92-94
 		opt6(5),		//SpO2 95-96
 		opt7(6);		//SpO2 >96
 

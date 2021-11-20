@@ -290,7 +290,7 @@ class HealthCareGroupTable extends Component {
                 return list;
               }}
               options={{
-                selection: true,
+                selection: false,
                 actionsColumnIndex: -1,
                 paging: false,
                 search: false,

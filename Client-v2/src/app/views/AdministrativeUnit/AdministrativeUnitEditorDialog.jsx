@@ -71,12 +71,10 @@ class AdministrativeUnitEditorDialog extends Component {
     obj.code = values.code;
     obj.name = values.name;
     obj.parent = values.parent;
-    obj.emergencyPhone = values.emergencyPhone;
-    obj.hotZalo = values.hotZalo;
     obj.parentId = values.parent ? values.parent.id : null;
     checkCode(obj).then(({data}) => {
       if (data == true) {
-        toast.warn("Mã đơn vị đã tồn tại");
+        toast.warn("Trùng mã đơn vị");
       } else {
         if (id) {
             update(obj).then(() => {
@@ -121,8 +119,6 @@ class AdministrativeUnitEditorDialog extends Component {
       code,
       level,
       parent,
-      emergencyPhone,
-      hotZalo,
       listAdministrativeUnit,
       isActive,
       loading
@@ -152,8 +148,6 @@ class AdministrativeUnitEditorDialog extends Component {
               code: code ? code : '',
               name: name ? name : '',
               parent: parent ? parent : null,
-              emergencyPhone: emergencyPhone ? emergencyPhone : '',
-              hotZalo: hotZalo ? hotZalo : ''
             }
           }
           handleSubmit={this.handleFormSubmit}

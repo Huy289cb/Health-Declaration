@@ -26,6 +26,9 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import clsx from 'clsx';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import SaveIcon from '@material-ui/icons/Save';
+import BlockIcon from '@material-ui/icons/Block';
+
 toast.configure({
   autoClose: 1000,
   draggable: false,
@@ -183,10 +186,10 @@ class BackgroundDiseaseEditorDialog extends Component {
               {/* code */}
               <Grid item sm={12} xs={12}>
                 <TextValidator
-                  className="w-100 mb-16"
+                  className="w-100"
                   label={<span className="font">
                     <span style={{ color: "red" }}> *</span>
-                    {t('Mã bệnh nền')}
+                    Mã bệnh nền
                   </span>
                   }
                   onChange={this.handleChange}
@@ -202,10 +205,10 @@ class BackgroundDiseaseEditorDialog extends Component {
               {/* name */}
               <Grid item sm={12} xs={12}>
                 <TextValidator
-                  className="w-100 mb-16"
+                  className="w-100"
                   label={<span className="font">
                     <span style={{ color: "red" }}> *</span>
-                    {t('Tên bệnh nền')}
+                    Tên bệnh nền
                   </span>}
                   onChange={this.handleChange}
                   type="text"
@@ -220,10 +223,10 @@ class BackgroundDiseaseEditorDialog extends Component {
               {/* Desc */}
               <Grid item sm={12} xs={12}>
                 <TextValidator
-                    className="w-100 mb-16"
+                    className="w-100"
                     label={<span className="font">
                         <span style={{ color: "red" }}></span>
-                        {t('Mô tả bệnh nền')}
+                        Mô tả
                     </span>}
                     onChange={this.handleChange}
                     type="text"
@@ -240,17 +243,20 @@ class BackgroundDiseaseEditorDialog extends Component {
 
           <DialogActions spacing={4} className="flex flex-end flex-middle">
             <Button
+              startIcon={<BlockIcon />}
               variant="contained"
+              className="mr-12 btn btn-secondary d-inline-flex"
               color="secondary"
               onClick={() => this.props.handleClose()}>
-              {t('Cancel')}
+              Huỷ
             </Button>
             <Button
+              startIcon={<SaveIcon />}
               variant="contained"
-              className="mr-12"
+              className="mr-12 btn btn-primary-d d-inline-flex"
               color="primary"
               type="submit">
-              {t('Save')}
+              Lưu
             </Button>
           </DialogActions>
         </ValidatorForm>

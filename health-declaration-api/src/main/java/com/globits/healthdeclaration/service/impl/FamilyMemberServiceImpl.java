@@ -121,6 +121,25 @@ public class FamilyMemberServiceImpl extends GenericServiceImpl<FamilyMember, UU
         	if(member == null) {
         		return null;
         	}
+			if (!dto.isHostFamily() && (dto.getMember().getDisplayName() == null ||
+					StringUtils.isEmpty(dto.getMember().getDisplayName()))) {
+				return null;
+			}
+			if (!dto.isHostFamily() && (dto.getMember().getGender() == null ||
+					StringUtils.isEmpty(dto.getMember().getGender()))) {
+				return null;
+			}
+			if (!dto.isHostFamily() && (dto.getMember().getAge() == null ||
+					dto.getMember().getHeight() == null || dto.getMember().getWeight() == null)) {
+				return null;
+			}
+			if (!dto.isHostFamily() && (dto.getMember().getDetailAddress() == null ||
+					StringUtils.isEmpty(dto.getMember().getDetailAddress()))) {
+				return null;
+			}
+			if (!dto.isHostFamily() && dto.getMember().getHaveBackgroundDisease() == null) {
+				return null;
+			}
             member.setDetailAddress(dto.getMember().getDetailAddress());
             member.setAge(dto.getMember().getAge());
             member.setAnamnesis(dto.getMember().getAnamnesis());
@@ -548,7 +567,7 @@ public class FamilyMemberServiceImpl extends GenericServiceImpl<FamilyMember, UU
 	private boolean hasDeletePermision(FamilyMember entity) {
 		UserInfoDto userInfo = userAdministrativeUnitService.getAllInfoByUserLogin();
 		if (entity != null && userInfo != null && entity.getFamily() != null && entity.getFamily().getId() != null) {
-			if (userInfo.isAdmin()) {
+			if (userInfo.isAdmin() || userInfo.isUser()) {
 				return true;
 			}
 		}

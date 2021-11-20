@@ -8,7 +8,9 @@ import java.util.UUID;
 import com.globits.core.dto.BaseObjectDto;
 import com.globits.healthdeclaration.domain.Family;
 import com.globits.healthdeclaration.domain.FamilyMember;
+import com.globits.healthdeclaration.domain.HDAdministrativeUnit;
 import com.globits.healthdeclaration.domain.PractitionerAndFamily;
+import org.springframework.util.StringUtils;
 
 public class FamilyDto extends BaseObjectDto {
 
@@ -36,6 +38,8 @@ public class FamilyDto extends BaseObjectDto {
     private List<MemberBackgroundDiseaseDto> listBackgroundDisease;//danh sách bệnh nền (tiền sử bệnh)
 
 	private Set<UUID> listUnit = new HashSet<>();
+
+    private String address;
     
     public FamilyDto() {
     }
@@ -54,6 +58,7 @@ public class FamilyDto extends BaseObjectDto {
             this.email = entity.getEmail();
             this.detailAddress = entity.getDetailAddress();
             this.seriusStatus = entity.getSeriusStatus();
+            this.address = this.getFullAddress(entity);
             if (entity.getAdministrativeUnit() != null) {
                 this.administrativeUnit = new HDAdministrativeUnitDto(entity.getAdministrativeUnit(), true, 1);
             }
@@ -82,6 +87,7 @@ public class FamilyDto extends BaseObjectDto {
             this.email = entity.getEmail();
             this.detailAddress = entity.getDetailAddress();
             this.seriusStatus = entity.getSeriusStatus();
+            this.address = this.getFullAddress(entity);
             if (entity.getAdministrativeUnit() != null) {
                 this.administrativeUnit = new HDAdministrativeUnitDto(entity.getAdministrativeUnit(), true, type); //type =2 cộng chuỗi đươn vị hành chính
             }
@@ -98,6 +104,28 @@ public class FamilyDto extends BaseObjectDto {
     			}
             }
         }
+    }
+
+    private String getFullAddress(Family entity) {
+        String result = "";
+        if (entity.getDetailAddress() != null && !StringUtils.isEmpty(entity.getDetailAddress())) {
+            result += entity.getDetailAddress();
+        }
+        if (entity.getAdministrativeUnit() != null && entity.getAdministrativeUnit().getName() != null) {
+            result += this.getAllAdministrativeUnitName(entity.getAdministrativeUnit());
+        }
+        return result;
+    }
+
+    private String getAllAdministrativeUnitName(HDAdministrativeUnit unit) {
+        String result = "";
+        if (unit != null && unit.getName() != null) {
+            result += ", " + unit.getName();
+            if (unit.getParent() != null) {
+                result += this.getAllAdministrativeUnitName(unit.getParent());
+            }
+        }
+        return result;
     }
 
     public String getPassword() {
@@ -274,6 +302,14 @@ public class FamilyDto extends BaseObjectDto {
 
     public void setListBackgroundDisease(List<MemberBackgroundDiseaseDto> listBackgroundDisease) {
         this.listBackgroundDisease = listBackgroundDisease;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
 

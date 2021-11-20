@@ -172,43 +172,43 @@ class ViewListPatientDialog extends Component {
     } = this.state;
     let columns = [
       {
-        title: t("Họ tên ca bệnh"),
+        title: "Họ tên ca bệnh",
         field: "code",
         width: '100',
         render: rowData => this.renderNamePhone(rowData.familyMember.member.displayName, rowData.familyMember.member.phoneNumber)
       },
       {
-        title: t('Hộ gia đình'),
+        title: 'Hộ gia đình',
         field: "name",
         width: '150',
         render: rowData => this.renderNamePhone(rowData.familyMember.family.displayName, rowData.familyMember.family.phoneNumber)
       },
       {
-        title: t('Địa chỉ'),
+        title: 'Địa chỉ',
         field: "age",
         width: '100',
         render: rowData => this.renderNamePhone(rowData.familyMember.family.detailAddress, rowData.familyMember.family.administrativeUnit.name)
       },
       {
-        title: t('SpO2'),
+        title: 'SpO2',
         field: "phoneNumber",
         width: '100',
         render: rowData => this.renderSpo2(rowData.spo2)
       },
       {
-        title: t('Nhịp thở'),
+        title: 'Nhịp thở',
         field: "breathingRate",
         width: '100',
         render: rowData => this.renderBreathingrate(rowData.breathingRate)
       },
       {
-        title: t('Nhiệt độ'),
+        title: 'Nhiệt độ',
         field: "temperature",
         width: '100',
         render: rowData => this.renderTemperature(rowData.temperature)
       },
       {
-        title: t('Loại khai báo'),
+        title: 'Loại khai báo',
         field: "type",
         width: '100',
         render: rowData => this.renderHealthRecordType(rowData.type)
@@ -219,7 +219,7 @@ class ViewListPatientDialog extends Component {
         className="dialog-container"
         open={open}
         fullWidth
-        maxWidth="lg"
+        maxWidth="xl"
       >
         <DialogTitle
           className="dialog-header bgc-primary-d1"
@@ -231,13 +231,10 @@ class ViewListPatientDialog extends Component {
             <Icon color="disabled">close</Icon>
           </IconButton>
         </DialogTitle>
-
-        <div className="dialog-body">
-
           <DialogContent>
             <Card elevation={12} className="">
               {listCase &&
-                <div class="overflow-auto">
+                <>
                   {/* <Table className="product-table" style={{tableLayout:'unset'}} >
                             <TableHead>
                                 <TableRow>
@@ -320,16 +317,15 @@ class ViewListPatientDialog extends Component {
                     totalElements={this.state.totalElements}
                     page={this.state.page}
                   />
-                </div>
+                </>
               }
             </Card>
           </DialogContent>
-        </div>
-        <div className="dialog-footer">
+        {/* <div className="dialog-footer">
           <DialogActions className="p-0">
 
           </DialogActions>
-        </div>
+        </div> */}
 
       </Dialog>
     );

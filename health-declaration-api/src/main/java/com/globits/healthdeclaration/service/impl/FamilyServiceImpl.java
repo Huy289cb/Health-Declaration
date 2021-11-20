@@ -11,7 +11,6 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import com.globits.healthdeclaration.domain.*;
-import com.globits.healthdeclaration.dto.MemberBackgroundDiseaseDto;
 import com.globits.healthdeclaration.repository.*;
 import com.globits.healthdeclaration.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.globits.core.domain.Person;
 import com.globits.core.repository.PersonRepository;
 import com.globits.core.service.impl.GenericServiceImpl;
 import com.globits.core.utils.SecurityUtils;
@@ -367,8 +365,6 @@ public class FamilyServiceImpl extends GenericServiceImpl<Family, UUID> implemen
 		}
 		return null;
 	}
-	
-	
 
 	@Override
 	public FamilyDto saveOrUpdate(FamilyDto dto, UUID id) {
@@ -899,23 +895,23 @@ public class FamilyServiceImpl extends GenericServiceImpl<Family, UUID> implemen
 
 	@Override
 	public Boolean checkDuplicate(UUID id, String code, String phoneNumber) {
-		boolean resutl = true;
+		boolean result = true;
 		if (code != null && StringUtils.hasText(code) && phoneNumber != null && StringUtils.hasText(phoneNumber)) {
-			resutl = checkCode(id, code);
-			if (resutl) {
-				return resutl;
+			result = checkCode(id, code);
+			if (result) {
+				return result;
 			}
 
-			resutl = checkPhoneNumber(id, phoneNumber);
-			if (resutl) {
-				return resutl;
+			result = checkPhoneNumber(id, phoneNumber);
+			if (result) {
+				return result;
 			}
 
 			if (id == null) {
-				resutl = checkUserName(phoneNumber);
+				result = checkUserName(phoneNumber);
 			}
 		}
-		return resutl;
+		return result;
 	}
 
 	@Override

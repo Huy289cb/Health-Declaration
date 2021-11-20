@@ -17,6 +17,7 @@ public class HealthCareGroupDto extends BaseObjectDto {
 	private String phoneNumber2;
 	private String zalo;
 	private String faceBook;
+	private String personInCharge; //Người phụ trách
 	private Set<HealthCareGroupAdministrativeUnitDto> listHealthCareGroupAdministrativeUnits = new HashSet<>();
 
 	public HealthCareGroupDto() {
@@ -37,6 +38,7 @@ public class HealthCareGroupDto extends BaseObjectDto {
 			this.phoneNumber2 = entity.getPhoneNumber2();
 			this.zalo = entity.getZalo();
 			this.faceBook = entity.getFaceBook();
+			this.personInCharge = entity.getPersonInCharge();
 			if (simple) {
 				if (entity.getListHealthCareGroupAdministrativeUnits() != null
 						&& entity.getListHealthCareGroupAdministrativeUnits().size() > 0) {
@@ -113,5 +115,13 @@ public class HealthCareGroupDto extends BaseObjectDto {
 	public void setListHealthCareGroupAdministrativeUnits(
 			Set<HealthCareGroupAdministrativeUnitDto> listHealthCareGroupAdministrativeUnits) {
 		this.listHealthCareGroupAdministrativeUnits = listHealthCareGroupAdministrativeUnits;
+	}
+
+	public String getPersonInCharge() {
+		return personInCharge;
+	}
+
+	public void setPersonInCharge(String personInCharge) {
+		this.personInCharge = personInCharge;
 	}
 }

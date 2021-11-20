@@ -268,7 +268,7 @@ class PractitionerAndFamily extends Component
       //   width: '100'
       // },
       {
-        title: t( 'Họ và tên chủ hộ' ),
+        title: 'Họ và tên chủ hộ',
         field: "name",
         width: '150'
       },
@@ -278,21 +278,25 @@ class PractitionerAndFamily extends Component
       //   width: '100'
       // },
       {
-        title: t( 'SĐT' ),
+        title: 'SĐT',
         field: "phoneNumber",
         width: '100'
       },
       {
-        title: t( 'Đơn vị hành chính' ),
-        field: "administrativeUnit.name",
+        title: 'Địa chỉ',
+        field: "address",
+        width: '150',
+        cellStyle: {
+          minWidth: "350px"
+        }
       },
       // {
       //   title: t('Địa chỉ chi tiết'),
       //   field: "detailAddress"
       // },
       {
-        title: t( 'Nhân viên y tế tại chỗ' ),
-        field: "detailAddress",
+        title: 'Nhân viên y tế tại chỗ',
+        field: "custom",
         render: rowData =>
         {
           if ( rowData.listPractitioner && rowData.listPractitioner.length > 0 )
@@ -306,8 +310,8 @@ class PractitionerAndFamily extends Component
         }
       },
       {
-        title: t( 'Nhân viên y tế tư vấn từ xa' ),
-        field: "detailAddress",
+        title: 'Nhân viên y tế từ xa',
+        field: "custom",
         render: rowData =>
         {
           if ( rowData.listPractitioner && rowData.listPractitioner.length > 0 )
@@ -441,7 +445,7 @@ class PractitionerAndFamily extends Component
                 toolbar: false,
                 maxBodyHeight: "440px",
                 headerStyle: {
-                  backgroundColor: '#4FAA6D',
+                  backgroundColor: '#3366ff',
                   color: '#fff',
                   textTransform: "uppercase",
                   whiteSpace: 'nowrap',

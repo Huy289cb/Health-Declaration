@@ -303,10 +303,9 @@ class SymptomTable extends Component {
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        variant="outlined"
+                        variant="standard"
                         size="small"
                         label="Loại triệu chứng"
-                        className="input"
                     />
                 )}
                 onChange={(event, value) => this.setState({symptomType: value}, () => this.updatePageData())}
@@ -315,7 +314,8 @@ class SymptomTable extends Component {
           <Grid item lg={3} md={3} sm={12} xs={12} >
             <FormControl fullWidth>
               <Input
-                className='mt-10 search_box w-100 stylePlaceholder'
+                className='search_box w-100 stylePlaceholder'
+                style={{marginTop: "13px"}}
                 type="text"
                 name="keyword"
                 value={keyword}

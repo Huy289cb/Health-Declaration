@@ -777,20 +777,20 @@ class EditorDialog extends Component {
             <Button
               startIcon={<BlockIcon />}
               variant="contained"
-              className="mr-12"
+              className="mr-12 btn btn-secondary d-inline-flex"
               color="secondary"
               onClick={() => handleClose()}
             >
-              {t("general.button.cancel")}
+              Huỷ
             </Button>
             {!readOnly &&
               <Button
                 startIcon={<SaveIcon />}
-                className="mr-12"
+                className="mr-12 btn btn-primary-d d-inline-flex"
                 variant="contained"
                 color="primary"
                 type="submit">
-                {t("general.button.save")}
+                Lưu
               </Button>}
           </DialogActions>
         </ValidatorForm>

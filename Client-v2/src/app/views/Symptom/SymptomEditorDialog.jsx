@@ -12,7 +12,7 @@ import {
   FormControl,
   InputLabel,
   TextField,
-  DialogActions, Icon, IconButton
+  DialogActions, Icon, IconButton, FormHelperText
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import {searchByPage, getById, addNew, update, checkCode } from "./SymptomService";
@@ -27,6 +27,9 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import clsx from 'clsx';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SYMPTOM_TYPE } from "../../appConfig";
+import SaveIcon from '@material-ui/icons/Save';
+import BlockIcon from '@material-ui/icons/Block';
+
 toast.configure({
   autoClose: 1000,
   draggable: false,
@@ -67,13 +70,9 @@ class SymptomEditorDialog extends Component {
     this.setState({ loading: true });
   };
 
-  selectType = (event, item) => { 
-    //event.persist();
-    this.setState(
-      { isActive: event.target.checked, 
-        [event.target.name]: event.target.value,
-        //systemType: item.key
-      });  
+  selectType = (event, item) => {
+    this.setState({[event.target.name]: event.target.value});
+    this.setState({errorType: false, errorTypeText: ""})
   }
   //popup
   handleDialogClose = () => {
@@ -117,7 +116,7 @@ class SymptomEditorDialog extends Component {
     let { id, code } = this.state;
     let { t } = this.props;
     if (this.validateData()) {
-      toast.warning('trường dữ liệu không thể để trống');
+      toast.warning('Trường dữ liệu không thể để trống');
     } else {
       if (id) {
         update({
@@ -157,6 +156,10 @@ class SymptomEditorDialog extends Component {
     if (this.state.name.trim().length == 0 || this.state.code.trim().length == 0) {
       return true;
     }
+    if (!this.state.type) {
+      this.setState({errorType: true, errorTypeText: "Trường này không được bỏ trống"})
+      return true;
+    }
     return false;
   }
 
@@ -192,10 +195,10 @@ class SymptomEditorDialog extends Component {
               {/* code */}
               <Grid item sm={12} xs={12}>
                 <TextValidator
-                  className="w-100 mb-16"
+                  className="w-100"
                   label={<span className="font">
-                    <span style={{ color: "red" }}> *</span>
-                    {t('Mã triệu chứng')}
+                    <span style={{ color: "red" }}> * </span>
+                    Mã triệu chứng
                   </span>
                   }
                   onChange={this.handleChange}
@@ -211,10 +214,10 @@ class SymptomEditorDialog extends Component {
               {/* name */}
               <Grid item sm={12} xs={12}>
                 <TextValidator
-                  className="w-100 mb-16"
+                  className="w-100"
                   label={<span className="font">
-                    <span style={{ color: "red" }}> *</span>
-                    {t('Tên triệu chứng')}
+                    <span style={{ color: "red" }}> * </span>
+                    Tên triệu chứng
                   </span>}
                   onChange={this.handleChange}
                   type="text"
@@ -228,21 +231,24 @@ class SymptomEditorDialog extends Component {
               </Grid>
               {/* Type */}
               <Grid item sm={12} xs={12}>
-                <FormControl fullWidth={true} variant="outlined" size="small">
+                <FormControl error={this.state.errorType} fullWidth={true} variant="outlined" size="small">
                     <InputLabel htmlFor="type-simple">
-                      Loại triệu chứng
+                      <span className="font">
+                        <span style={{ color: "red" }}> * </span>
+                        Loại triệu chứng
+                      </span>
                     </InputLabel>
                     <Select
-                        label="Loại triệu chứng"
-                        // style={{ marginTop: '16px' }}
+                        label={<span className="font">
+                          <span style={{ color: "red" }}> * </span>
+                          Loại triệu chứng
+                        </span>}
                         value={type ? type : null}
                         onChange={(key) => this.selectType(key)}
                         inputProps={{
                             name: "type",
                             id: "objectType-simple",
                         }}
-                        validators={["required"]}
-                        errorMessages={[t("general.required")]}
                     >
                         {SYMPTOM_TYPE.map((item) => {
                             return (
@@ -252,6 +258,7 @@ class SymptomEditorDialog extends Component {
                             );
                         })}
                     </Select>
+                    <FormHelperText>{this.state.errorTypeText}</FormHelperText>
                 </FormControl>
               </Grid>
               {/* parent */}
@@ -303,17 +310,20 @@ class SymptomEditorDialog extends Component {
 
           <DialogActions spacing={4} className="flex flex-end flex-middle">
             <Button
+              startIcon={<BlockIcon />}
               variant="contained"
+              className="mr-12 btn btn-secondary d-inline-flex"
               color="secondary"
               onClick={() => this.props.handleClose()}>
-              {t('Cancel')}
+              Huỷ
             </Button>
             <Button
+              startIcon={<SaveIcon />}
               variant="contained"
-              className="mr-12"
+              className="mr-12 btn btn-primary-d d-inline-flex"
               color="primary"
               type="submit">
-              {t('Save')}
+              Lưu
             </Button>
           </DialogActions>
         </ValidatorForm>

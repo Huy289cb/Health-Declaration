@@ -39,6 +39,7 @@ import { withStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search';
 import { Link } from "react-router-dom";
 import NotificationPopup from '../Component/NotificationPopup/NotificationPopup'
+import 'styles/globitsStyles.css';
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -352,12 +353,12 @@ class Menu extends React.Component {
         <Grid container spacing={2} justify="space-between">
           <Grid item md={3} xs={12} >
             <Button
-              className="align-bottom mr-16 mb-16"
+              className="align-bottom mr-16 mb-16 btn btn-primary-d"
               variant="contained"
               color="primary"
               onClick={() => this.handleEditItem(null)}
             >
-              {t('general.button.add')}
+              Thêm mới
             </Button>
             {/* <Button
               className="align-bottom mb-16"
@@ -371,7 +372,7 @@ class Menu extends React.Component {
             {this.state.shouldOpenConfirmationDeleteAllDialog && (
               <ConfirmationDialog
                 open={this.state.shouldOpenConfirmationDeleteAllDialog}
-                onConfirmDialogClose={this.handleDialogClose}
+                onClose={this.handleDialogClose}
                 onYesClick={this.handleDeleteAll}
                 text={t('general.deleteAllConfirm')}
                 cancel={t('general.cancel')}
@@ -446,7 +447,7 @@ class Menu extends React.Component {
                 <ConfirmationDialog
                   title={t('general.confirm')}
                   open={this.state.shouldOpenConfirmationDialog}
-                  onConfirmDialogClose={this.handleDialogClose}
+                  onClose={this.handleDialogClose}
                   onYesClick={this.handleConfirmationResponse}
                   text={t('general.deleteConfirm')}
                   agree={t('general.agree')}

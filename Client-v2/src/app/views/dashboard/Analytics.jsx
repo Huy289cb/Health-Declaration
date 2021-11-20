@@ -24,6 +24,8 @@ import { getListPatientByAdminUnit, reportByAdminUnit } from "./DashboardService
 import ViewDialog from "./ViewDialog";
 import ViewListPatientDialog from "./ViewListPatientDialog";
 import {getListHealthCareGroup} from "../HealthCareGroup/HealthCareGroupService";
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
     backgroundColor: theme.palette.common.white,
@@ -329,7 +331,7 @@ class Analytics extends Component {
         {role == "ROLE_USER" &&
           <Grid container spacing={3} style={{dipslay: "flex", justifyContent: "center"}}>
             <Grid item lg={3} md={3} sm={12} xs={12}>
-              <Link to={"/personal-health-record/create"}>
+              <Link to={"/create-health-record"}>
                 <Card elevation={3} className="p-32 py-32 text-center h-100 click icon">
                   <div className="text-white margin-auto">
                     <div className="card-title text-white uppercase m-0">Khai báo y tế</div>
@@ -437,7 +439,7 @@ class Analytics extends Component {
                 <Grid item lg={6} md={6} sm={12} xs={12}>
                   <Card elevation={3} className="bgc-green-l p-32 py-32 h-100 click">
                     <div className="text-primary-d2">
-                      <div className="card-title text-primary-d2 uppercase text-center">{t("Thông tin hộ gia đình")}</div>
+                      <div className="card-title text-primary-d2 uppercase text-center">Thông tin hộ gia đình</div>
                       <div className="card-body" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                         <Button
                           size="small"
@@ -486,7 +488,7 @@ class Analytics extends Component {
                           </tr>
                           <tr>
                             <td><b>Địa Chỉ:</b></td>
-                            <td style={{maxWidth: "250px", lineBreak: "auto"}}>{this.state.userAddress}</td>
+                            <td style={{maxWidth: "250px", lineBreak: "auto"}}>{userData.address}</td>
                           </tr>
                           <tr>
                             <td><b>Các thành viên:</b></td>
@@ -688,12 +690,13 @@ class Analytics extends Component {
             <Grid container spacing={3}>
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
-              className="mb-16 mr-16"
+              startIcon={<AccountBoxIcon />}
+              className="btn btn-primary-d d-inline-flex"
               variant="contained"
               color="primary"
               onClick={() => this.setState( this.linkToEncounter() )}
             >
-              {t('Thăm khám')}
+              Thăm khám
             </Button>
             {/* <Button
               className="mb-16 mr-16"
@@ -921,7 +924,7 @@ class Analytics extends Component {
               {shouldOpenConfirmationViewDialog && (
                 <ConfirmationDialog
                   open={shouldOpenConfirmationViewDialog}
-                  onConfirmDialogClose={this.handleClose}
+                  onClose={this.handleClose}
                   onYesClick={this.handleDeleteListItem}
                   title={t("Thông báo")}
                   text={t('Chưa có thông tin cập nhật sức khoẻ của người này!')}

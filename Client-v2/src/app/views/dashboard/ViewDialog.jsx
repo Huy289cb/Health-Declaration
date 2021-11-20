@@ -124,12 +124,12 @@ class ViewDialog extends Component {
                                     <FormControl fullWidth={true} variant="outlined" size="small">
                                         <InputLabel htmlFor="temperature-simple">
                                             {
-                                                <span>{t("Trạng thái xử lý")}</span>
+                                                <span>Trạng thái xử lý</span>
                                             }
                                         </InputLabel>
                                         <Select
                                             label={
-                                                <span>{t("Trạng thái xử lý")}</span>
+                                                <span>Trạng thái xử lý</span>
                                             }
                                             value={resolveStatus ? resolveStatus : ""}
                                             onChange={(event) => {
@@ -176,33 +176,27 @@ class ViewDialog extends Component {
                                                 {seriusStatus && appConfig.SERIUS_STATUS_CONST.find((element) => element.value === seriusStatus).display}
                                             </Grid>
                                             <Grid item lg={6} md={6} sm={12} xs={12}>
-                                                <b>Xét nghiệm COVID: </b>
-                                                {haveTest ? "Có" : "Không"}
+                                                <b>Xét nghiệm nhanh: </b> {haveQuickTest ? "Có" : "Không"}
+                                                <ul style={{ marginTop: 0, marginBottom: 0 }}>
+                                                    {quickTestDate && <li>
+                                                        <b>Ngày xét nghiệm: </b>{moment(quickTestDate).format("DD/MM/YYYY")}
+                                                    </li>}
+                                                    {quickTestResults && <li>
+                                                        <b>Kết quả xét nghiệm: </b>{appConfig.RESULT_TEST.find((e) => e.key == quickTestResults).value}
+                                                    </li>}
+                                                </ul>
                                             </Grid>
-                                            {haveTest && haveQuickTest &&
-                                                <Grid item lg={6} md={6} sm={12} xs={12}>
-                                                    <b>Xét nghiệm nhanh: </b>
-                                                    <ul style={{ marginTop: 0, marginBottom: 0 }}>
-                                                        {quickTestDate && <li>
-                                                            <b>Ngày xét nghiệm: </b>{moment(quickTestDate).format("DD/MM/YYYY")}
-                                                        </li>}
-                                                        {quickTestResults && <li>
-                                                            <b>Kết quả xét nghiệm: </b>{appConfig.RESULT_TEST.find((e) => e.key == quickTestResults).value}
-                                                        </li>}
-                                                    </ul>
-                                                </Grid>}
-                                            {haveTest && havePCR &&
-                                                <Grid item lg={6} md={6} sm={12} xs={12}>
-                                                    <b>Xét nghiệm PCR: </b>
-                                                    <ul style={{ marginTop: 0, marginBottom: 0 }}>
-                                                        {pcrTestDate && <li>
-                                                            <b>Ngày xét nghiệm: </b>{moment(pcrTestDate).format("DD/MM/YYYY")}
-                                                        </li>}
-                                                        {pcrResults && <li>
-                                                            <b>Kết quả xét nghiệm: </b>{appConfig.RESULT_TEST.find((e) => e.key == pcrResults).value}
-                                                        </li>}
-                                                    </ul>
-                                                </Grid>}
+                                            <Grid item lg={6} md={6} sm={12} xs={12}>
+                                                <b>Xét nghiệm PCR: </b> {havePCR ? "Có" : "Không"}
+                                                <ul style={{ marginTop: 0, marginBottom: 0 }}>
+                                                    {pcrTestDate && <li>
+                                                        <b>Ngày xét nghiệm: </b>{moment(pcrTestDate).format("DD/MM/YYYY")}
+                                                    </li>}
+                                                    {pcrResults && <li>
+                                                        <b>Kết quả xét nghiệm: </b>{appConfig.RESULT_TEST.find((e) => e.key == pcrResults).value}
+                                                    </li>}
+                                                </ul>
+                                            </Grid>
                                             <Grid item lg={6} md={6} sm={12} xs={12}>
                                                 <b>Nhịp thở(lần/phút): </b>
                                                 {breathingRate && appConfig.BREATHINGRATE_CONST.find((element) => element.value === breathingRate)
@@ -269,16 +263,16 @@ class ViewDialog extends Component {
                             color="secondary"
                             onClick={() => handleClose()}
                         >
-                            {t("Đóng")}
+                            Đóng
                         </Button>
                         <Button
                             startIcon={<SaveIcon />}
-                            className="mr-12 btn btn-success d-inline-flex"
+                            className="mr-12 btn btn-primary-d d-inline-flex"
                             variant="contained"
                             color="primary"
                             type="submit"
                         >
-                            {t("general.button.save")}
+                            Lưu
                         </Button>
                     </DialogActions>
                 </ValidatorForm>

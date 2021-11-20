@@ -87,37 +87,30 @@ class Create extends React.Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
-    if (source == "haveTest") {
-      this.setState({ radioHelperTextHaveTest: "", radioErrorHaveTest: false });
+    if (source == "haveQuickTest") {
+      this.setState({ radioHelperTextHaveQuickTest: "", radioErrorHaveQuickTest: false });
       if (event.target.defaultValue == "false") {
         this.setState({
-          haveTest: false,
+          haveQuickTest: false,
         });
-        this.resetHaveQuickTest();
-        this.resetHavePCR();
-      } else {
-        this.setState({
-          haveTest: true,
-        });
-      }
-      return;
-    }
-    if (source == "haveQuickTest") {
-      if (!event.target.checked) {
         this.resetHaveQuickTest();
       } else {
         this.setState({
-          haveQuickTest: event.target.checked,
+          haveQuickTest: true,
         });
       }
       return;
     }
     if (source == "havePCR") {
-      if (!event.target.checked) {
+      this.setState({ radioHelperTextHavePCR: "", radioErrorHavePCR: false });
+      if (event.target.defaultValue == "false") {
+        this.setState({
+          havePCR: false,
+        });
         this.resetHavePCR();
       } else {
         this.setState({
-          havePCR: event.target.checked,
+          havePCR: true,
         });
       }
       return;
@@ -200,9 +193,9 @@ class Create extends React.Component {
         obj.contactPersonRelation = this.state.contactPersonRelation;
         obj.systolicBloodPressure = this.state.systolicBloodPressure;
         obj.diastolicBloodPressure = this.state.diastolicBloodPressure;
+        obj.pulseRate = this.state.pulseRate;
         obj.pcrTestDate = this.state.pcrTestDate;
         obj.quickTestDate = this.state.quickTestDate;
-        obj.haveTest = this.state.haveTest;
         obj.haveQuickTest = this.state.haveQuickTest;
         obj.havePCR = this.state.havePCR;
         obj.pcrResults = this.state.pcrResults;
@@ -236,15 +229,11 @@ class Create extends React.Component {
         }
         addNew(obj).then((response) => {
           if (response.data != null && response.status == 200) {
-            this.resetState();
-            this.setState(
-              {
-                loading: false,
-                openSaveDialog: true,
-              },
-              this.updatePageData()
-            );
-            toast.success(t("Cảm ơn bạn đã tham gia khai báo thông tin y tế."));
+            // this.resetState();
+            this.setState({ loading: false, openSaveDialog: true, }, () => {
+              // this.updatePageData()
+            });
+            toast.success("Cảm ơn bạn đã tham gia khai báo thông tin y tế");
           }
         });
       });
@@ -259,7 +248,6 @@ class Create extends React.Component {
       listSevereSymptom: [],
       breathingRate: "",
       spo2: "",
-      haveTest: null,
       haveQuickTest: false,
       quickTestResults: null,
       havePCR: false,
@@ -274,6 +262,7 @@ class Create extends React.Component {
       examinationTime: null,
       systolicBloodPressure: null,
       diastolicBloodPressure: null,
+      pulseRate: null,
       quickTestDate: null,
       pcrTestDate: null,
       haveSymptom: null,
@@ -307,18 +296,18 @@ class Create extends React.Component {
       //   r = false;
       // }
     }
-    if (this.state.haveTest === null || this.state.haveTest === undefined) {
+    if (this.state.haveQuickTest === null || this.state.haveQuickTest === undefined) {
       this.setState({
-        radioHelperTextHaveTest: "Đây là trường bắt buộc",
-        radioErrorHaveTest: true,
+        radioHelperTextHaveQuickTest: "Đây là trường bắt buộc",
+        radioErrorHaveQuickTest: true,
       });
       r = false;
     }
-    if (
-      this.state.haveTest &&
-      !(this.state.haveQuickTest || this.state.havePCR)
-    ) {
-      toast.warning("Chưa chọn loại xét nghiệm COVID");
+    if (this.state.havePCR === null || this.state.havePCR === undefined) {
+      this.setState({
+        radioHelperTextHavePCR: "Đây là trường bắt buộc",
+        radioErrorHavePCR: true,
+      });
       r = false;
     }
     if (this.state.haveQuickTest && !this.state.quickTestResults) {
@@ -335,10 +324,14 @@ class Create extends React.Component {
       });
       r = false;
     }
-    // if (!this.state.breathingRate) {
-    //   this.setState({breathingRateHelperText:"Đây là trường bắt buộc",breathingRateError:true})
-    //   r = false;
-    // }
+    if (!this.state.breathingRate) {
+      this.setState({breathingRateHelperText:"Đây là trường bắt buộc", breathingRateError:true})
+      r = false;
+    }
+    if (!this.state.temperature) {
+      this.setState({temperatureHelperText:"Đây là trường bắt buộc", temperatureError:true})
+      r = false;
+    }
     let symptomLength =
       this.state.nomalSystoms.length + this.state.severeSymptoms.length;
     if (
@@ -348,16 +341,13 @@ class Create extends React.Component {
     ) {
       // this.setState({radioHelperTextHaveSymptom: "Đây là trường bắt buộc", radioErrorHaveSymptom: true});
       toast.warning(
-        "Chọn không triệu chứng hoặc chọn/nhập ít nhất 1 triệu chứng"
+        "Chọn \"không triệu chứng\" hoặc chọn/nhập ít nhất 1 triệu chứng"
       );
       r = false;
     }
-    // if (this.state.haveSymptom) {
-    //   if (symptomLength == 0 && !this.state.symptomText) {
-    //     r = false;
-
-    //   }
-    // }
+    if (!this.state.pulseRate) {
+      r = false;
+    }
     if (r) {
       return true;
     } else {
@@ -425,7 +415,7 @@ class Create extends React.Component {
   //Paging handle end
   updatePageData = (item) => {
     let obj = {
-      pageSize: 1000,
+      pageSize: 100,
       pageIndex: 0,
     };
     getSymptoms(obj).then(({ data }) => {
@@ -464,21 +454,7 @@ class Create extends React.Component {
               totalPages: data.totalPages,
             });
             if (data.content && data.content.length > 0) {
-              this.setState({
-                haveTest: data.content[0].haveTest,
-                haveQuickTest: data.content[0].haveQuickTest,
-                quickTestResults: data.content[0].quickTestResults,
-                havePCR: data.content[0].havePCR,
-                pcrResults: data.content[0].pcrResults,
-                quickTestDate: data.content[0].quickTestDate,
-                pcrTestDate: data.content[0].pcrTestDate,
-              });
-              if (data.content[0].haveTest) {
-                this.setState({
-                  radioHelperTextHaveTest: "",
-                  radioErrorHaveTest: false,
-                });
-              }
+              this.updateLastData(data.content[0]);
             }
           });
         }
@@ -495,25 +471,66 @@ class Create extends React.Component {
           totalPages: data.totalPages,
         });
         if (data.content && data.content.length > 0) {
-          this.setState({
-            haveTest: data.content[0].haveTest,
-            haveQuickTest: data.content[0].haveQuickTest,
-            quickTestResults: data.content[0].quickTestResults,
-            havePCR: data.content[0].havePCR,
-            pcrResults: data.content[0].pcrResults,
-            quickTestDate: data.content[0].quickTestDate,
-            pcrTestDate: data.content[0].pcrTestDate,
-          });
-          if (data.content[0].haveTest) {
-            this.setState({
-              radioHelperTextHaveTest: "",
-              radioErrorHaveTest: false,
-            });
-          }
+          this.updateLastData(data.content[0])
         }
       });
     }
   };
+
+  updateLastData = (item) => {
+    let iscurrentDate = moment(item?.declarationTime).isSame(moment(), "day");
+    if(iscurrentDate) {
+      this.setState({errorMemberMessage : "Thành viên này đã khai báo y tế ngày hôm nay", errorMember: true})
+    }
+    this.setState({
+      haveQuickTest: item.haveQuickTest,
+      quickTestResults: item.quickTestResults,
+      havePCR: item.havePCR,
+      pcrResults: item.pcrResults,
+      quickTestDate: item.quickTestDate,
+      pcrTestDate: item.pcrTestDate,
+      temperature: item.temperature,
+      breathingRate: item.breathingRate,
+      spo2: item.spo2,
+      diastolicBloodPressure: item.diastolicBloodPressure,
+      systolicBloodPressure: item.systolicBloodPressure,
+      pulseRate: item.pulseRate,
+    });
+    if (item.haveQuickTest) {
+      this.setState({
+        radioHelperTextHaveQuickTest: "",
+        radioErrorHaveQuickTest: false,
+      });
+    }
+    if (item.havePCR) {
+      this.setState({
+        radioHelperTextHavePCR: "",
+        radioErrorHavePCR: false,
+      });
+    }
+  }
+
+  resetLastData = () => {
+    this.setState({
+      errorMemberMessage : "",
+      haveQuickTest: null,
+      quickTestResults: null,
+      havePCR: null,
+      pcrResults: null,
+      quickTestDate: null,
+      pcrTestDate: null,
+      temperature: null,
+      breathingRate: null,
+      spo2: null,
+      diastolicBloodPressure: null,
+      systolicBloodPressure: null,
+      radioHelperTextHaveQuickTest: "",
+      radioErrorHaveQuickTest: false,
+      radioHelperTextHavePCR: "",
+      radioErrorHavePCR: false,
+      pulseRate: null,
+    });
+  }
 
   handleClose = () => {
     this.setState(
@@ -541,7 +558,7 @@ class Create extends React.Component {
     } else if (bmi >= 35) {
       bmiText = "Béo phì nguy hiểm";
     }
-    this.setState({ bmi: bmi, bmiText: bmiText });
+    this.setState({ bmi: bmi + " - " + bmiText, bmiText: bmiText });
   };
 
   selectListBackgroundDisease = (values) => {
@@ -572,8 +589,8 @@ class Create extends React.Component {
   {
     let { family } = this.state;
     let familyMember = family && family.familyMembers ? family.familyMembers.find( element => element.id == familyMemberId ) : null;
-    if ( familyMember && familyMember.id )
-    {
+    if ( familyMember && familyMember.id ) {
+      this.resetLastData();
       this.setState( { familyMemberId: familyMember.id, familyMember: familyMember }, () =>
       {
         this.updatePageData();
@@ -635,13 +652,13 @@ class Create extends React.Component {
       isUser,
       systolicBloodPressure,
       diastolicBloodPressure,
+      pulseRate,
       bmi,
       bmiText,
       openSaveDialog,
       quickTestDate,
       pcrTestDate,
       openFamilyPopup,
-      haveTest,
       haveQuickTest,
       quickTestResults,
       havePCR,
@@ -659,7 +676,7 @@ class Create extends React.Component {
           <DialogContent style={{ backgroundColor: "#fff" }}>
             <Grid container spacing={1}>
               <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Button
+                {/* <Button
                   startIcon={<Icon>home</Icon>}
                   className="mr-12 btn btn-secondary d-inline-flex"
                   variant="contained"
@@ -670,7 +687,7 @@ class Create extends React.Component {
                   }}
                 >
                   Trang chủ
-                </Button>
+                </Button> */}
                 {!isUser && (
                   <>
                     <Button
@@ -700,28 +717,14 @@ class Create extends React.Component {
                     />
                   </>
                 )}
+
+                <div className="pt-16">
+                  (<span style={{ color: "red" }}> * </span>){" "}
+                  <i>Trường bắt buộc.</i>
+                </div>
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
-                <div className="head-line">Khai báo y tế cho thành viên</div>
-                <div style={{ display: 'flex'}} className="mt-8">
-                  <div>Ghi chú:</div>
-                  <div className="pl-16">
-                    (<span style={{ color: "red" }}> * </span>){" "}
-                    <i>Trường bắt buộc.</i>
-                  </div>
-                  <div className="pl-16" style={{ display: "inline-block" }}>
-                    ({" "}
-                    <div
-                      style={{
-                        display: "inline-block",
-                        width: "12px",
-                        height: "12px",
-                        backgroundColor: "#eee",
-                      }}
-                    ></div>{" "}
-                    ) <i>Trường chỉ xem.</i>
-                  </div>
-                </div>
+                <div className="head-line">Khai báo y tế</div>
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Grid className="" container spacing={2} style={{ paddingTop: "12px" }}>
@@ -751,7 +754,9 @@ class Create extends React.Component {
                     </Grid>
                   )}
                   <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
-                    <FormControl className="nice-input" fullWidth={ true } variant="outlined" size="small">
+                    <FormControl 
+                    // error={this.state.errorMember}
+                    className="nice-input" fullWidth={ true } variant="outlined" size="small">
                       <InputLabel htmlFor="familyMembers-simple">
                         {
                           <span className="">
@@ -778,9 +783,10 @@ class Create extends React.Component {
                       >
                         { family?.familyMembers && this.renderSelectOptions() }
                       </Select>
+                      <FormHelperText style={{color: "#3366ff"}}>{this.state.errorMemberMessage}</FormHelperText>
                     </FormControl>
                   </Grid>
-                  <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 6 }>
+                  {/* <Grid item lg={ 3 } md={ 3 } sm={ 6 } xs={ 6 }>
                     <TextValidator
                       className="nice-input w-100"
                       label="Tuổi"
@@ -817,7 +823,7 @@ class Create extends React.Component {
                         variant="outlined"
                         size="small"
                       />
-                  </Grid>
+                  </Grid> */}
                   <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
@@ -854,19 +860,19 @@ class Create extends React.Component {
                       }}
                     />
                   </Grid>
-                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
+                  <Grid item lg={ 3 } md={ 3 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
                       label="Chỉ số BMI"
                       disabled
-                      type="number"
+                      type="text"
                       name="bmi"
                       value={ bmi ? bmi : "" }
                       variant="outlined"
                       size="small"
                     />
                   </Grid>
-                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
+                  {/* <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
                     <TextValidator
                       className="nice-input w-100"
                       label="Đánh giá chỉ số BMI"
@@ -877,8 +883,8 @@ class Create extends React.Component {
                       variant="outlined"
                       size="small"
                     />
-                  </Grid>
-                  <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
+                  </Grid> */}
+                  {/* <Grid item lg={ 3 } md={ 6 } sm={ 12 } xs={ 12 }>
                     <FormControl error={ this.state.radioError }
                       disabled={ familyMember ? false : true }
                       style={{
@@ -939,307 +945,272 @@ class Create extends React.Component {
                         />
                       ) }
                     />
-                  </Grid>
-                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                  </Grid> */}
+                  <Grid item lg={12} md={12} sm={12} xs={12} >
                     <div className="head-line">Xét nghiệm COVID</div>
-                    <Grid container spacing={2} style={{ padding: "12px" }}>
-                    <Grid item lg={ 4 } md={ 4 } sm={ 12 } xs={ 12 }>
-                        <FormControl error={ this.state.radioErrorHaveTest }
-                          style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}>
-                          <span><span style={ { color: "red" } }> * </span>Có xét nghiệm:</span>
-                          <RadioGroup row
-                            aria-label="position" name="position" defaultValue="top"
-                            onChange={ ( value ) => { this.handleChange( value, "haveTest" ) } }
-                          >
-                            <FormControlLabel
-                              value={ true }
-                              control={ <Radio checked={ haveTest === true ? true : false } /> }
-                              label="Có"
-                              labelPlacement="end"
-                            />
-                            <FormControlLabel
-                              value={ false }
-                              control={ <Radio checked={ haveTest === false ? true : false } /> }
-                              label="Không"
-                              labelPlacement="end"
-                            />
-                          </RadioGroup>
-                          <FormHelperText>{ this.state.radioHelperTextHaveTest }</FormHelperText>
-                        </FormControl>
-                      </Grid>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
-                        <div style={{ display: haveTest ? "block" : "none" }}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={haveQuickTest ? haveQuickTest : false}
-                                onChange={(value) => {
-                                  this.handleChange(value, "haveQuickTest");
-                                }}
-                                name="haveQuickTest"
+                    <div style={{ padding: "12px" }}>
+                      <Grid container spacing={2}>
+                        <Grid item lg={4} md={4} sm={12} xs={12}>
+                          <FormControl error={ this.state.radioErrorHaveQuickTest }
+                              style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}>
+                            <span><span style={ { color: "red" } }> * </span>Xét nghiệm nhanh:</span>
+                            <RadioGroup row
+                              aria-label="position" name="position" defaultValue="top"
+                              onChange={ ( value ) => { this.handleChange( value, "haveQuickTest" ) } }
+                            >
+                              <FormControlLabel
+                                value={ true }
+                                control={ <Radio checked={ haveQuickTest === true ? true : false } /> }
+                                label="Có"
+                                labelPlacement="end"
                               />
-                            }
-                            label={
-                              <span>
-                                <span style={{ color: "red" }}> * </span>Có xét
-                                nghiệm nhanh
-                              </span>
-                            }
-                          />
-                          <div
-                            style={{
-                              display: haveQuickTest ? "block" : "none",
-                            }}
-                          >
-                            <Grid container spacing={2}>
-                              <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                  <KeyboardDatePicker
-                                    disableFuture
-                                    className="nice-input"
-                                    fullWidth
-                                    id="quickTestDate"
-                                    name="quickTestDate"
-                                    autoOk
-                                    variant="inline"
-                                    inputVariant="outlined"
-                                    label={
-                                      <span>
-                                        <span style={{ color: "red" }}>
-                                          {" "}
-                                          *{" "}
-                                        </span>
-                                        Ngày xét nghiệm
-                                      </span>
-                                    }
-                                    format="dd/MM/yyyy"
-                                    size="small"
-                                    InputAdornmentProps={{ position: "end" }}
-                                    onChange={(date) =>
-                                      this.setState({ quickTestDate: date })
-                                    }
-                                    value={quickTestDate ? quickTestDate : null}
-                                    required={
-                                      haveQuickTest ? haveQuickTest : false
-                                    }
-                                  />
-                                </MuiPickersUtilsProvider>
-                              </Grid>
-                              <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <FormControl
-                                  className="nice-input"
-                                  fullWidth={true}
-                                  error={this.state.quickTestResultsError}
-                                  variant="outlined"
-                                  size="small"
-                                >
-                                  <InputLabel htmlFor="quickTestResults-simple">
-                                    {
-                                      <span>
-                                        <span style={{ color: "red" }}>
-                                          {" "}
-                                          *{" "}
-                                        </span>
-                                        {t("Kết quả xét nghiệm nhanh")}
-                                      </span>
-                                    }
-                                  </InputLabel>
-                                  <Select
-                                    label={
-                                      <span>
-                                        <span style={{ color: "red" }}>
-                                          {" "}
-                                          *{" "}
-                                        </span>
-                                        {t("Kết quả xét nghiệm nhanh")}
-                                      </span>
-                                    }
-                                    value={
-                                      quickTestResults ? quickTestResults : ""
-                                    }
-                                    onChange={(event) => {
-                                      this.setState({
-                                        quickTestResults: event.target.value,
-                                        quickTestResultsError: false,
-                                        quickTestResultsHelperText: "",
-                                      });
-                                    }}
-                                    inputProps={{
-                                      name: "quickTestResults",
-                                      id: "quickTestResults-simple",
-                                    }}
-                                  >
-                                    {ConstantList.RESULT_TEST &&
-                                      ConstantList.RESULT_TEST.map((item) => {
-                                        return (
-                                          <MenuItem
-                                            key={item.key}
-                                            value={item.key}
-                                          >
-                                            {item.value ? item.value : ""}
-                                          </MenuItem>
-                                        );
-                                      })}
-                                  </Select>
-                                  <FormHelperText>
-                                    {this.state.quickTestResultsHelperText}
-                                  </FormHelperText>
-                                </FormControl>
-                              </Grid>
-                            </Grid>
-                          </div>
-                        </div>
-                      </Grid>
-                      <Grid item lg={4} md={4} sm={12} xs={12}>
-                        <div style={{ display: haveTest ? "block" : "none" }}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={havePCR ? havePCR : false}
-                                onChange={(value) => {
-                                  this.handleChange(value, "havePCR");
-                                }}
-                                name="havePCR"
+                              <FormControlLabel
+                                value={ false }
+                                control={ <Radio checked={ haveQuickTest === false ? true : false } /> }
+                                label="Không"
+                                labelPlacement="end"
                               />
-                            }
-                            label={
-                              <span>
-                                <span style={{ color: "red" }}> * </span>Có xét
-                                nghiệm PCR
-                              </span>
-                            }
-                          />
-                          <div style={{ display: havePCR ? "block" : "none" }}>
-                            <Grid container spacing={2}>
-                              <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                  <KeyboardDatePicker
-                                    disableFuture
-                                    className="nice-input"
-                                    fullWidth
-                                    id="pcrTestDate"
-                                    name="pcrTestDate"
-                                    autoOk
-                                    variant="inline"
-                                    inputVariant="outlined"
-                                    label={
-                                      <span>
-                                        <span style={{ color: "red" }}>
-                                          {" "}
-                                          *{" "}
-                                        </span>
-                                        Ngày xét nghiệm
-                                      </span>
-                                    }
-                                    format="dd/MM/yyyy"
-                                    size="small"
-                                    InputAdornmentProps={{ position: "end" }}
-                                    onChange={(date) =>
-                                      this.setState({ pcrTestDate: date })
-                                    }
-                                    value={pcrTestDate ? pcrTestDate : null}
-                                    required={havePCR ? havePCR : false}
-                                  />
-                                </MuiPickersUtilsProvider>
-                              </Grid>
-                              <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <FormControl
-                                  className="nice-input"
-                                  error={this.state.pcrResultsError}
-                                  fullWidth={true}
-                                  variant="outlined"
-                                  size="small"
-                                >
-                                  <InputLabel htmlFor="pcrResults-simple">
-                                    {
-                                      <span>
-                                        <span style={{ color: "red" }}>
-                                          {" "}
-                                          *{" "}
-                                        </span>
-                                        {t("Kết quả xét nghiệm PCR")}
-                                      </span>
-                                    }
-                                  </InputLabel>
-                                  <Select
-                                    label={
-                                      <span>
-                                        <span style={{ color: "red" }}>
-                                          {" "}
-                                          *{" "}
-                                        </span>
-                                        {t("Kết quả xét nghiệm PCR")}
-                                      </span>
-                                    }
-                                    value={pcrResults ? pcrResults : ""}
-                                    onChange={(event) => {
-                                      this.setState({
-                                        pcrResults: event.target.value,
-                                        pcrResultsError: false,
-                                        pcrResultsHelperText: "",
-                                      });
-                                    }}
-                                    inputProps={{
-                                      name: "pcrResults",
-                                      id: "pcrResults-simple",
-                                    }}
-                                  >
-                                    {ConstantList.RESULT_TEST &&
-                                      ConstantList.RESULT_TEST.map((item) => {
-                                        return (
-                                          <MenuItem
-                                            key={item.key}
-                                            value={item.key}
-                                          >
-                                            {item.value ? item.value : ""}
-                                          </MenuItem>
-                                        );
-                                      })}
-                                  </Select>
-                                  <FormHelperText>
-                                    {this.state.pcrResultsHelperText}
-                                  </FormHelperText>
-                                </FormControl>
-                              </Grid>
-                            </Grid>
-                          </div>
-                        </div>
+                            </RadioGroup>
+                            <FormHelperText>{ this.state.radioHelperTextHaveQuickTest }</FormHelperText>
+                          </FormControl>
+                        </Grid>
+                        <Grid item lg={4} md={4} sm={12} xs={12} style={{ display: haveQuickTest ? "block" : "none" }}>
+                          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                              disableFuture
+                              className="nice-input"
+                              fullWidth
+                              id="quickTestDate"
+                              name="quickTestDate"
+                              autoOk
+                              variant="inline"
+                              inputVariant="outlined"
+                              label={
+                                <span>
+                                  <span style={{ color: "red" }}> * </span>
+                                  Ngày xét nghiệm
+                                </span>
+                              }
+                              format="dd/MM/yyyy"
+                              size="small"
+                              InputAdornmentProps={{ position: "end" }}
+                              onChange={(date) =>
+                                this.setState({ quickTestDate: date })
+                              }
+                              value={quickTestDate ? quickTestDate : null}
+                              required={
+                                haveQuickTest ? haveQuickTest : false
+                              }
+                            />
+                          </MuiPickersUtilsProvider>
+                        </Grid>
+                        <Grid item lg={4} md={4} sm={12} xs={12} style={{ display: haveQuickTest ? "block" : "none" }}>
+                          <FormControl
+                            className="nice-input"
+                            fullWidth={true}
+                            error={this.state.quickTestResultsError}
+                            variant="outlined"
+                            size="small"
+                          >
+                            <InputLabel htmlFor="quickTestResults-simple">
+                              {
+                                <span>
+                                  <span style={{ color: "red" }}> * </span>
+                                  Kết quả xét nghiệm nhanh
+                                </span>
+                              }
+                            </InputLabel>
+                            <Select
+                              label={
+                                <span>
+                                  <span style={{ color: "red" }}> * </span>
+                                  Kết quả xét nghiệm nhanh
+                                </span>
+                              }
+                              value={
+                                quickTestResults ? quickTestResults : ""
+                              }
+                              onChange={(event) => {
+                                this.setState({
+                                  quickTestResults: event.target.value,
+                                  quickTestResultsError: false,
+                                  quickTestResultsHelperText: "",
+                                });
+                              }}
+                              inputProps={{
+                                name: "quickTestResults",
+                                id: "quickTestResults-simple",
+                              }}
+                            >
+                              {ConstantList.RESULT_TEST &&
+                                ConstantList.RESULT_TEST.map((item) => {
+                                  return (
+                                    <MenuItem
+                                      key={item.key}
+                                      value={item.key}
+                                    >
+                                      {item.value ? item.value : ""}
+                                    </MenuItem>
+                                  );
+                                })}
+                            </Select>
+                            <FormHelperText>{this.state.quickTestResultsHelperText}</FormHelperText>
+                          </FormControl>
+                        </Grid>
                       </Grid>
-                    </Grid>
+                      <Grid container spacing={2}>
+                        <Grid item lg={4} md={4} sm={12} xs={12}>
+                          <FormControl error={ this.state.radioErrorHavePCR }
+                              style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}>
+                            <span><span style={ { color: "red" } }> * </span>Xét nghiệm PCR:</span>
+                            <RadioGroup row
+                              aria-label="position" name="position" defaultValue="top"
+                              onChange={ ( value ) => { this.handleChange( value, "havePCR" ) } }
+                            >
+                              <FormControlLabel
+                                value={ true }
+                                control={ <Radio checked={ havePCR === true ? true : false } /> }
+                                label="Có"
+                                labelPlacement="end"
+                              />
+                              <FormControlLabel
+                                value={ false }
+                                control={ <Radio checked={ havePCR === false ? true : false } /> }
+                                label="Không"
+                                labelPlacement="end"
+                              />
+                            </RadioGroup>
+                            <FormHelperText>{ this.state.radioHelperTextHavePCR }</FormHelperText>
+                          </FormControl>
+                        </Grid>
+                        <Grid item lg={4} md={4} sm={12} xs={12} style={{ display: havePCR ? "block" : "none" }}>
+                          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                              disableFuture
+                              className="nice-input"
+                              fullWidth
+                              id="pcrTestDate"
+                              name="pcrTestDate"
+                              autoOk
+                              variant="inline"
+                              inputVariant="outlined"
+                              label={
+                                <span>
+                                  <span style={{ color: "red" }}> * </span>
+                                  Ngày xét nghiệm
+                                </span>
+                              }
+                              format="dd/MM/yyyy"
+                              size="small"
+                              InputAdornmentProps={{ position: "end" }}
+                              onChange={(date) =>
+                                this.setState({ pcrTestDate: date })
+                              }
+                              value={pcrTestDate ? pcrTestDate : null}
+                              required={havePCR ? havePCR : false}
+                            />
+                          </MuiPickersUtilsProvider>
+                        </Grid>
+                        <Grid item lg={4} md={4} sm={12} xs={12} style={{ display: havePCR ? "block" : "none" }}>
+                          <FormControl
+                            className="nice-input"
+                            error={this.state.pcrResultsError}
+                            fullWidth={true}
+                            variant="outlined"
+                            size="small"
+                          >
+                            <InputLabel htmlFor="pcrResults-simple">
+                              {
+                                <span>
+                                  <span style={{ color: "red" }}> * </span>
+                                  Kết quả xét nghiệm PCR
+                                </span>
+                              }
+                            </InputLabel>
+                            <Select
+                              label={
+                                <span>
+                                  <span style={{ color: "red" }}> * </span>
+                                  Kết quả xét nghiệm PCR
+                                </span>
+                              }
+                              value={pcrResults ? pcrResults : ""}
+                              onChange={(event) => {
+                                this.setState({
+                                  pcrResults: event.target.value,
+                                  pcrResultsError: false,
+                                  pcrResultsHelperText: "",
+                                });
+                              }}
+                              inputProps={{
+                                name: "pcrResults",
+                                id: "pcrResults-simple",
+                              }}
+                            >
+                              {ConstantList.RESULT_TEST &&
+                                ConstantList.RESULT_TEST.map((item) => {
+                                  return (
+                                    <MenuItem
+                                      key={item.key}
+                                      value={item.key}
+                                    >
+                                      {item.value ? item.value : ""}
+                                    </MenuItem>
+                                  );
+                                })}
+                            </Select>
+                            <FormHelperText>
+                              {this.state.pcrResultsHelperText}
+                            </FormHelperText>
+                          </FormControl>
+                        </Grid>
+                      </Grid>
+                    </div>
                   </Grid>
 
                   <Grid item lg={12} md={12} sm={12} xs={12}>
                     <div className="head-line">Các chỉ số</div>
                     <Grid container spacing={2} style={{ padding: "12px" }}>
-                      <Grid item lg={2} md={4} sm={12} xs={12}>
+                      <Grid item lg={4} md={4} sm={12} xs={12}>
                         <FormControl
+                          error={this.state.temperatureError}
                           className="nice-input"
                           fullWidth={true}
                           variant="outlined"
                           size="small"
                         >
                           <InputLabel htmlFor="temperature-simple">
-                            {<span>{t("Nhiệt độ (°C)")}</span>}
+                            <span>
+                              <span style={{ color: "red" }}> * </span>
+                              Nhiệt độ (°C)
+                            </span>
                           </InputLabel>
                           <Select
-                            label={<span>{t("Nhiệt độ (°C)")}</span>}
+                            label={<span>
+                              <span style={{ color: "red" }}> * </span>
+                              Nhiệt độ (°C)
+                            </span>}
                             value={temperature ? temperature : ""}
                             onChange={(event) => {
                               this.setState({
                                 temperature: event.target.value,
+                                temperatureError: false, temperatureHelperText: ""
                               });
                             }}
                             inputProps={{
                               name: "temperature",
                               id: "temperature-simple",
                             }}
-                            validators={["required"]}
-                            errorMessages={[t("general.required")]}
                           >
                             {appConfig.TEMPERATURE_CONST.map((item) => {
                               return (
@@ -1249,26 +1220,33 @@ class Create extends React.Component {
                               );
                             })}
                           </Select>
+                          <FormHelperText>{this.state.temperatureHelperText}</FormHelperText>
                         </FormControl>
                       </Grid>
-                      <Grid item lg={2} md={4} sm={12} xs={12}>
+                      <Grid item lg={4} md={4} sm={12} xs={12}>
                         <FormControl
                           className="nice-input"
-                          // error={this.state.breathingRateError}
+                          error={this.state.breathingRateError}
                           fullWidth={true}
                           variant="outlined"
                           size="small"
                         >
                           <InputLabel htmlFor="breathingRate-simple">
-                            {<span>{t("Nhịp thở (lần/phút)")}</span>}
+                            <span>
+                              <span style={{ color: "red" }}> * </span>
+                              Nhịp thở (lần/phút)
+                            </span>
                           </InputLabel>
                           <Select
-                            label={<span>{t("Nhịp thở (lần/phút)")}</span>}
+                            label={<span>
+                              <span style={{ color: "red" }}> * </span>
+                              Nhịp thở (lần/phút)
+                            </span>}
                             value={breathingRate ? breathingRate : ""}
                             onChange={(event) => {
                               this.setState({
                                 breathingRate: event.target.value,
-                                // breathingRateError: false, breathingRateHelperText: ""
+                                breathingRateError: false, breathingRateHelperText: ""
                               });
                             }}
                             inputProps={{
@@ -1284,10 +1262,32 @@ class Create extends React.Component {
                               );
                             })}
                           </Select>
-                          {/* <FormHelperText>{this.state.breathingRateHelperText}</FormHelperText>  */}
+                          <FormHelperText>{this.state.breathingRateHelperText}</FormHelperText> 
                         </FormControl>
                       </Grid>
-                      <Grid item lg={2} md={4} sm={12} xs={12}>
+                      <Grid item lg={4} md={4} sm={12} xs={12}>
+                        <TextValidator
+                          className="nice-input w-100"
+                          label={
+                            <span className="font">
+                              <span style={{ color: "red" }}> * </span>
+                              Mạch
+                            </span>
+                          }
+                          onChange={this.handleChange}
+                          type="number"
+                          name="pulseRate"
+                          value={ pulseRate ? pulseRate : "" }
+                          validators={["required", "minNumber:0" ]}
+                          errorMessages={["Trường này là bắt buộc", "Phải là số dương"]}
+                          variant="outlined"
+                          size="small"
+                          InputProps={{
+                            endAdornment: <InputAdornment position="end">(lần/phút)</InputAdornment>
+                          }}
+                        />
+                      </Grid>
+                      <Grid item lg={4} md={4} sm={12} xs={12}>
                         <FormControl
                           className="nice-input"
                           fullWidth={true}
@@ -1295,10 +1295,10 @@ class Create extends React.Component {
                           size="small"
                         >
                           <InputLabel htmlFor="spo2-simple">
-                            {<span>{t("Chỉ số SpO2")}</span>}
+                            {<span>Chỉ số SpO2</span>}
                           </InputLabel>
                           <Select
-                            label={<span>{t("Chỉ số SpO2")}</span>}
+                            label={<span>Chỉ số SpO2</span>}
                             value={spo2 ? spo2 : ""}
                             onChange={(event) => {
                               this.setState({ spo2: event.target.value });
@@ -1307,8 +1307,6 @@ class Create extends React.Component {
                               name: "spo2",
                               id: "spo2-simple",
                             }}
-                            // validators={["required"]}
-                            // errorMessages={[t("general.required")]}
                           >
                             {appConfig.SPO2_CONST.map((item) => {
                               return (
@@ -1320,11 +1318,11 @@ class Create extends React.Component {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item lg={3} md={6} sm={12} xs={12}>
+                      <Grid item lg={4} md={4} sm={12} xs={12}>
                         <TextValidator
                           className="nice-input w-100"
                           label={
-                            <span className="font">{t("Huyết áp tối đa")}</span>
+                            <span className="font">Huyết áp tối đa</span>
                           }
                           onChange={this.handleChange}
                           type="number"
@@ -1341,12 +1339,12 @@ class Create extends React.Component {
                           }}
                         />
                       </Grid>
-                      <Grid item lg={3} md={6} sm={12} xs={12}>
+                      <Grid item lg={4} md={4} sm={12} xs={12}>
                         <TextValidator
                           className="nice-input w-100"
                           label={
                             <span className="font">
-                              {t("Huyết áp tối thiểu")}
+                              Huyết áp tối thiểu"
                             </span>
                           }
                           onChange={this.handleChange}
@@ -1373,7 +1371,7 @@ class Create extends React.Component {
                     </Grid>
                   </Grid>
                   <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <div className="head-line">Triệu chứng</div>
+                    <div className="head-line"><span style={{ color: "red" }}> * </span>Triệu chứng</div>
                     <Grid container style={{ padding: "12px" }}>
                       <Grid item lg={3} md={3} sm={12} xs={12}>
                         <FormControl
@@ -1492,7 +1490,7 @@ class Create extends React.Component {
                             className="nice-input w-100"
                             label={
                               <span className="font">
-                                {t("Triệu chứng khác")}
+                                Triệu chứng khác
                               </span>
                             }
                             multiLine={true}
@@ -1522,7 +1520,7 @@ class Create extends React.Component {
                             );
                           }}
                         >
-                          {t("Trở về trang chủ")}
+                          Trở về trang chủ
                         </Button>
                       ) : (
                         <Button
@@ -1576,7 +1574,7 @@ class Create extends React.Component {
                         data={this.state.itemList ? this.state.itemList : []}
                         columns={[
                           {
-                            title: t("STT"),
+                            title: "STT",
                             field: "custom",
                             align: "left",
                             width: "150",
@@ -1596,46 +1594,8 @@ class Create extends React.Component {
                               rowData.tableData.id +
                               1,
                           },
-                          // {
-                          //   title: t('Họ tên'), field: "temperature", align: "left", width: "150",
-                          //   headerStyle: {
-                          //     minWidth: "150px",
-                          //     paddingLeft: "10px",
-                          //     paddingRight: "0px",
-                          //   },
-                          //   cellStyle: {
-                          //     minWidth: "150px",
-                          //     paddingLeft: "10px",
-                          //     paddingRight: "0px",
-                          //     textAlign: "left",
-                          //   },
-                          //   render: (rowData) => {
-                          //     if (rowData.familyMember && rowData.familyMember.member && rowData.familyMember.member.displayName) {
-                          //       return rowData.familyMember.member.displayName;
-                          //     }
-                          //   }
-                          // },
-                          // {
-                          //   title: t('Tuổi'), field: "temperature", align: "left", width: "150",
-                          //   headerStyle: {
-                          //     minWidth: "150px",
-                          //     paddingLeft: "10px",
-                          //     paddingRight: "0px",
-                          //   },
-                          //   cellStyle: {
-                          //     minWidth: "150px",
-                          //     paddingLeft: "10px",
-                          //     paddingRight: "0px",
-                          //     textAlign: "left",
-                          //   },
-                          //   render: (rowData) => {
-                          //     if (rowData.familyMember && rowData.familyMember.member && rowData.familyMember.member.age) {
-                          //       return rowData.familyMember.member.age;
-                          //     }
-                          //   }
-                          // },
                           {
-                            title: t("Ngày/giờ"),
+                            title: "Ngày/giờ",
                             field: "declarationTime",
                             align: "left",
                             width: "150",
@@ -1657,7 +1617,7 @@ class Create extends React.Component {
                             },
                           },
                           {
-                            title: t("Nhiệt độ (°C)"),
+                            title: "Nhiệt độ (°C)",
                             field: "temperature",
                             align: "left",
                             width: "150",
@@ -1684,7 +1644,7 @@ class Create extends React.Component {
                             },
                           },
                           {
-                            title: t("Nhịp thở(lần/phút)"),
+                            title: "Nhịp thở(lần/phút)",
                             field: "breathingRate",
                             align: "left",
                             width: "150",
@@ -1711,7 +1671,29 @@ class Create extends React.Component {
                             },
                           },
                           {
-                            title: t("Chỉ số SpO2"),
+                            title: "Mạch (lần/phút)",
+                            field: "pulseRate",
+                            align: "left",
+                            width: "150",
+                            headerStyle: {
+                              minWidth: "150px",
+                              paddingLeft: "10px",
+                              paddingRight: "0px",
+                            },
+                            cellStyle: {
+                              minWidth: "150px",
+                              paddingLeft: "10px",
+                              paddingRight: "0px",
+                              textAlign: "left",
+                            },
+                            render: (rowData) => {
+                              if (rowData.pulseRate) {
+                                return rowData.pulseRate;
+                              }
+                            },
+                          },
+                          {
+                            title: "Chỉ số SpO2",
                             field: "spo2",
                             align: "left",
                             width: "150",
@@ -1736,7 +1718,7 @@ class Create extends React.Component {
                             },
                           },
                           {
-                            title: t("Triệu chứng"),
+                            title: "Triệu chứng",
                             field: "custom",
                             align: "left",
                             width: "150",
@@ -1752,13 +1734,6 @@ class Create extends React.Component {
                               textAlign: "left",
                             },
                             render: (rowData) => {
-                              // let str = "";
-                              // rowData.nomalSystoms &&
-                              // rowData.nomalSystoms.forEach((e) => {
-                              //     str += e.symptom.name + ", "
-                              // });
-                              // str = str.replace(/,\s*$/, "");
-                              // return str;
                               if (
                                 (rowData.nomalSystoms &&
                                   rowData.nomalSystoms.length > 0) ||

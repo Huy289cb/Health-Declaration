@@ -48,6 +48,7 @@ public class PersonalHealthRecordDto extends BaseObjectDto {
 	private HealthOrganizationDto healthOrganization;//Đơn vị y tế cấp cứu
 	private Boolean haveSymptom; //Có triệu chứng hay không
 	private String symptomText; //Triệu chứng cho người dùng nhập bằng tay
+	private Integer pulseRate; // mạch (lần/phút)
 
 	public PersonalHealthRecordDto(PersonalHealthRecord entity, Boolean collapse) {
 		super();
@@ -68,7 +69,7 @@ public class PersonalHealthRecordDto extends BaseObjectDto {
 			this.resolveStatus = entity.getResolveStatus();
 			this.systolicBloodPressure = entity.getSystolicBloodPressure();
 			this.diastolicBloodPressure = entity.getDiastolicBloodPressure();
-
+			this.pulseRate = entity.getPulseRate();
 			this.haveTest = entity.getHaveTest();
 			this.haveQuickTest = entity.getHaveQuickTest();
 			this.quickTestResults = entity.getQuickTestResults();
@@ -371,5 +372,13 @@ public class PersonalHealthRecordDto extends BaseObjectDto {
 
 	public void setSymptomText(String symptomText) {
 		this.symptomText = symptomText;
+	}
+
+	public Integer getPulseRate() {
+		return pulseRate;
+	}
+
+	public void setPulseRate(Integer pulseRate) {
+		this.pulseRate = pulseRate;
 	}
 }

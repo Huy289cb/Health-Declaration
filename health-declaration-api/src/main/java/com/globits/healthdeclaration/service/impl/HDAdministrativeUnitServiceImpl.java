@@ -231,6 +231,15 @@ public class HDAdministrativeUnitServiceImpl extends GenericServiceImpl<HDAdmini
 				HDAdministrativeUnit.setCreatedBy(currentUserName);
 			}
 
+			//validate
+			if (dto.getName() == null || StringUtils.isEmpty(dto.getName())) {
+				return null;
+			}
+
+			if (dto.getCode() == null || StringUtils.isEmpty(dto.getCode())) {
+				return null;
+			}
+
 			if (dto.getName() != null)
 				HDAdministrativeUnit.setName(dto.getName());
 

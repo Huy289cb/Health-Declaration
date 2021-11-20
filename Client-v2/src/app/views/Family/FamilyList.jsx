@@ -335,7 +335,7 @@ class FamilyList extends Component {
               {shouldOpenConfirmationDeleteListDialog && (
                 <ConfirmationDialog
                   open={shouldOpenConfirmationDeleteListDialog}
-                  onConfirmDialogClose={this.handleClose}
+                  onClose={this.handleClose}
                   onYesClick={this.handleDeleteListItem}
                   title={t("confirm_dialog.delete_list.title")}
                   text={t('confirm_dialog.delete_list.text')}
@@ -447,7 +447,7 @@ class FamilyList extends Component {
             {shouldOpenConfirmationDialog && (
               <ConfirmationDialog
                 open={shouldOpenConfirmationDialog}
-                onConfirmDialogClose={this.handleClose}
+                onClose={this.handleClose}
                 onYesClick={this.handleConfirmDeleteItem}
                 title={t("confirm_dialog.delete.title")}
                 text={t('confirm_dialog.delete.text')}

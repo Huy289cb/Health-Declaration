@@ -270,7 +270,7 @@ class HealthOrganization extends Component {
               {shouldOpenConfirmationDeleteListDialog && (
                 <ConfirmationDialog
                   open={shouldOpenConfirmationDeleteListDialog}
-                  onConfirmDialogClose={this.handleClose}
+                  onClose={this.handleClose}
                   onYesClick={this.handleDeleteListItem}
                   title={t("confirm_dialog.delete_list.title")}
                   text={t('confirm_dialog.delete_list.text')}

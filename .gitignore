@@ -44,3 +44,4 @@ sketch
 .settings
 .idea
 .vscode
+build/

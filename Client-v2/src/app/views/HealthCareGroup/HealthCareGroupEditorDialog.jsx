@@ -28,6 +28,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import clsx from 'clsx';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import SaveIcon from '@material-ui/icons/Save';
+import BlockIcon from '@material-ui/icons/Block';
 toast.configure({
   autoClose: 1000,
   draggable: false,
@@ -65,6 +67,7 @@ class HealthCareGroupEditorDialog extends Component {
     listHealthCareGroupAdministrativeUnits: [],
     shouldOpenSelectAdministrativeUnitPopup: false,
     parentId: "",
+    personInCharge: ""
   };
   handleChange = (event, source) => {
     if (source === "switch") {
@@ -146,10 +149,10 @@ class HealthCareGroupEditorDialog extends Component {
     console.log(this.state);
     let { t } = this.props;
     if (!(this.state.listHealthCareGroupAdministrativeUnits.length > 0)) {
-      toast.warning('Đơn vị hành chính không được để trống');
+      toast.warning('Đơn vị hành chính quản lý không được để trống');
     }
     else if (this.validateData()) {
-      toast.warning('trường dữ liệu không thể để trống');
+      toast.warning('Trường dữ liệu không thể để trống');
     } else if(phoneNumber1 != null && phoneNumber1.length > 0 && phoneNumber2 != null && phoneNumber2.length > 0 && this.validateSDT(phoneNumber1) == false && this.validateSDT(phoneNumber2) == false){
       toast.warning("Số điện thoại không hợp lệ");
     } else {
@@ -214,13 +217,15 @@ class HealthCareGroupEditorDialog extends Component {
       address,
       phoneNumber1,
       phoneNumber2,
-      zalo, faceBook
+      zalo, 
+      // faceBook
+      personInCharge,
     } = this.state;
     var stop = false;
 
     let columns = [
       {
-        title: t("general.action"),
+        title: "Thao tác",
         field: "custom",
         align: "left",
         width: "250",
@@ -246,7 +251,7 @@ class HealthCareGroupEditorDialog extends Component {
         />
       },
       {
-        title: t("Mã đơn vị"), field: "", width: "150",
+        title: "Mã đơn vị", field: "", width: "150",
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -261,7 +266,7 @@ class HealthCareGroupEditorDialog extends Component {
         render: rowData => <span>{rowData.administrativeUnit ? rowData.administrativeUnit.code : ''}</span>
       },
       {
-        title: t('Tên đơn vị'), field: "", align: "left", width: "150",
+        title: 'Tên đơn vị', field: "", align: "left", width: "150",
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -295,7 +300,7 @@ class HealthCareGroupEditorDialog extends Component {
                   className="w-100"
                   label={<span className="font">
                     <span style={{ color: "red" }}> *</span>
-                    {t('healthCareGroup.code')}
+                    Mã tổ y tế
                   </span>
                   }
                   onChange={this.handleChange}
@@ -313,7 +318,7 @@ class HealthCareGroupEditorDialog extends Component {
                   className="w-100"
                   label={<span className="font">
                     <span style={{ color: "red" }}> *</span>
-                    {t('healthCareGroup.name')}
+                    Tên tổ y tế
                   </span>}
                   onChange={this.handleChange}
                   type="text"
@@ -329,15 +334,15 @@ class HealthCareGroupEditorDialog extends Component {
                 <TextValidator
                   className="w-100"
                   label={<span className="font">
-                    <span style={{ color: "red" }}></span>
-                    {t('healthCareGroup.phone')}
+                    <span style={{ color: "red" }}> * </span>
+                    Số điện thoại cấp cứu
                   </span>}
-                  onChange={(event) => this.handleChange(event)}
+                  onChange={this.handleChange}
                   type="tel"
                   name="phoneNumber1"
                   value={phoneNumber1}
-                  //validators={["required"]}
-                  // errorMessages={[t("general.errorMessages_required")]}
+                  validators={["required", "matchRegexp:^0[0-9]{9,10}$"]}
+                  errorMessages={[t("general.errorMessages_required"), "Số điện thoại không hợp lệ"]}
                   variant="outlined"
                   size="small"
                 />
@@ -347,41 +352,23 @@ class HealthCareGroupEditorDialog extends Component {
                 <TextValidator
                   className="w-100"
                   label={<span className="font">
-                    <span style={{ color: "red" }}></span>
-                    {t('healthCareGroup.otherPhone')}
+                    <span style={{ color: "red" }}>  </span>
+                    Số Zalo
                   </span>}
                   onChange={this.handleChange}
-                  type="text"
-                  name="phoneNumber2"
-                  value={phoneNumber2}
-                  //validators={["required"]}
-                  // errorMessages={[t("general.errorMessages_required")]}
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item lg={6} md={6} sm={12} xs={12}>
-                <TextValidator
-                  className="w-100"
-                  label={<span className="font">
-                    {/* <span style={{ color: "red" }}> *</span> */}
-                    {t('healthCareGroup.zalo')}
-                  </span>}
-                  onChange={this.handleChange}
-                  type="text"
+                  type="tel"
                   name="zalo"
                   value={zalo}
-                  // validators={["required"]}
-                  // errorMessages={[t("general.errorMessages_required")]}
+                  validators={["matchRegexp:^0[0-9]{9,10}$"]}
+                  errorMessages={["Số điện thoại không hợp lệ"]}
                   variant="outlined"
                   size="small"
                 />
               </Grid>
-              <Grid item lg={6} md={6} sm={12} xs={12}>
+              {/* <Grid item lg={6} md={6} sm={12} xs={12}>
                 <TextValidator
                   className="w-100"
                   label={<span className="font">
-                    {/* <span style={{ color: "red" }}> *</span> */}
                     {t('healthCareGroup.faceBook')}
                   </span>}
                   onChange={this.handleChange}
@@ -393,20 +380,54 @@ class HealthCareGroupEditorDialog extends Component {
                   variant="outlined"
                   size="small"
                 />
+              </Grid> */}
+              <Grid item lg={6} md={6} sm={12} xs={12}>
+                <TextValidator
+                  className="w-100"
+                  label={<span className="font">
+                    <span style={{ color: "red" }}>  </span>
+                    Người phụ trách
+                  </span>}
+                  onChange={this.handleChange}
+                  type="text"
+                  name="personInCharge"
+                  value={personInCharge}
+                  // validators={["required"]}
+                  // errorMessages={[t("general.errorMessages_required")]}
+                  variant="outlined"
+                  size="small"
+                />
+              </Grid>
+              <Grid item lg={6} md={6} sm={12} xs={12}>
+                <TextValidator
+                  className="w-100"
+                  label={<span className="font">
+                    <span style={{ color: "red" }}> </span>
+                    Số điện thoại người phụ trách
+                  </span>}
+                  onChange={this.handleChange}
+                  type="tel"
+                  name="phoneNumber2"
+                  value={phoneNumber2}
+                  validators={["matchRegexp:^0[0-9]{9,10}$"]}
+                  errorMessages={["Số điện thoại không hợp lệ"]}
+                  variant="outlined"
+                  size="small"
+                />
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <TextValidator
                   className="w-100"
                   label={<span className="font">
-                    <span style={{ color: "red" }}></span>
-                    {t('healthCareGroup.address')}
+                    <span style={{ color: "red" }}> * </span>
+                    Địa chỉ
                   </span>}
                   onChange={this.handleChange}
                   type="text"
                   name="address"
                   value={address}
-                  //validators={["required"]}
-                  // errorMessages={[t("general.errorMessages_required")]}
+                  validators={["required"]}
+                  errorMessages={[t("general.errorMessages_required")]}
                   variant="outlined"
                   size="small"
                 />
@@ -414,11 +435,14 @@ class HealthCareGroupEditorDialog extends Component {
               <Grid item sm={12} xs={12}>
                 <Button
                   size="small"
-                  // style={{ float: "right" }}
+                  className="btn btn-success"
                   variant="contained"
                   color="primary"
                   onClick={this.openParentPopup}>
-                  {t("Chọn đơn vị hành chính quản lý")}
+                    <span className="font">
+                      <span style={{ color: "red" }}> * </span>
+                      Đơn vị hành chính quản lý
+                    </span>
                 </Button>
                 {/* <TextValidator
                   size="small"
@@ -490,17 +514,21 @@ class HealthCareGroupEditorDialog extends Component {
 
           <DialogActions spacing={4} className="flex flex-end flex-middle">
             <Button
+              startIcon={<BlockIcon />}
+              variant="contained"
+              className="mr-12 btn btn-secondary d-inline-flex"
               variant="contained"
               color="secondary"
               onClick={() => this.props.handleClose()}>
-              {t('Cancel')}
+              Huỷ
             </Button>
             <Button
+              startIcon={<SaveIcon />}
               variant="contained"
-              className="mr-12"
+              className="mr-12 btn btn-primary-d d-inline-flex"
               color="primary"
               type="submit">
-              {t('Save')}
+              Lưu
             </Button>
           </DialogActions>
         </ValidatorForm>

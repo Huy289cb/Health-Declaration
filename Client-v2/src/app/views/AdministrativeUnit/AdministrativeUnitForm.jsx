@@ -34,8 +34,8 @@ export default function AdministrativeUnitForm(props) {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object({
-        code: Yup.string().required(),
-        name: Yup.string().required()
+        code: Yup.string().required("Đây là trường bắt buộc").typeError("Đây là trường bắt buộc"),
+        name: Yup.string().required("Đây là trường bắt buộc").typeError("Đây là trường bắt buộc")
     });
 
     const formik = useFormik({
@@ -56,12 +56,16 @@ export default function AdministrativeUnitForm(props) {
                             <Grid item sm={12}>
                                 <TextField
                                     disabled={readOnly}
-                                    required
                                     classes={{ root: classes.textField }}
                                     id="code"
                                     size="small"
                                     name="code"
-                                    label={t('occupation.code')}
+                                    label={
+                                        <span className="font">
+                                          <span style={{ color: "red" }}> * </span>
+                                          Mã đơn vị
+                                        </span>
+                                      }
                                     variant="outlined"
                                     value={formik.values.code}
                                     onChange={formik.handleChange}
@@ -72,12 +76,16 @@ export default function AdministrativeUnitForm(props) {
                             <Grid item sm={12}>
                                 <TextField
                                     disabled={readOnly}
-                                    required
                                     classes={{ root: classes.textField }}
                                     id="name"
                                     size="small"
                                     name="name"
-                                    label={t('occupation.name')}
+                                    label={
+                                        <span className="font">
+                                          <span style={{ color: "red" }}> * </span>
+                                          Tên đơn vị
+                                        </span>
+                                      }
                                     variant="outlined"
                                     value={formik.values.name}
                                     onChange={formik.handleChange}
@@ -85,7 +93,7 @@ export default function AdministrativeUnitForm(props) {
                                     helperText={formik.touched.name && formik.errors.name}
                                 />
                             </Grid>
-                            <Grid item sm={12}>
+                            {/* <Grid item sm={12}>
                                 <TextField
                                     disabled={readOnly}
                                     // required
@@ -118,11 +126,11 @@ export default function AdministrativeUnitForm(props) {
                                     error={formik.touched.hotZalo && Boolean(formik.errors.hotZalo)}
                                     helperText={formik.touched.hotZalo && formik.errors.hotZalo}
                                 />
-                            </Grid>
+                            </Grid> */}
                             <Grid item sm={12}>
                                 <InputPopup
                                     disabled={readOnly}
-                                    label={t("administrative_unit.parent")}
+                                    label="Đơn vị quản lý"
                                     formik={formik}
                                     field="parent"
                                     variant="outlined"
@@ -142,16 +150,16 @@ export default function AdministrativeUnitForm(props) {
                                 color="secondary"
                                 onClick={() => handleClose()}
                             >
-                                {t("general.button.cancel")}
+                                Huỷ
                             </Button>
                             {!readOnly &&
                             <Button
                                 startIcon={<SaveIcon />}
-                                className="mr-0 btn btn-success d-inline-flex"
+                                className="mr-0 btn btn-primary-d d-inline-flex"
                                 variant="contained"
                                 color="primary"
                                 type="submit">
-                                {t("general.button.save")}
+                                Lưu
                             </Button>}
                         </div>
                     </DialogActions>

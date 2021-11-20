@@ -49,7 +49,7 @@ public class BackgroundDiseaseServiceImpl extends GenericServiceImpl<BackgroundD
 		}
 
 		String whereClause = "";
-		String orderBy = " ";
+		String orderBy = " ORDER BY entity.code asc ";
 		String sqlCount = "select count(entity.id) from BackgroundDisease as entity where (1=1) ";
 		String sql = "select new com.globits.healthdeclaration.dto.BackgroundDiseaseDto(entity) from BackgroundDisease as entity where (1=1) ";
 
@@ -102,6 +102,12 @@ public class BackgroundDiseaseServiceImpl extends GenericServiceImpl<BackgroundD
 				entity = new BackgroundDisease();
 			}
 
+			if (dto.getName() == null || StringUtils.isEmpty(dto.getName())) {
+				return null;
+			}
+			if (dto.getCode() == null || StringUtils.isEmpty(dto.getCode())) {
+				return null;
+			}
 			entity.setName(dto.getName());
 			entity.setCode(dto.getCode());
 			entity.setDescription(dto.getDescription());

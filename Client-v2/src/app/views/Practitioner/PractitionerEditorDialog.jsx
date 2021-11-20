@@ -31,6 +31,8 @@ import {
 } from "./PractitionerService";
 import { toast } from 'react-toastify';
 import appConfig from "app/appConfig";
+import SaveIcon from '@material-ui/icons/Save';
+import BlockIcon from '@material-ui/icons/Block';
 toast.configure({
   autoClose: 2000,
   draggable: false,
@@ -66,12 +68,12 @@ class PractitionerEditorDialog extends Component {
   listGender = [
     { id: "M", name: "Nam" },
     { id: "F", name: "Nữ" },
-    { id: "U", name: "Không rõ" },
   ];
 
   listOccupation = [
     { id: 1, name: "Bác sĩ" },
-    { id: 2, name: 'Điều dưỡng' }
+    { id: 2, name: 'Điều dưỡng' },
+    { id: 3, name: 'Tình nguyện viên'}
   ]
 
   handleChange = (event, source) => {
@@ -141,10 +143,13 @@ class PractitionerEditorDialog extends Component {
     practitioner.type = this.state.type;
     practitioner.zalo = this.state.zalo;
     if (this.state.phoneNumber != null && this.validateSDT(this.state.phoneNumber) == false) {
-      toast.info("Số điện thoại không hợp lệ");
+      toast.warn("Số điện thoại không hợp lệ");
       return;
     } else if (this.state.zalo != null && this.validateSDT(this.state.zalo) == false) {
-      toast.info("Số Zalo không hợp lệ");
+      toast.warn("Số Zalo không hợp lệ");
+      return;
+    } else if (!this.state.gender || this.state.gender == '') {
+      toast.warn("Giới tính là trường bắt buộc");
       return;
     }
     checkDuplicateUserName(id, this.state.username).then((resp) => {
@@ -242,8 +247,8 @@ class PractitionerEditorDialog extends Component {
                   className="w-100 "
                   label={
                     <span className="font">
-                      <span style={{ color: "red" }}>*</span>
-                      {t("user.display_name")}
+                      <span style={{ color: "red" }}> * </span>
+                      Họ và tên
                     </span>
                   }
                   onChange={this.handleChange}
@@ -391,7 +396,7 @@ class PractitionerEditorDialog extends Component {
                   label={
                     <span className="font">
                       <span style={{ color: "red" }}></span>
-                      {t("Zalo")}
+                      Zalo
                     </span>
                   }
                   onChange={this.handleChange}
@@ -428,14 +433,14 @@ class PractitionerEditorDialog extends Component {
                     {
                       <span className="">
                         <span style={{ color: "red" }}> * </span>
-                        {t("Phân loại nhân viên")}
+                        Phân loại nhân viên
                       </span>
                     }
                   </InputLabel>
                   <Select
                     label={<span className="">
                       <span style={{ color: "red" }}> * </span>
-                      {t("Phân loại nhân viên")}
+                      Phân loại nhân viên
                     </span>}
                     value={type ? type : null}
                     onChange={(event) => {
@@ -484,7 +489,7 @@ class PractitionerEditorDialog extends Component {
                   name="healthCareGroup"
                   label={<span className="">
                     <span style={{ color: "red" }}> * </span>
-                    {t("Tổ y tế")}
+                    Tổ y tế
                   </span>}
                   value={this.state.healthCareGroup ? this.state.healthCareGroup.name : ""}
                   InputProps={{
@@ -492,12 +497,12 @@ class PractitionerEditorDialog extends Component {
                       <InputAdornment position="end">
                         <Button
                           size="small"
-                          className="align-bottom"
+                          className="btn-primary-d"
                           variant="contained"
                           color="primary"
                           onClick={this.openParentPopup}
                         >
-                          {t("general.popup.select")}
+                          Chọn
                         </Button>
                       </InputAdornment>
                     ),
@@ -611,34 +616,24 @@ class PractitionerEditorDialog extends Component {
             </Grid>
           </DialogContent>
           <DialogActions spacing={4} className="flex flex-end flex-middle">
-            <Grid
-              container
-              spacing={2}
-              direction="row"
-              justify="flex-end"
-              alignItems="center"
-              md={12}
-              xs={12}
-              lg={12}
-              sm={12}
-            >
               <Button
+                startIcon={<BlockIcon />}
                 variant="contained"
                 color="secondary"
-                className="mt-8 mr-16 mb-16"
+                className="mr-12 btn btn-secondary d-inline-flex"
                 onClick={() => this.props.handleClose()}
               >
-                {t("Cancel")}
+                Huỷ
               </Button>
               <Button
+                startIcon={<SaveIcon />}
                 variant="contained"
-                className="mt-8 mr-16 mb-16"
+                className="mr-12 btn btn-primary-d d-inline-flex"
                 color="primary"
                 type="submit"
               >
-                {t("Save")}
+                Lưu
               </Button>
-            </Grid>
           </DialogActions>
         </ValidatorForm>
 

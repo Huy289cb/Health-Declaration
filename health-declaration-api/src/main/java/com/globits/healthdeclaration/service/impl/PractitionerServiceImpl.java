@@ -159,7 +159,32 @@ public class PractitionerServiceImpl extends GenericServiceImpl<Practitioner, UU
 					return null;
 				}
 			}
-
+			if (dto.getDisplayName() == null || StringUtils.isEmpty(dto.getDisplayName())) {
+				return null;
+			}
+			if (dto.getEmail() == null || StringUtils.isEmpty(dto.getEmail())) {
+				return null;
+			}
+			if (dto.getPhoneNumber() == null || StringUtils.isEmpty(dto.getPhoneNumber())) {
+				return null;
+			}
+			if (dto.getZalo() == null || StringUtils.isEmpty(dto.getZalo())) {
+				return null;
+			}
+			if (dto.getType() == null) {
+				return null;
+			}
+			if (dto.getHealthCareGroup() == null) {
+				return null;
+			}
+			if (dto.getUser() == null || dto.getUser().getUsername() == null ||
+					StringUtils.isEmpty(dto.getUser().getUsername())) {
+				return null;
+			}
+			if (dto.getUser() == null || dto.getUser().getPassword() == null ||
+					StringUtils.isEmpty(dto.getUser().getPassword())) {
+				return null;
+			}
 			entity.setDisplayName(dto.getDisplayName());
 			entity.setAge(dto.getAge());
 			entity.setPhoneNumber(dto.getPhoneNumber());

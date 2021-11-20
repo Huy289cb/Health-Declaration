@@ -331,18 +331,19 @@ class SelectAdministrativeUnitPopup extends React.Component
         </DialogContent>
         <DialogActions>
           <Button
-            className="mb-16 mr-36 align-bottom"
+            className="mb-16 mr-16 align-bottom"
             variant="contained"
             color="secondary"
             onClick={ () => handleClose() }
           >
-            { t( 'Hủy' ) }</Button>
+            Hủy
+          </Button>
           <Button className="mb-16 mr-16 align-bottom"
             variant="contained"
             color="primary"
             onClick={ () => handleSelect( this.state.selectedItem ) }
           >
-            { t( 'Chọn' ) }
+            Chọn
           </Button>
         </DialogActions>
       </Dialog>

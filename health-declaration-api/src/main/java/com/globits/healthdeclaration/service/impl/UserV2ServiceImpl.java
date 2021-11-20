@@ -43,7 +43,8 @@ public class UserV2ServiceImpl implements UserV2Service {
 				"SELECT new com.globits.healthdeclaration.dto.UserV2Dto(u) FROM User u";
 		if(dto.getText() != null && StringUtils.hasText(dto.getText())){
 			whereClause +=
-					" AND (u.person.displayName LIKE :text OR u.person.phoneNumber LIKE :text)";
+					" AND (u.person.displayName LIKE :text OR u.person.phoneNumber LIKE :text" +
+							" OR u.username LIKE :text OR u.email LIKE :text)";
 		}
 
 		sql += whereClause + orderBy;

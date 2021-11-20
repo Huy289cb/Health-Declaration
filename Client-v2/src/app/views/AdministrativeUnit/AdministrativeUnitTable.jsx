@@ -299,7 +299,7 @@ class AdministrativeUnitTable extends Component {
                   {t('general.button.delete')}
                 </Button>
                 <Button
-                  className="mb-16 mr-16 btn btn-secondary d-inline-flex"
+                  className="mb-16 mr-12 btn btn-secondary d-inline-flex"
                   startIcon={<DescriptionIcon />}
                   variant="contained"
                   onClick={this.importExcel}

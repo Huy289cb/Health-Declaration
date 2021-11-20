@@ -203,7 +203,7 @@ class SelectFamilyPopup extends React.Component {
                 toolbar: false,
                 maxBodyHeight: "440px",
                 headerStyle: {
-                  backgroundColor: "#2a80c8",
+                  backgroundColor: "#3366ff",
                   color: "#fff",
                 },
                 rowStyle: (rowData, index) => ({
@@ -229,11 +229,11 @@ class SelectFamilyPopup extends React.Component {
         </DialogContent>
         <DialogActions>
           <Button
-            className="mb-16 mr-36 btn btn-secondary"
+            className="mb-16 mr-12 btn btn-secondary"
             variant="contained"
             onClick={() => handleClose()}>Đóng</Button>
           <Button
-            className="mb-16 mr-16 btn btn-success"
+            className="mb-16 mr-12 btn btn-primary-d"
             variant="contained"
             onClick={() => {
               let { selectedItem } = this.state;

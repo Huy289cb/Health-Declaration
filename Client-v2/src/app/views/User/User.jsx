@@ -191,9 +191,9 @@ class User extends Component {
       { title: t("user.email"), field: "email", align: "left", width: "150" },
       // { title: t("Tổ y tế"), field: "healthCareGroup.name", align: "left", width: "150" },
       {
-        title: t("Action"),
+        title: "Thao tác",
         field: "custom",
-        align: "left",
+        align: "right",
         width: "250",
         render: rowData => <MaterialButton item={rowData} id={rowData.id ? rowData.id : null}
           onSelect={(rowData, method) => {
@@ -280,7 +280,7 @@ class User extends Component {
                 <ConfirmationDialog
                   title={t("confirm")}
                   open={shouldOpenConfirmationDialog}
-                  onConfirmDialogClose={this.handleDialogClose}
+                  onClose={this.handleDialogClose}
                   onYesClick={this.handleConfirmationResponse}
                   text={t('DeleteConfirm')}
                 />

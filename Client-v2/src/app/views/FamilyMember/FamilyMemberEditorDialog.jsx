@@ -31,6 +31,8 @@ import localStorageService from "../../services/localStorageService";
 import { getCurrentUser } from "../page-layouts/UserProfileService";
 import { getFamilyByUserLogin } from "../Family/Service";
 import "./style.css"
+import SaveIcon from '@material-ui/icons/Save';
+import BlockIcon from '@material-ui/icons/Block';
 
 toast.configure({
   autoClose: 1000,
@@ -218,12 +220,12 @@ class FamilyMemberEditorDialog extends Component {
         } else if (this.state.member.weight < 0 || this.state.member.weight > 250) {
           toast.warning("Cân nặng không hợp lệ");
         } else {
-          checkDuplicate(obj).then(({ data }) => {
-            if (data == 1) {
-              toast.warning("Số bảo hiểm y tế đã tồn tại");
-            } else if (data == 2) {
-              toast.warning("Số CCCD, CMND đã tồn tại");
-            } else {
+          // checkDuplicate(obj).then(({ data }) => {
+            // if (data == 1) {
+            //   toast.warning("Số bảo hiểm y tế đã tồn tại");
+            // } else if (data == 2) {
+            //   toast.warning("Số CCCD, CMND đã tồn tại");
+            // } else {
               if (id) {
                 saveOrUpdate(obj).then(() => {
                   toast.success(t('Đã cập nhật'));
@@ -240,8 +242,8 @@ class FamilyMemberEditorDialog extends Component {
                   }
                 });
               }
-            }
-          })
+            // }
+          // })
         }
       });
     }
@@ -340,7 +342,7 @@ class FamilyMemberEditorDialog extends Component {
                     label={
                       <span className="font">
                         <span style={{ color: "red" }}> *</span>
-                        {t("Hộ gia đình")}
+                        Hộ gia đình
                       </span>
                     }
                   />
@@ -351,8 +353,8 @@ class FamilyMemberEditorDialog extends Component {
                   className="w-100"
                   label={
                     <span className="font">
-                      <span style={{ color: "red" }}> *</span>
-                      {t("Họ tên")}
+                      <span style={{ color: "red" }}> * </span>
+                      Họ và tên
                     </span>
                   }
                   onChange={(value) => { this.handleChange(value, "displayName") }}
@@ -409,12 +411,12 @@ class FamilyMemberEditorDialog extends Component {
                 <FormControl className="nice-input" fullWidth={true} variant="outlined" size="small">
                   <InputLabel htmlFor="type-simple">
                     {
-                      <span>{t("Mức độ nghi nhiễm")}</span>
+                      <span>Mức độ nghi nhiễm</span>
                     }
                   </InputLabel>
                   <Select
                     label={
-                      <span>{t("Mức độ nghi nhiễm")}</span>
+                      <span>Mức độ nghi nhiễm</span>
                     }
                     value={member && member.suspectedLevel ? member.suspectedLevel : ""}
                     onChange={(value) => { this.handleChange(value, "suspectedLevel") }}
@@ -441,7 +443,7 @@ class FamilyMemberEditorDialog extends Component {
                   className="w-100"
                   label={
                     <span className="font">
-                      <span style={{ color: "red" }}>* </span>Tuổi
+                      <span style={{ color: "red" }}> * </span>Tuổi
                     </span>
                   }
                   onChange={(value) => { this.handleChange(value, "age") }}
@@ -460,7 +462,7 @@ class FamilyMemberEditorDialog extends Component {
                   className="w-100"
                   label={
                     <span className="font">
-                      <span style={{ color: "red" }}> *</span>Cân nặng(kg)
+                      <span style={{ color: "red" }}> * </span>Cân nặng(kg)
                     </span>
                   }
                   onChange={(value) => { this.handleChange(value, "weight") }}
@@ -480,7 +482,7 @@ class FamilyMemberEditorDialog extends Component {
                   className="w-100"
                   label={
                     <span className="font">
-                      <span style={{ color: "red" }}> *</span>Chiều cao(cm)
+                      <span style={{ color: "red" }}> * </span>Chiều cao(cm)
                     </span>
                   }
                   onChange={(value) => { this.handleChange(value, "height") }}
@@ -553,7 +555,7 @@ class FamilyMemberEditorDialog extends Component {
                   className="w-100"
                   label={
                     <span className="font">
-                      <span style={{ color: "red" }}>* </span>Địa chỉ
+                      <span style={{ color: "red" }}> * </span>Địa chỉ
                     </span>
                   }
                   onChange={(value) => { this.handleChange(value, "detailAddress") }}
@@ -607,7 +609,7 @@ class FamilyMemberEditorDialog extends Component {
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <FormControl component="fieldset" error={this.state.radioError}
                   disabled={readOnly}>
-                  <FormLabel component="legend"><span style={{ color: "red" }}> *</span>Có bệnh nền: </FormLabel>
+                  <FormLabel component="legend"><span style={{ color: "red" }}> * </span>Có bệnh nền: </FormLabel>
                   <RadioGroup row aria-label="haveBackgroundDisease" name="haveBackgroundDisease"
                     value={member.haveBackgroundDisease}
                     onChange={(event) => {
@@ -656,7 +658,7 @@ class FamilyMemberEditorDialog extends Component {
                         value={(member && member.backgroundDiseases) ? member.backgroundDiseases : []}
                         label={
                           <span className="font">
-                            {t("Tiền sử bệnh")}
+                            Tiền sử bệnh
                           </span>
                         }
                         variant="outlined"
@@ -671,19 +673,21 @@ class FamilyMemberEditorDialog extends Component {
 
           <DialogActions spacing={4} className="flex flex-end flex-middle">
             <Button
+              startIcon={<BlockIcon />}
               variant="contained"
-              className="mr-12"
+              className="mr-12 btn btn-secondary d-inline-flex"
               color="secondary"
               onClick={() => this.props.handleClose()}>
-              {t('Cancel')}
+              Huỷ
             </Button>
             {!readOnly && <Button
+              startIcon={<SaveIcon />}
               variant="contained"
-              className="mr-12"
+              className="mr-12 btn btn-primary-d d-inline-flex"
               color="primary"
               // onClick={() => this.handleSave()}
               type="submit">
-              {t('Save')}
+              Lưu
             </Button>}
           </DialogActions>
         </ValidatorForm>

@@ -16,13 +16,14 @@ import com.globits.core.domain.BaseObject;
 @Table(name = "tbl_hd_health_care_group")
 @XmlRootElement
 public class HealthCareGroup extends BaseObject{
-	private String code;//
-	private String name;//
-	private String address;//
-	private String phoneNumber1;//
-	private String phoneNumber2;//
-	private String zalo;
-	private String faceBook;
+	private String code;// mã tổ y tế
+	private String name;// tên
+	private String address;// địa chỉ
+	private String phoneNumber1;// số cấp cứu
+	private String phoneNumber2;// số đt người phụ trách
+	private String zalo;// số zalo
+	private String faceBook; // đường dẫn fb (k dùng)
+	private String personInCharge; //Người phụ trách
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "healthCareGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
@@ -93,4 +94,11 @@ public class HealthCareGroup extends BaseObject{
 		this.faceBook = faceBook;
 	}
 
+	public String getPersonInCharge() {
+		return personInCharge;
+	}
+
+	public void setPersonInCharge(String personInCharge) {
+		this.personInCharge = personInCharge;
+	}
 }

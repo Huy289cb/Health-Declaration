@@ -87,7 +87,7 @@ class Practitioner extends Component {
   };
 
   search() {
-    this.setState({ page: 0 }, function () {
+    this.setState({ page: 1 }, function () {
       var searchObject = {};
       searchObject.text = this.state.keyword;
       searchObject.pageIndex = this.state.page;
@@ -278,7 +278,7 @@ class Practitioner extends Component {
         },
       },
       {
-        title: t("Tổ y tế"), field: "healthCareGroup.name", align: "left", width: "150",
+        title: "Tổ y tế", field: "healthCareGroup.name", align: "left", width: "150",
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -292,7 +292,7 @@ class Practitioner extends Component {
         },
       },
       {
-        title: t("Phân loại nhân viên"), align: "left", width: "150",
+        title: "Phân loại", align: "left", width: "150",
         headerStyle: {
           minWidth: "150px",
           paddingLeft: "10px",
@@ -307,7 +307,7 @@ class Practitioner extends Component {
         render: rowData => this.genType(rowData.type)
       },
       {
-        title: t("Thao tác"),
+        title: "Thao tác",
         field: "custom",
         align: "left",
         width: "250",
@@ -341,7 +341,7 @@ class Practitioner extends Component {
         </div>
 
         <Grid container spacing={3}>
-          <Grid item lg={4} md={4} sm={12} xs={12}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
               className="mb-16 mr-16 btn btn-success d-inline-flex"
               startIcon={<AddIcon />}
@@ -351,32 +351,32 @@ class Practitioner extends Component {
               }
               }
             >
-              {t('general.button.add')}
+              Thêm mới
             </Button>
 
           </Grid>
-          <Grid item md={4} lg={4} sm={12} xs={6}>
+          <Grid item md={3} lg={3} sm={12} xs={12}>
             <Autocomplete
-              className="mt-10"
               options={listHealthCareGroup ? listHealthCareGroup : []}
               getOptionLabel={(option) => option.name}
               id="healthCareGroup"
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  variant="outlined"
+                  variant="standard"
                   size="small"
-                  label={t("Tổ y tế")}
+                  label="Tổ y tế"
                   className="input"
                 />
               )}
               onChange={(event, value) => { this.changeSelected(value, "healthCareGroup") }}
             />
           </Grid>
-          <Grid item lg={4} md={4} sm={12} xs={12} >
+          <Grid item lg={3} md={3} sm={12} xs={12} >
             <FormControl fullWidth>
               <Input
-                className='mt-10 search_box w-100 stylePlaceholder'
+                className='search_box w-100 stylePlaceholder'
+                style={{marginTop: "13px"}}
                 type="text"
                 name="keyword"
                 value={keyword}
@@ -414,7 +414,7 @@ class Practitioner extends Component {
                 <ConfirmationDialog
                   title={t("confirm")}
                   open={shouldOpenConfirmationDialog}
-                  onConfirmDialogClose={this.handleDialogClose}
+                  onClose={this.handleDialogClose}
                   onYesClick={this.handleConfirmationResponse}
                   text={t('DeleteConfirm')}
                 />

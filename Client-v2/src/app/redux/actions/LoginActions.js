@@ -3,6 +3,15 @@ import FirebaseAuthService from "../../services/firebase/firebaseAuthService";
 import { setUserData } from "./UserActions";
 import history from "history.js";
 import ConstantList from "../../appConfig";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure({
+  autoClose: 1000,
+  draggable: false,
+  limit: 3
+});
+
 export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_LOADING = "LOGIN_LOADING";
@@ -31,7 +40,8 @@ export  function loginWithEmailAndPassword({ email, password }) {
         });
       })
       .catch(error => {
-        alert('Tài khoản hoặc mật khẩu không đúng. Mời bạn đăng nhập lại');//Cần xem cách đưa ra thông báo thông qua đa ngôn ngữ
+        toast.warn("Tên đăng nhập hoặc mật khẩu không đúng. Mời bạn đăng nhập lại")
+        // alert('Tài khoản hoặc mật khẩu không đúng. Mời bạn đăng nhập lại');//Cần xem cách đưa ra thông báo thông qua đa ngôn ngữ
         return dispatch({
           type: LOGIN_ERROR,
           payload: error

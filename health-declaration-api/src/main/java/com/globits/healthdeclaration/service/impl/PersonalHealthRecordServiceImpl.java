@@ -168,7 +168,7 @@ public class PersonalHealthRecordServiceImpl extends GenericServiceImpl<Personal
 
 		String joinSql = "  ";
 		String whereClause = " where (1=1) ";
-		String orderBy = " ORDER BY  entity.seriusStatus desc, entity.createDate desc ";
+		String orderBy = " ORDER BY  entity.seriusStatus desc, entity.resolveStatus asc, entity.createDate desc ";
 		if (dto.getShowHistoryForm() != null && dto.getShowHistoryForm()) {
 			orderBy = " ORDER BY entity.createDate desc ";
 		}
@@ -285,6 +285,13 @@ public class PersonalHealthRecordServiceImpl extends GenericServiceImpl<Personal
 			if (dto.getType() != null) {
 				entity.setType(dto.getType());
 			}
+			//validate server
+			if (dto.getFamilyMember() == null || dto.getHaveQuickTest() == null ||
+				dto.getHavePCR() == null || dto.getTemperature() == null || dto.getBreathingRate() == null ||
+					dto.getPulseRate() == null
+			) {
+				return null;
+			}
 			entity.setOtherInformation(dto.getOtherInformation());
 			entity.setMakeDecision(dto.getMakeDecision());
 			entity.setBreathingRate(dto.getBreathingRate());
@@ -295,6 +302,7 @@ public class PersonalHealthRecordServiceImpl extends GenericServiceImpl<Personal
 			entity.setContactPersonRelation(dto.getContactPersonRelation());
 			entity.setDiastolicBloodPressure(dto.getDiastolicBloodPressure());
 			entity.setSystolicBloodPressure(dto.getSystolicBloodPressure());
+			entity.setPulseRate(dto.getPulseRate());
 			entity.setHaveTest(dto.getHaveTest());
 			entity.setHaveQuickTest(dto.getHaveQuickTest());
 			entity.setQuickTestResults(dto.getQuickTestResults());
@@ -332,9 +340,9 @@ public class PersonalHealthRecordServiceImpl extends GenericServiceImpl<Personal
 				entity.setResolveStatus(dto.getResolveStatus());
 			} else {
 				entity.setResolveStatus(
-						HealthDeclarationEnumsType.PersonalHealthRecordResolveStatus.Processing.getValue());
-				//nếu hướng xử lý là chuyển đi cấp cứu => trạng thái xử lý = đã xử lý
-				if (dto.getMakeDecision() != null && dto.getMakeDecision().equals(HealthDeclarationEnumsType.EncounterMakeDecision.decision1)) {
+						HealthDeclarationEnumsType.PersonalHealthRecordResolveStatus.NoProcess.getValue());
+				//nếu được bs thăm khám => trạng thái xử lý = đã xử lý
+				if (dto.getPractitioner() != null && dto.getPractitioner().getId() != null) {
 					entity.setResolveStatus(
 							HealthDeclarationEnumsType.PersonalHealthRecordResolveStatus.Processed.getValue());
 				}
@@ -423,10 +431,19 @@ public class PersonalHealthRecordServiceImpl extends GenericServiceImpl<Personal
 					//3. spo2 <= 92
 					//4. người bệnh đang có tình trạng: thở máy, có ống mở khí quản, liệt tứ chi, đang điều trị hoá trị
 
-					if (familyMember.getMember().getAge() != null && familyMember.getMember().getAge() >= 65 && familyMember.getMember().getHaveBackgroundDisease() != null && familyMember.getMember().getHaveBackgroundDisease() != null && familyMember.getMember().getHaveBackgroundDisease()) {
+					if (familyMember.getMember().getAge() != null && familyMember.getMember().getAge() >= 65 &&
+							familyMember.getMember().getHaveBackgroundDisease() != null &&
+							familyMember.getMember().getHaveBackgroundDisease() != null &&
+							familyMember.getMember().getHaveBackgroundDisease()
+					) {
 						entity.setSeriusStatus(HealthDeclarationEnumsType.PersonalHealthRecordSeriusStatus.Level3.getValue());
 					}
-					if (dto.getSpo2() != null && dto.getSpo2() < HealthDeclarationEnumsType.PersonalHealthRecordSpO2.opt5.getValue()) {
+					if (dto.getSpo2() != null &&
+							dto.getSpo2().equals(HealthDeclarationEnumsType.PersonalHealthRecordSpO2.opt4.getValue())) {
+						entity.setSeriusStatus(HealthDeclarationEnumsType.PersonalHealthRecordSeriusStatus.Level3.getValue());
+					}
+					//5. nếu mạch >50 hoặc <120
+					if (dto.getPulseRate() != null && (dto.getPulseRate() < 50 || dto.getPulseRate() > 120)) {
 						entity.setSeriusStatus(HealthDeclarationEnumsType.PersonalHealthRecordSeriusStatus.Level3.getValue());
 					}
 

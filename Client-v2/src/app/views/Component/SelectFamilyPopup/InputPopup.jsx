@@ -69,7 +69,7 @@ export default function InputPopup(props) {
                 variant="contained"
                 onClick={() => handleOpenPopup(true)}
             >
-                <div className="btn-select-family">{t("general.button.select")}</div>
+                <div className="btn-select-family">Chọn</div>
             </Button>}
             {openPopup && (
                 <SelectFamilyPopup
