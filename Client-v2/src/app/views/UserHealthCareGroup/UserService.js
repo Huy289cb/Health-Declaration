@@ -96,7 +96,7 @@ export const getUserById = id => {
   return axios.get("/api/user", { data: id });
 };
 export const deleteItem = id => {
-  return axios.delete(ConstantList.API_ENPOINT + "/api/healthOrgType/" + id);
+  return axios.delete(API_PATH_ORG + "/" + id);
 };
 export const checkCode = (id, code) => {
   const config = { params: { id: id, code: code } };

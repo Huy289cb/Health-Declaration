@@ -70,5 +70,5 @@ export const getUserByEmail = (email) => {
 };
 
 export const deleteItem = id => {
-    return axios.delete(API_PATH + id);
+    return axios.delete(API_PATH + "/" + id);
 };

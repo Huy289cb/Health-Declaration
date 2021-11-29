@@ -21,6 +21,7 @@ import UserRoles from "app/services/UserRoles";
 import NicePagination from '../Component/Pagination/NicePagination';
 import AddIcon from '@material-ui/icons/Add';
 import 'styles/globitsStyles.css';
+import { toast } from "react-toastify";
 function MaterialButton(props) {
   const { t, i18n } = useTranslation();
   const item = props.item;
@@ -29,9 +30,9 @@ function MaterialButton(props) {
     {id != null && (<IconButton size="small" onClick={() => props.onSelect(item, 0)}>
       <Icon fontSize="small" color="primary">edit</Icon>
     </IconButton>)}
-    {/* <IconButton onClick={() => props.onSelect(item, 1)}>
-      <Icon color="error">delete</Icon>
-    </IconButton> */}
+    <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+      <Icon fontSize="small" color="error">delete</Icon>
+    </IconButton>
   </div>;
 }
 
@@ -141,6 +142,9 @@ class User extends Component {
     deleteItem(this.state.id).then(() => {
       this.updatePageData();
       this.handleDialogClose();
+      toast.success("Đã xoá bản ghi");
+    }).catch(() => {
+      toast.warn("Có lỗi xảy ra, vui lòng thử lại sau");
     });
   };
 
@@ -294,11 +298,13 @@ class User extends Component {
 
               {shouldOpenConfirmationDialog && (
                 <ConfirmationDialog
-                  title={t("confirm")}
+                  title="Xác nhận xoá"
                   open={shouldOpenConfirmationDialog}
                   onClose={this.handleDialogClose}
                   onYesClick={this.handleConfirmationResponse}
-                  text={t('DeleteConfirm')}
+                  text="Bạn có chắc chắn muốn xoá bản ghi này?"
+                  cancel="Huỷ"
+                  agree="Xoá"
                 />
               )}
             </div>

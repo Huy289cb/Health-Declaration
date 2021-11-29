@@ -36,7 +36,7 @@ function MaterialButton(props) {
 class BackgroundDiseaseTable extends Component {
   state = {
     rowsPerPage: 10,
-    page: 0,
+    page: 1,
     backgroundDiseaseList: [],
     item: {},
     keyword: '',
@@ -99,20 +99,20 @@ class BackgroundDiseaseTable extends Component {
     };
   };
   search() {
-    this.setState({ page: 0 }, function () {
+    this.setState({ page: 1 }, function () {
       var searchObject = {};
       searchObject.text = this.state.keyword;
-      searchObject.pageIndex = this.state.page + 1;
+      searchObject.pageIndex = this.state.page;
       searchObject.pageSize = this.state.rowsPerPage;
-      searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-        this.setState({ backgroundDiseaseList: [...data.content], totalElements: data.totalElements })
+      searchByPage(searchObject).then(({ data }) => {
+        this.setState({ backgroundDiseaseList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages})
       });
     
     });
   }
 
   setRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value, page: 0 }, function () {
+    this.setState({ rowsPerPage: event.target.value, page: 1 }, function () {
       this.search();
     })
   };
@@ -124,10 +124,10 @@ class BackgroundDiseaseTable extends Component {
     this.setState({ page: pageNumber }, function () {
       var searchObject = {};
       searchObject.text = this.state.keyword;
-      searchObject.pageIndex = this.state.page + 1;
+      searchObject.pageIndex = this.state.page;
       searchObject.pageSize = this.state.rowsPerPage;
       searchByPage(searchObject, this.state.page, this.state.rowsPerPage).then(({ data }) => {
-        this.setState({ backgroundDiseaseList: [...data.content], totalElements: data.totalElements })
+        this.setState({ backgroundDiseaseList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages})
       });
     });
   }
@@ -167,10 +167,10 @@ class BackgroundDiseaseTable extends Component {
   updatePageData = () => {
     var searchObject = {};
     searchObject.keyword = this.state.keyword;
-    searchObject.pageIndex = this.state.page + 1;
+    searchObject.pageIndex = this.state.page;
     searchObject.pageSize = this.state.rowsPerPage;
     searchByPage(searchObject).then(({ data }) => {
-      this.setState({ backgroundDiseaseList: [...data.content], totalElements: data.totalElements })
+      this.setState({ backgroundDiseaseList: [...data.content], totalElements: data.totalElements, totalPages: data.totalPages })
     });
   }
 

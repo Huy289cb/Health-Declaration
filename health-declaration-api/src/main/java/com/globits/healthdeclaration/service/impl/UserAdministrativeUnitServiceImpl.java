@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import javax.persistence.Query;
 
+import com.globits.healthdeclaration.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,13 +29,6 @@ import com.globits.core.service.impl.GenericServiceImpl;
 import com.globits.core.utils.SecurityUtils;
 import com.globits.healthdeclaration.HealthDeclarationConstant;
 import com.globits.healthdeclaration.HealthDeclarationEnumsType;
-import com.globits.healthdeclaration.domain.Family;
-import com.globits.healthdeclaration.domain.FamilyMember;
-import com.globits.healthdeclaration.domain.HDAdministrativeUnit;
-import com.globits.healthdeclaration.domain.HealthCareGroup;
-import com.globits.healthdeclaration.domain.PersonalHealthRecord;
-import com.globits.healthdeclaration.domain.UserAdministrativeUnit;
-import com.globits.healthdeclaration.domain.UserOtp;
 import com.globits.healthdeclaration.dto.FamilyDto;
 import com.globits.healthdeclaration.dto.FamilyMemberDto;
 import com.globits.healthdeclaration.dto.HealthCareGroupAdministrativeUnitDto;
@@ -168,7 +162,9 @@ public class UserAdministrativeUnitServiceImpl extends GenericServiceImpl<UserAd
 		String sql = "select new com.globits.healthdeclaration.dto.UserAdministrativeUnitDto(user,u) from UserAdministrativeUnit as user "
 						+ " join User as u on user.user.id = u.id ";
 		if (dto.getText() != null && StringUtils.hasText(dto.getText())) {
-			whereClause += " AND (u.person.displayName LIKE :text OR user.userType LIKE :text OR u.person.phoneNumber LIKE :text)";
+			whereClause += " AND (u.person.displayName LIKE :text OR user.userType LIKE :text OR u.person.phoneNumber LIKE :text" +
+					" OR u.person.Email LIKE :text OR user.user.email LIKE :text OR user.user.username LIKE :text " +
+					" OR user.healthCareGroup.name LIKE :text) ";
 		}
 		
 		if (!userOrganization.isAdmin()) {
@@ -269,9 +265,15 @@ public class UserAdministrativeUnitServiceImpl extends GenericServiceImpl<UserAd
 	}
 
 	@Override
-	public Boolean deleteById(UUID fromString) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean deleteById(UUID id) {
+		if (id != null) {
+			UserAdministrativeUnit entity = userAdministrativeUnitRepository.getOne(id);
+			if (entity != null) {
+				userAdministrativeUnitRepository.deleteById(id);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

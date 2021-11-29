@@ -391,6 +391,7 @@ class UserEditorDialog extends Component {
                   </Select>
                 </FormControl>
               </Grid>
+              {isAddNew &&
               <Grid item sm={6} xs={12}>
                 <TextValidator
                   InputProps={{
@@ -412,7 +413,7 @@ class UserEditorDialog extends Component {
                   validators={["required"]}
                   errorMessages={[t("general.errorMessages_required")]}
                 />
-              </Grid>
+              </Grid>}
               <Grid item sm={6} xs={12}>
                 <TextValidator
                   className="w-100 "
@@ -649,7 +650,7 @@ class UserEditorDialog extends Component {
                   />
                 </Grid>
               )}
-              <Grid item sm={6} xs={12}>
+              {/* <Grid item sm={6} xs={12}>
                 <FormControlLabel
                   value={active}
                   name="active"
@@ -657,7 +658,7 @@ class UserEditorDialog extends Component {
                   control={<Checkbox checked={active} />}
                   label={t("user.active")}
                 />
-              </Grid>
+              </Grid> */}
               {/*----- Active AutoGenCode --------*/}
 
               {changePass != null && changePass == true ? (
