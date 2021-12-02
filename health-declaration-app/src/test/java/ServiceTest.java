@@ -26,6 +26,7 @@ import com.globits.healthdeclaration.functiondto.HealthCareGroupSearchDto;
 import com.globits.healthdeclaration.functiondto.SearchDto;
 import com.globits.healthdeclaration.repository.BackgroundDiseaseRepository;
 import com.globits.healthdeclaration.repository.FamilyRepository;
+import com.globits.healthdeclaration.repository.PractitionerAndFamilyRepository;
 import com.globits.healthdeclaration.rest.RestBackgroundDiseaseController;
 import com.globits.healthdeclaration.rest.RestFamilyController;
 import com.globits.healthdeclaration.service.BackgroundDiseaseService;
@@ -83,12 +84,12 @@ import java.util.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DatabaseConfig.class)
 @Transactional(propagation = Propagation.REQUIRED)
-@AutoConfigureMockMvc
+//@AutoConfigureMockMvc
 //@WithMockUser(username = "admin", roles = "ADMIN")
 public class ServiceTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+//	@Autowired
+//	private MockMvc mockMvc;
 
 //	@Autowired
 //	private BackgroundDiseaseService backgroundDiseaseService;
@@ -97,17 +98,19 @@ public class ServiceTest {
 //	private WebApplicationContext webApplicationContext;
 
 	@Autowired
-	private FamilyRepository familyRepository;
+	private PractitionerAndFamilyRepository practitionerAndFamilyRepository;
 
-	@Test
-	public void getEmployeeByIdAPI() throws Exception
-	{
-		mockMvc.perform( MockMvcRequestBuilders
-						.get("/api/family/{id}", "275c3327-30b5-4ca3-802e-5087cec7862d")
-						.accept(MediaType.APPLICATION_JSON))
-				.andDo(print())
-				.andExpect(status().isOk());
-	}
+
+
+//	@Test
+//	public void getEmployeeByIdAPI() throws Exception
+//	{
+//		mockMvc.perform( MockMvcRequestBuilders
+//						.get("/api/family/{id}", "275c3327-30b5-4ca3-802e-5087cec7862d")
+//						.accept(MediaType.APPLICATION_JSON))
+//				.andDo(print())
+//				.andExpect(status().isOk());
+//	}
 
 //	@Before()
 //	public void setup()
@@ -117,10 +120,12 @@ public class ServiceTest {
 //	}
 
 	@Test
-	@WithMockUser(roles = "ADMIN")
 	public void testFamily() throws Exception {
 
-		assertTrue(familyRepository.findById(UUID.fromString("019fc27a-b141-49ae-97e7-edf6febe696e")).isPresent());
+		Integer c = 0;
+		c = practitionerAndFamilyRepository.countFamilyMemberByPractitionerId(UUID.fromString("da96f930-d7f6-458a-a0d1-33a4f7820fb3"));
+		System.out.println(c);
+//		assertTrue(familyRepository.findById(UUID.fromString("019fc27a-b141-49ae-97e7-edf6febe696e")).isPresent());
 //		mockMvc.perform(get("/health-declaration/api/family/{id}", "275c3327-30b5-4ca3-802e-5087cec7862d"))
 //				.andDo(print())
 //				.andExpect(status().isOk());

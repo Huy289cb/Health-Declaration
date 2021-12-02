@@ -164,4 +164,12 @@ public class PractitionerAndFamilyServiceImpl extends GenericServiceImpl<Practit
 		return list;
 	}
 
+	@Override
+	public Integer countFamilyMemberByPractitionerId(UUID practitionerId) {
+		if (practitionerId != null) {
+			return repository.countFamilyMemberByPractitionerId(practitionerId);
+		}
+		return null;
+	}
+
 }

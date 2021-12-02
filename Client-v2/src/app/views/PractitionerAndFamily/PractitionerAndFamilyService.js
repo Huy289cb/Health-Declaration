@@ -4,6 +4,11 @@ import ConstantList from "../../appConfig";
 var path = "/api/practitionerAndFamily";
 var pathFamily = "/api/family";
 
+export const countFamilyMemberByPractitionerId = (id) => {
+    var url = ConstantList.API_ENPOINT + path + "/countFamilyMemberByPractitionerId/" + id;
+    return axios.get(url);
+};
+
 export const searchByPage = (searchDto) => {
     var url = ConstantList.API_ENPOINT + path + "/searchByDto";
     return axios.post(url, searchDto);

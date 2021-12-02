@@ -353,7 +353,7 @@ class EditorDialog extends Component {
           <div className="">
             <DialogContent className="o-hidden">
               <Grid container spacing={2}>
-                {!isUser &&
+                {/* {!isUser &&
                   <Grid item md={6} sm={12} xs={12}>
                     <TextValidator
                       className="w-100"
@@ -373,14 +373,14 @@ class EditorDialog extends Component {
                       disabled
                     />
                   </Grid>
-                }
+                } */}
                 <Grid item md={6} sm={12} xs={12}>
                   <TextValidator
                     disabled={readOnly}
                     className="w-100"
                     label={<span className="font">
                       <span style={{ color: "red" }}> *</span>
-                      {t('Họ và tên chủ hộ')}
+                      Họ và tên chủ hộ
                     </span>
                     }
                     onChange={this.handleChange}

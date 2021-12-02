@@ -144,6 +144,12 @@ class FamilyMemberEditorDialog extends Component {
       member.idCardNumber = event.target.value;
       this.setState({ member });
     }
+    else if (source != null && source == "noteBackgroundDiseases") {
+      let { member } = this.state;
+      if (!member) { member = {} };
+      member.noteBackgroundDiseases = event.target.value;
+      this.setState({ member });
+    }
     else if(source != null && source == "suspectedLevel"){
       let { member } = this.state;
       if (!member) { member = {} };
@@ -315,7 +321,7 @@ class FamilyMemberEditorDialog extends Component {
         // style={{ cursor: 'move' }} 
         // id="draggable-dialog-title"
         >
-          <span className="mb-20" > {(readOnly && readOnly == true) ? ('Xem thông tin') : (t("FamilyMember.titlePopupEdit"))} </span>
+          <span className="mb-20" > {(readOnly && readOnly == true) ? 'Xem thông tin' : (t("FamilyMember.titlePopupEdit"))} </span>
           <IconButton style={{ position: "absolute", right: "10px", top: "10px" }} onClick={() => handleClose()}><Icon color="error"
             title={t("close")}>
             close
@@ -367,7 +373,7 @@ class FamilyMemberEditorDialog extends Component {
                   size="small"
                 />
               </Grid>
-              <Grid item lg={4} md={4} sm={12} xs={12} className="radio_gender">
+              <Grid item lg={8} md={8} sm={12} xs={12} className="radio_gender">
                 <FormControl component="fieldset" error={this.state.radioErrorGender}
                   disabled={readOnly}>
                   <FormLabel component="legend"><span style={{ color: "red" }}> *</span>Giới tính: </FormLabel>
@@ -390,10 +396,7 @@ class FamilyMemberEditorDialog extends Component {
                   </RadioGroup>
                   <FormHelperText>{this.state.radioHelperTextGender}</FormHelperText>
                 </FormControl>
-              </Grid>
-
-              <Grid item lg={4} md={4} sm={12} xs={12}>
-                <div style={{ display: member ? (member.gender == "F" ? "block" : "none") : "none" }}>
+                <div style={{ display: member ? (member.gender == "F" ? "block" : "none") : "none", marginLeft: "12px" }}>
                   <FormControlLabel
                     disabled={readOnly}
                     control={
@@ -403,7 +406,7 @@ class FamilyMemberEditorDialog extends Component {
                         name="isPregnant"
                       />
                     }
-                    label="Có mang thai"
+                    label="Đang mang thai/nuôi con nhỏ(<12 tháng)"
                   />
                 </div>
               </Grid>
@@ -635,39 +638,58 @@ class FamilyMemberEditorDialog extends Component {
 
                 </FormControl>
               </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12}>
-                {member.haveBackgroundDisease &&
-                  <Autocomplete
+              {member.haveBackgroundDisease &&
+              <>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Autocomplete
+                      disabled={readOnly}
+                      style={{ width: "100%" }}
+                      multiple
+                      id="combo-box-demo"
+                      defaultValue={(member && member.backgroundDiseases) ? member.backgroundDiseases : []}
+                      options={listDataBackgroundDisease ? listDataBackgroundDisease : []}
+                      getOptionSelected={(option, value) =>
+                        option.id === value.id
+                      }
+                      getOptionLabel={(option) => option.name}
+                      onChange={(event, value) => {
+                        this.selectListBackgroundDisease(value);
+                      }}
+                      renderInput={(params) => (
+                        <TextValidator
+                          disabled={readOnly}
+                          {...params}
+                          value={(member && member.backgroundDiseases) ? member.backgroundDiseases : []}
+                          label={
+                            <span className="font">
+                              Tiền sử bệnh
+                            </span>
+                          }
+                          variant="outlined"
+                          size="small"
+                          fullWidth
+                        />
+                      )}
+                    />
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <TextValidator
                     disabled={readOnly}
-                    style={{ width: "100%" }}
-                    multiple
-                    id="combo-box-demo"
-                    defaultValue={(member && member.backgroundDiseases) ? member.backgroundDiseases : []}
-                    options={listDataBackgroundDisease ? listDataBackgroundDisease : []}
-                    getOptionSelected={(option, value) =>
-                      option.id === value.id
+                    className="w-100"
+                    label={
+                      <span className="font">
+                        Ghi chú tình trạng bệnh nền
+                      </span>
                     }
-                    getOptionLabel={(option) => option.name}
-                    onChange={(event, value) => {
-                      this.selectListBackgroundDisease(value);
-                    }}
-                    renderInput={(params) => (
-                      <TextValidator
-                        disabled={readOnly}
-                        {...params}
-                        value={(member && member.backgroundDiseases) ? member.backgroundDiseases : []}
-                        label={
-                          <span className="font">
-                            Tiền sử bệnh
-                          </span>
-                        }
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                      />
-                    )}
-                  />}
-              </Grid>
+                    onChange={(value) => { this.handleChange(value, "noteBackgroundDiseases") }}
+                    type="text"
+                    name="idCardNumber"
+                    value={member ? (member.noteBackgroundDiseases ? member.noteBackgroundDiseases : '') : ''}
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+              </>}
             </Grid>
           </DialogContent>
 

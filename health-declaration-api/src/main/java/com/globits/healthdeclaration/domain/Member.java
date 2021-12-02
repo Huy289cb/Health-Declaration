@@ -55,6 +55,17 @@ public class Member extends Person {
 	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<MemberBackgroundDisease> listBackgroundDisease;//danh sách bệnh nền (tiền sử bệnh)
 
+	@Column(name="note_background_diseases")
+	private String noteBackgroundDiseases;//Ghi chú tình trạng bệnh nền
+
+	public String getNoteBackgroundDiseases() {
+		return noteBackgroundDiseases;
+	}
+
+	public void setNoteBackgroundDiseases(String noteBackgroundDiseases) {
+		this.noteBackgroundDiseases = noteBackgroundDiseases;
+	}
+
 	public String getDetailAddress() {
 		return detailAddress;
 	}

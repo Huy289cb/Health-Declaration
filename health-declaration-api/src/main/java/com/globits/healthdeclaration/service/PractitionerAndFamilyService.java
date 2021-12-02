@@ -19,4 +19,5 @@ public interface PractitionerAndFamilyService extends GenericService<Practitione
 
 	List<PractitionerAndFamilyDto> updateListFamily(List<FamilyDto> listFamily, UUID practitionerId, Integer type);
 
+	Integer countFamilyMemberByPractitionerId(UUID practitionerId);
 }

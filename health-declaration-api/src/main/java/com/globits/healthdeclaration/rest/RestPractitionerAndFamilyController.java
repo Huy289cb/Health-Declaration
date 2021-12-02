@@ -48,4 +48,11 @@ public class RestPractitionerAndFamilyController {
         List<PractitionerAndFamilyDto> result = service.updateListFamily(dto.getListFamily(), dto.getPractitionerId(), dto.getType());
         return new ResponseEntity<List<PractitionerAndFamilyDto>>(result, (result != null) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
+
+    @Secured({ HealthDeclarationConstant.ROLE_ADMIN, HealthDeclarationConstant.ROLE_HEALTHCARE_STAFF, HealthDeclarationConstant.ROLE_MEDICAL_TEAM })
+    @RequestMapping(value = "countFamilyMemberByPractitionerId/{practitionerId}", method = RequestMethod.GET)
+    public ResponseEntity<Integer> countFamilyMemberByPractitionerId(@PathVariable("practitionerId") UUID practitionerId) {
+        Integer result = service.countFamilyMemberByPractitionerId(practitionerId);
+        return new ResponseEntity<Integer>(result, (result != null) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
 }

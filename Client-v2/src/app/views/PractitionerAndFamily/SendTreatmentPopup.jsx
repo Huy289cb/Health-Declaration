@@ -16,7 +16,7 @@ import Draggable from 'react-draggable';
 import Paper from '@material-ui/core/Paper';
 import 'react-toastify/dist/ReactToastify.css';
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { assignmentById, updateListFamily } from './PractitionerAndFamilyService';
+import { assignmentById, updateListFamily, countFamilyMemberByPractitionerId } from './PractitionerAndFamilyService';
 import SelectPractitionerPopup from '../Component/SelectPractitionerPopup/InputPopup'
 
 toast.configure({
@@ -74,7 +74,8 @@ class SendTreatmentPopup extends React.Component {
         let { open, handleClose, t, itemSendCheck } = this.props;
         let {
             practitioner,
-            type
+            type,
+            count,
         } = this.state;
         return (
             <Dialog
@@ -108,6 +109,12 @@ class SendTreatmentPopup extends React.Component {
                                             this.setState({ practitioner: item }, () => {
                                                 console.log(this.state)
                                             });
+                                            countFamilyMemberByPractitionerId(item.id).then(({data}) => {
+                                                if (data) {
+                                                    this.setState({count: data});
+                                                }
+                                            })
+
                                         }}
                                         size="small"
                                         variant="outlined"
@@ -119,6 +126,10 @@ class SendTreatmentPopup extends React.Component {
                                         }
                                     />
                                 </Grid>
+                                {count &&
+                                <Grid item sm={12} xs={12}>
+                                    Số người đã được phân công: {count}
+                                </Grid>}
                             </Grid>
                         </DialogContent>
                     </div>

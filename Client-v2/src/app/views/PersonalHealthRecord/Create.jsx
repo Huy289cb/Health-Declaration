@@ -280,22 +280,19 @@ class Create extends React.Component {
         selectFamilyMemberError: true,
       });
       r = false;
-    } else {
-      if (
-        familyMember.member.haveBackgroundDisease === null ||
-        familyMember.member.haveBackgroundDisease === undefined
-      ) {
-        this.setState({
-          radioHelperText: "Đây là trường bắt buộc",
-          radioError: true,
-        });
-        r = false;
-      }
-      // if (familyMember.member.haveBackgroundDisease && (familyMember.member.backgroundDiseases && familyMember.member.backgroundDiseases.length == 0)) {
-      //   toast.warning("Chưa chọn bệnh nền")
-      //   r = false;
-      // }
-    }
+    } 
+    // else {
+    //   if (
+    //     familyMember.member.haveBackgroundDisease === null ||
+    //     familyMember.member.haveBackgroundDisease === undefined
+    //   ) {
+    //     this.setState({
+    //       radioHelperText: "Đây là trường bắt buộc",
+    //       radioError: true,
+    //     });
+    //     r = false;
+    //   }
+    // }
     if (this.state.haveQuickTest === null || this.state.haveQuickTest === undefined) {
       this.setState({
         radioHelperTextHaveQuickTest: "Đây là trường bắt buộc",
@@ -951,31 +948,32 @@ class Create extends React.Component {
                     <div style={{ padding: "12px" }}>
                       <Grid container spacing={2}>
                         <Grid item lg={4} md={4} sm={12} xs={12}>
-                          <FormControl error={ this.state.radioErrorHaveQuickTest }
-                              style={{
-                              display: "flex",
-                              flexDirection: "row",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                            }}>
-                            <span><span style={ { color: "red" } }> * </span>Xét nghiệm nhanh:</span>
-                            <RadioGroup row
-                              aria-label="position" name="position" defaultValue="top"
-                              onChange={ ( value ) => { this.handleChange( value, "haveQuickTest" ) } }
-                            >
-                              <FormControlLabel
-                                value={ true }
-                                control={ <Radio checked={ haveQuickTest === true ? true : false } /> }
-                                label="Có"
-                                labelPlacement="end"
-                              />
-                              <FormControlLabel
-                                value={ false }
-                                control={ <Radio checked={ haveQuickTest === false ? true : false } /> }
-                                label="Không"
-                                labelPlacement="end"
-                              />
-                            </RadioGroup>
+                          <FormControl error={ this.state.radioErrorHaveQuickTest }>
+                              <div style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}>
+                                <span><span style={ { color: "red" } }> * </span>Xét nghiệm nhanh:</span>
+                                <RadioGroup row
+                                  aria-label="position" name="position" defaultValue="top"
+                                  onChange={ ( value ) => { this.handleChange( value, "haveQuickTest" ) } }
+                                >
+                                  <FormControlLabel
+                                    value={ true }
+                                    control={ <Radio checked={ haveQuickTest === true ? true : false } /> }
+                                    label="Có"
+                                    labelPlacement="end"
+                                  />
+                                  <FormControlLabel
+                                    value={ false }
+                                    control={ <Radio checked={ haveQuickTest === false ? true : false } /> }
+                                    label="Không"
+                                    labelPlacement="end"
+                                  />
+                                </RadioGroup>
+                              </div>
                             <FormHelperText>{ this.state.radioHelperTextHaveQuickTest }</FormHelperText>
                           </FormControl>
                         </Grid>
@@ -1065,31 +1063,32 @@ class Create extends React.Component {
                       </Grid>
                       <Grid container spacing={2}>
                         <Grid item lg={4} md={4} sm={12} xs={12}>
-                          <FormControl error={ this.state.radioErrorHavePCR }
-                              style={{
+                          <FormControl error={ this.state.radioErrorHavePCR }>
+                            <div style={{
                               display: "flex",
                               flexDirection: "row",
                               alignItems: "center",
                               justifyContent: "space-between",
                             }}>
-                            <span><span style={ { color: "red" } }> * </span>Xét nghiệm PCR:</span>
-                            <RadioGroup row
-                              aria-label="position" name="position" defaultValue="top"
-                              onChange={ ( value ) => { this.handleChange( value, "havePCR" ) } }
-                            >
-                              <FormControlLabel
-                                value={ true }
-                                control={ <Radio checked={ havePCR === true ? true : false } /> }
-                                label="Có"
-                                labelPlacement="end"
-                              />
-                              <FormControlLabel
-                                value={ false }
-                                control={ <Radio checked={ havePCR === false ? true : false } /> }
-                                label="Không"
-                                labelPlacement="end"
-                              />
-                            </RadioGroup>
+                              <span><span style={ { color: "red" } }> * </span>Xét nghiệm PCR:</span>
+                              <RadioGroup row
+                                aria-label="position" name="position" defaultValue="top"
+                                onChange={ ( value ) => { this.handleChange( value, "havePCR" ) } }
+                              >
+                                <FormControlLabel
+                                  value={ true }
+                                  control={ <Radio checked={ havePCR === true ? true : false } /> }
+                                  label="Có"
+                                  labelPlacement="end"
+                                />
+                                <FormControlLabel
+                                  value={ false }
+                                  control={ <Radio checked={ havePCR === false ? true : false } /> }
+                                  label="Không"
+                                  labelPlacement="end"
+                                />
+                              </RadioGroup>
+                            </div>
                             <FormHelperText>{ this.state.radioHelperTextHavePCR }</FormHelperText>
                           </FormControl>
                         </Grid>

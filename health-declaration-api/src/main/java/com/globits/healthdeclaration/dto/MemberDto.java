@@ -22,6 +22,7 @@ public class MemberDto extends PersonDto {
     private Boolean isPregnant;//Mang thai
     private Boolean haveBackgroundDisease = false;//Có bệnh nền
 	private List<MemberBackgroundDiseaseDto> listBackgroundDisease;//danh sách bệnh nền (tiền sử bệnh)
+    private String noteBackgroundDiseases;
 
     public MemberDto(Member entity) {
         super();
@@ -41,6 +42,7 @@ public class MemberDto extends PersonDto {
             this.idCardNumber = entity.getIdCardNumber();
             this.anamnesis = entity.getAnamnesis();
             this.suspectedLevel = entity.getSuspectedLevel();
+            this.noteBackgroundDiseases = entity.getNoteBackgroundDiseases();
             if (entity.getListBackgroundDisease() != null && entity.getListBackgroundDisease().size() > 0) {
                 this.listBackgroundDisease = new ArrayList<>();
                 for (MemberBackgroundDisease memberBackgroundDisease : entity.getListBackgroundDisease()) {
@@ -68,6 +70,7 @@ public class MemberDto extends PersonDto {
             this.idCardNumber = entity.getIdCardNumber();
             this.anamnesis = entity.getAnamnesis();
             this.suspectedLevel = entity.getSuspectedLevel();
+            this.noteBackgroundDiseases = entity.getNoteBackgroundDiseases();
         }
     }
 
@@ -172,4 +175,11 @@ public class MemberDto extends PersonDto {
 		this.suspectedLevel = suspectedLevel;
 	}
 
+    public String getNoteBackgroundDiseases() {
+        return noteBackgroundDiseases;
+    }
+
+    public void setNoteBackgroundDiseases(String noteBackgroundDiseases) {
+        this.noteBackgroundDiseases = noteBackgroundDiseases;
+    }
 }

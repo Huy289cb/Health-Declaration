@@ -154,9 +154,14 @@ public class FamilyMemberServiceImpl extends GenericServiceImpl<FamilyMember, UU
         	member.setIsPregnant(dto.getMember().getIsPregnant());
         	member.setSuspectedLevel(dto.getMember().getSuspectedLevel());
         	member.setHaveBackgroundDisease(dto.getMember().getHaveBackgroundDisease());
-        	if (dto.getMember().getHaveBackgroundDisease() != null && dto.getMember().getHaveBackgroundDisease() && dto.getMember().getListBackgroundDisease() != null && dto.getMember().getListBackgroundDisease().size() > 0) {
+			member.setNoteBackgroundDiseases(dto.getMember().getNoteBackgroundDiseases());
+        	if (dto.getMember().getHaveBackgroundDisease() != null &&
+					dto.getMember().getHaveBackgroundDisease() &&
+					dto.getMember().getListBackgroundDisease() != null &&
+					dto.getMember().getListBackgroundDisease().size() > 0) {
         		HashSet<MemberBackgroundDisease> memberBackgroundDiseases = new HashSet<>();
-                for (MemberBackgroundDiseaseDto memberBackgroundDiseaseDto : dto.getMember().getListBackgroundDisease()) {
+                for (MemberBackgroundDiseaseDto memberBackgroundDiseaseDto :
+						dto.getMember().getListBackgroundDisease()) {
 
             		BackgroundDisease backgroundDisease = null;
                 	MemberBackgroundDisease mbd = new MemberBackgroundDisease();

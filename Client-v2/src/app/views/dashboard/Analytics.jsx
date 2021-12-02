@@ -25,6 +25,7 @@ import ViewDialog from "./ViewDialog";
 import ViewListPatientDialog from "./ViewListPatientDialog";
 import {getListHealthCareGroup} from "../HealthCareGroup/HealthCareGroupService";
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import ColumnChart from './charts/BasicColumn';
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -231,11 +232,13 @@ class Analytics extends Component {
         page: 1,
         text: item.text,
         resolveStatus: item.resolveStatus,
+        type: item.type,
       }, () => {
         searchObject.text = this.state.text;
         searchObject.pageIndex = this.state.page;
         searchObject.pageSize = this.state.rowsPerPage;
         searchObject.resolveStatus = this.state.resolveStatus;
+        searchObject.type = this.state.type;
         seachPersonalHealthRecord(searchObject).then(({ data }) => {
           this.setState({
             itemList: [...data.content],
@@ -250,6 +253,7 @@ class Analytics extends Component {
       searchObject.pageIndex = this.state.page;
       searchObject.pageSize = this.state.rowsPerPage;
       searchObject.resolveStatus = this.state.resolveStatus;
+      searchObject.type = this.state.type;
       seachPersonalHealthRecord(searchObject).then(({ data }) => {
         this.setState({
           itemList: [...data.content],
@@ -675,6 +679,9 @@ class Analytics extends Component {
                     />
                   )}
                 </div>
+              </div>
+              <div className="text-primary-d2 margin-auto margin-padding">
+                <ColumnChart reportData={reportData} />
               </div>
             </Grid>}
           </Grid>

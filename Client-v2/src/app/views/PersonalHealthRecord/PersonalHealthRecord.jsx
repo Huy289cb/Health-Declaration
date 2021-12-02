@@ -51,7 +51,7 @@ function MaterialButton ( props )
       enterDelay={ 500 }
       leaveDelay={ 300 }
     >
-      <IconButton size="small" onClick={ () => props.seachPersonalHealthRecordByDto( item ) }>
+      <IconButton size="small" onClick={ () => props.handleViewItem( item ) }>
         <Icon fontSize="small" color="primary">visibility</Icon>
       </IconButton>
     </LightTooltip>
@@ -71,7 +71,7 @@ function MaterialButton ( props )
 class PerrsonalHealthRecord extends Component
 {
   state = {
-    rowsPerPage: 25,
+    rowsPerPage: 10,
     page: 1,
     listData: [],
     item: {},
@@ -132,6 +132,12 @@ class PerrsonalHealthRecord extends Component
     };
   };
 
+  setPage = page => {
+    this.setState({ page }, function () {
+      this.updatePageData();
+    })
+  };
+
   setRowsPerPage = event =>
   {
     this.setState( { rowsPerPage: event.target.value, page: 1 }, function ()
@@ -142,7 +148,7 @@ class PerrsonalHealthRecord extends Component
 
   handleChangePage = ( event, newPage ) =>
   {
-    this.updateData( newPage );
+    this.setPage(newPage);
   };
 
   updateData ( pageNumber )
@@ -177,40 +183,40 @@ class PerrsonalHealthRecord extends Component
     this.setState( { role: localStorageService.getItem( "role" ) } );
   }
 
-  componentWillMount ()
-  {
-    let { location } = this.props;
-    //get practitioner nếu user đăng nhập là nhân viên y tế
-    getAllInfoByUserLogin().then( ( resp ) =>
-    {
-      let data = resp ? resp.data : null;
-      if ( data )
-      {
-        if ( data.healthCareStaff )
-        {
-          if ( data && data.practitioner && data.practitioner.id )
-          {
-            var type = ConstantList.GET_PERSONAL_HEALTH_RECORD_TYPE.practitioner;
-            this.setState( { practitioner: { id: data.practitioner.id }, type: type }, () =>
-            {
-              console.log( this.state );
-            } );
-          }
-        }
-        else if ( data.medicalTeam )
-        {
-          if ( data && data.userUnit && data.userUnit.id )
-          {
-            var type = ConstantList.GET_PERSONAL_HEALTH_RECORD_TYPE.medical_team;
-            this.setState( { medicalTeam: { id: data.userUnit.id }, type: type }, () =>
-            {
-              console.log( this.state );
-            } );
-          }
-        }
-      }
-    } )
-  }
+  // componentWillMount ()
+  // {
+  //   let { location } = this.props;
+  //   //get practitioner nếu user đăng nhập là nhân viên y tế
+  //   getAllInfoByUserLogin().then( ( resp ) =>
+  //   {
+  //     let data = resp ? resp.data : null;
+  //     if ( data )
+  //     {
+  //       if ( data.healthCareStaff )
+  //       {
+  //         if ( data && data.practitioner && data.practitioner.id )
+  //         {
+  //           var type = ConstantList.GET_PERSONAL_HEALTH_RECORD_TYPE.practitioner;
+  //           this.setState( { practitioner: { id: data.practitioner.id }, type: type }, () =>
+  //           {
+  //             console.log( this.state );
+  //           } );
+  //         }
+  //       }
+  //       else if ( data.medicalTeam )
+  //       {
+  //         if ( data && data.userUnit && data.userUnit.id )
+  //         {
+  //           var type = ConstantList.GET_PERSONAL_HEALTH_RECORD_TYPE.medical_team;
+  //           this.setState( { medicalTeam: { id: data.userUnit.id }, type: type }, () =>
+  //           {
+  //             console.log( this.state );
+  //           } );
+  //         }
+  //       }
+  //     }
+  //   } )
+  // }
 
   updatePageData = ( item ) =>
   {
@@ -256,7 +262,7 @@ class PerrsonalHealthRecord extends Component
     );
   }
 
-  seachPersonalHealthRecordByDto = ( rowData ) =>
+  handleViewItem = ( rowData ) =>
   {
     let searchObject = {
       pageIndex: 1, pageSize: 10,
@@ -392,7 +398,7 @@ class PerrsonalHealthRecord extends Component
         align: "left",
         width: "250",
         render: rowData =>
-          <MaterialButton item={ rowData } seachPersonalHealthRecordByDto={ this.seachPersonalHealthRecordByDto } linkToEncounter={ this.linkToEncounter } />
+          <MaterialButton item={ rowData } handleViewItem={ this.handleViewItem } linkToEncounter={ this.linkToEncounter } />
       }
 
     ]
@@ -526,7 +532,7 @@ class PerrsonalHealthRecord extends Component
                 totalPages={ this.state.totalPages }
                 handleChangePage={ this.handleChangePage }
                 setRowsPerPage={ this.setRowsPerPage }
-                pageSize={ this.state.rowsPerPage }
+                pageSize= { rowsPerPage }
                 pageSizeOption={ [1, 2, 3, 5, 10, 25, 50] }
                 t={ t }
                 totalElements={ this.state.totalElements }

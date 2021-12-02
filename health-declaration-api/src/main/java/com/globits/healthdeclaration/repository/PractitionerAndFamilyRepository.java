@@ -24,4 +24,11 @@ public interface PractitionerAndFamilyRepository extends JpaRepository<Practitio
 	@Query(" SELECT COUNT(DISTINCT entity.id) FROM PractitionerAndFamily entity where entity.family.id =?1 AND entity.practitioner.id =?2 ")
 	Integer countAllByIdAndInListAdministrativeUnitId(UUID familyId, UUID practitionerId);
 
+	@Query("SELECT count(fm.id) FROM PractitionerAndFamily e " +
+			"JOIN Family f ON f.id = e.family.id " +
+			"JOIN FamilyMember fm ON fm.family.id = f.id " +
+			"JOIN Practitioner p ON p.id = e.practitioner.id " +
+			"WHERE p.id =?1")
+	Integer countFamilyMemberByPractitionerId(UUID practitionerId);
+
 }

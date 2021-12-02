@@ -861,12 +861,13 @@ public class FamilyServiceImpl extends GenericServiceImpl<Family, UUID> implemen
 			if (entity != null) {
 				List<PersonalHealthRecord> lst = personalHealthRecordRepository.getListByFamilyId(id);
 				if (lst != null || lst.size() > 0) {
-					for (PersonalHealthRecord phr : lst) {
-						Boolean delete = personalHealthRecordService.deleteById(phr.getId());
-						if (delete == null || !delete) {
-							return false;
-						}
-					}
+					return false;
+//					for (PersonalHealthRecord phr : lst) {
+//						Boolean delete = personalHealthRecordService.deleteById(phr.getId());
+//						if (delete == null || !delete) {
+//							return false;
+//						}
+//					}
 				}
 				if (entity.getFamilyMembers() != null) {
 					for (FamilyMember familyMember : entity.getFamilyMembers()) {

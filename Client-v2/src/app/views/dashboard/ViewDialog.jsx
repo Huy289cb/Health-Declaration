@@ -107,7 +107,7 @@ class ViewDialog extends Component {
                 //   style={{ cursor: 'move' }}
                 //   id="draggable-dialog-title"
                 >
-                    <span className="mb-20 text-white" > {t("Thông tin lần khai báo gần nhất")} </span>
+                    <span className="mb-20 text-white" > Thông tin lần khai báo gần nhất </span>
                     <IconButton style={{ position: "absolute", right: "5px", top: "5px" }} onClick={() => handleClose()}>
                         <Icon color="disabled" title={t("general.button.close")}>close</Icon>
                     </IconButton>
@@ -236,18 +236,22 @@ class ViewDialog extends Component {
                                                     : "Không"
                                                 }
                                             </Grid>
-                                            <Grid item lg={6} md={6} sm={12} xs={12}>
-                                                <b>Ghi chú: </b>{otherInformation ? otherInformation : "Không"}
-                                            </Grid>
-                                            <Grid item lg={6} md={6} sm={12} xs={12}>
-                                                <b>Hướng xử lý: </b>
-                                                {makeDecision && appConfig.ENCOUNTER_MAKE_DECISION.find((e) => e.key === makeDecision).description}
-                                            </Grid>
-                                            {makeDecision && makeDecision === "decision1" &&
+                                            {type != appConfig.GET_PERSONAL_HEALTH_RECORD_TYPE.family &&
+                                                <> 
+                                                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                                                        <b>Ghi chú: </b>{otherInformation ? otherInformation : "Không"}
+                                                    </Grid>
+                                                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                                                        <b>Hướng xử lý: </b>
+                                                        {makeDecision && appConfig.ENCOUNTER_MAKE_DECISION.find((e) => e.key === makeDecision).description}
+                                                    </Grid>
+                                                </>
+                                            }
+                                            {/* {makeDecision && makeDecision === "decision1" &&
                                             <Grid item lg={6} md={6} sm={12} xs={12}>
                                                 <b>Đơn vị y tế: </b>
                                                 {healthOrganization ? healthOrganization.name : ""}
-                                            </Grid>}    
+                                            </Grid>}     */}
                                             
                                         </Grid>
                                     </fieldset>
