@@ -860,7 +860,7 @@ public class FamilyServiceImpl extends GenericServiceImpl<Family, UUID> implemen
 			Family entity = repository.getOne(id);
 			if (entity != null) {
 				List<PersonalHealthRecord> lst = personalHealthRecordRepository.getListByFamilyId(id);
-				if (lst != null || lst.size() > 0) {
+				if (lst != null && lst.size() > 0) {
 					return false;
 //					for (PersonalHealthRecord phr : lst) {
 //						Boolean delete = personalHealthRecordService.deleteById(phr.getId());
